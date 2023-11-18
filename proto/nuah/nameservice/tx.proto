@@ -1,7 +1,35 @@
 syntax = "proto3";
+
 package nuah.nameservice;
 
 option go_package = "nuah/x/nameservice/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc SetName      (MsgSetName     ) returns (MsgSetNameResponse     );
+  rpc TransferName (MsgTransferName) returns (MsgTransferNameResponse);
+  rpc DeleteName   (MsgDeleteName  ) returns (MsgDeleteNameResponse  );
+}
+message MsgSetName {
+  string creator = 1;
+  string name    = 2;
+  string value   = 3;
+}
+
+message MsgSetNameResponse {}
+
+message MsgTransferName {
+  string creator = 1;
+  string name    = 2;
+  string value   = 3;
+}
+
+message MsgTransferNameResponse {}
+
+message MsgDeleteName {
+  string creator = 1;
+  string name    = 2;
+}
+
+message MsgDeleteNameResponse {}
+
