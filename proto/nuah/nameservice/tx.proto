@@ -1,0 +1,7 @@
+syntax = "proto3";
+package nuah.nameservice;
+
+option go_package = "nuah/x/nameservice/types";
+
+// Msg defines the Msg service.
+service Msg {}
