@@ -1,5 +1,13 @@
 version: 1
 accounts:
+- name: validator
+  coins:
+  - 1000000000000nuahp
+- name: test
+  coins:
+  - 10000nuah
+  - 10000aga
+  - 1000000000000nuahp
 - name: alice
   coins:
   - 20000token
@@ -11,11 +19,16 @@ accounts:
 client:
   openapi:
     path: docs/static/openapi.yml
+genesis:
+  app_state:
+    staking:
+      params:
+        bond_denom: "nuahp"
 faucet:
   name: bob
   coins:
   - 5token
-  - 100000stake
+  - 100000nuahp
 validators:
-- name: alice
-  bonded: 100000000stake
+- name: validator
+  bonded: 1000000000000nuahp
