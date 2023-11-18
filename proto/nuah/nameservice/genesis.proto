@@ -1,12 +1,16 @@
 syntax = "proto3";
+
 package nuah.nameservice;
 
 import "gogoproto/gogo.proto";
 import "nuah/nameservice/params.proto";
+import "nuah/nameservice/whois.proto";
 
 option go_package = "nuah/x/nameservice/types";
 
 // GenesisState defines the nameservice module's genesis state.
 message GenesisState {
-  Params params = 1 [(gogoproto.nullable) = false];
+           Params params    = 1 [(gogoproto.nullable) = false];
+  repeated Whois  whoisList = 2 [(gogoproto.nullable) = false];
 }
+
