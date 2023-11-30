@@ -9,6 +9,7 @@ service Msg {
   rpc SetName      (MsgSetName     ) returns (MsgSetNameResponse     );
   rpc TransferName (MsgTransferName) returns (MsgTransferNameResponse);
   rpc DeleteName   (MsgDeleteName  ) returns (MsgDeleteNameResponse  );
+  rpc CheckName    (MsgCheckName   ) returns (MsgCheckNameResponse   );
 }
 message MsgSetName {
   string creator = 1;
@@ -32,4 +33,13 @@ message MsgDeleteName {
 }
 
 message MsgDeleteNameResponse {}
+
+message MsgCheckName {
+  string creator = 1;
+  string name    = 2;
+}
+
+message MsgCheckNameResponse {
+  string isFound = 1;
+}
 

@@ -11,6 +11,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetName{}, "nameservice/SetName", nil)
 	cdc.RegisterConcrete(&MsgTransferName{}, "nameservice/TransferName", nil)
 	cdc.RegisterConcrete(&MsgDeleteName{}, "nameservice/DeleteName", nil)
+	cdc.RegisterConcrete(&MsgCheckName{}, "nameservice/CheckName", nil)
 	// this line is used by starport scaffolding # 2
 }
 
@@ -23,6 +24,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgDeleteName{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgCheckName{},
 	)
 	// this line is used by starport scaffolding # 3
 

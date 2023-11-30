@@ -75385,6 +75385,11 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  nuah.nameservice.MsgCheckNameResponse:
+    type: object
+    properties:
+      isFound:
+        type: string
   nuah.nameservice.MsgDeleteNameResponse:
     type: object
   nuah.nameservice.MsgSetNameResponse:
