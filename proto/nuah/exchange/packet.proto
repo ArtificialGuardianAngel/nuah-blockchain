@@ -1,0 +1,13 @@
+syntax = "proto3";
+package nuah.exchange;
+
+option go_package = "nuah/x/exchange/types";
+
+message ExchangePacketData {
+    oneof packet {
+        NoData noData = 1;
+    }
+}
+
+message NoData {
+}
