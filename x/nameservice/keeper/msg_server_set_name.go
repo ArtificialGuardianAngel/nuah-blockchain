@@ -14,7 +14,6 @@ func (k msgServer) SetName(goCtx context.Context, msg *types.MsgSetName) (*types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// TODO: Handling the message
-
 	_, isFound := k.GetWhois(ctx, msg.Name)
 
 	if isFound {
