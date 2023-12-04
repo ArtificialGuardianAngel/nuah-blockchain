@@ -12,8 +12,14 @@ func (k msgServer) CheckName(goCtx context.Context, msg *types.MsgCheckName) (*t
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// TODO: Handling the message
-	// _, isFound = k.Whois
-	_ = ctx
 
-	return &types.MsgCheckNameResponse{}, nil
+	_, isFound := k.GetWhois(ctx, msg.Name)
+
+	response := "Not Found"
+
+	if isFound {
+		response = "Found"
+	}
+
+	return &types.MsgCheckNameResponse{IsFound: response}, nil
 }
