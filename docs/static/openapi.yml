@@ -75768,6 +75768,12 @@ definitions:
         type: string
       priceDenom:
         type: string
+  nuah.exchange.MsgSendBuyOrderResponse:
+    type: object
+  nuah.exchange.MsgSendCreatePairResponse:
+    type: object
+  nuah.exchange.MsgSendSellOrderResponse:
+    type: object
   nuah.exchange.Params:
     type: object
     description: Params defines the parameters for the module.
