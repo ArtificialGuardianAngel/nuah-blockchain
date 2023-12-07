@@ -75768,6 +75768,10 @@ definitions:
         type: string
       priceDenom:
         type: string
+  nuah.exchange.MsgCancelBuyOrderResponse:
+    type: object
+  nuah.exchange.MsgCancelSellOrderResponse:
+    type: object
   nuah.exchange.MsgSendBuyOrderResponse:
     type: object
   nuah.exchange.MsgSendCreatePairResponse:
