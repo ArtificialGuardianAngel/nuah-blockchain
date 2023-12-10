@@ -1,0 +1,12 @@
+syntax = "proto3";
+package nuah.oracles;
+
+option go_package = "nuah/x/oracles/types";
+
+message Data {
+  string index = 1; 
+  string key = 2; 
+  string value = 3; 
+  string creator = 4;
+}
+

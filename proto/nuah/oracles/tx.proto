@@ -1,7 +1,39 @@
 syntax = "proto3";
+
 package nuah.oracles;
+
+import "nuah/oracles/data.proto";
 
 option go_package = "nuah/x/oracles/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc CreateData (MsgCreateData) returns (MsgCreateDataResponse);
+  rpc UpdateData (MsgUpdateData) returns (MsgUpdateDataResponse);
+  rpc DeleteData (MsgDeleteData) returns (MsgDeleteDataResponse);
+}
+message MsgCreateData {
+  string creator = 1;
+  string index   = 2;
+  string key     = 3;
+  string value   = 4;
+}
+
+message MsgCreateDataResponse {}
+
+message MsgUpdateData {
+  string creator = 1;
+  string index   = 2;
+  string key     = 3;
+  string value   = 4;
+}
+
+message MsgUpdateDataResponse {}
+
+message MsgDeleteData {
+  string creator = 1;
+  string index   = 2;
+}
+
+message MsgDeleteDataResponse {}
+
