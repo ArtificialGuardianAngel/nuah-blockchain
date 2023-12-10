@@ -47193,6 +47193,42 @@ paths:
           type: string
       tags:
         - Query
+  /nuah/oracles/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: NuahOraclesParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
 definitions:
   cosmos.auth.v1beta1.AddressBytesToStringResponse:
     type: object
@@ -76229,3 +76265,13 @@ definitions:
         type: string
       owner:
         type: string
+  nuah.oracles.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  nuah.oracles.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.

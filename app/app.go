@@ -116,6 +116,9 @@ import (
 	nameservicemodule "nuah/x/nameservice"
 	nameservicemodulekeeper "nuah/x/nameservice/keeper"
 	nameservicemoduletypes "nuah/x/nameservice/types"
+	oraclesmodule "nuah/x/oracles"
+	oraclesmodulekeeper "nuah/x/oracles/keeper"
+	oraclesmoduletypes "nuah/x/oracles/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "nuah/app/params"
@@ -178,6 +181,7 @@ var (
 		consensus.AppModuleBasic{},
 		nameservicemodule.AppModuleBasic{},
 		exchangemodule.AppModuleBasic{},
+		oraclesmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -258,6 +262,8 @@ type App struct {
 	NameserviceKeeper    nameservicemodulekeeper.Keeper
 	ScopedExchangeKeeper capabilitykeeper.ScopedKeeper
 	ExchangeKeeper       exchangemodulekeeper.Keeper
+	ScopedOraclesKeeper  capabilitykeeper.ScopedKeeper
+	OraclesKeeper        oraclesmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -306,6 +312,7 @@ func New(
 		capabilitytypes.StoreKey, group.StoreKey, icacontrollertypes.StoreKey, consensusparamtypes.StoreKey,
 		nameservicemoduletypes.StoreKey,
 		exchangemoduletypes.StoreKey,
+		oraclesmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -553,6 +560,20 @@ func New(
 	exchangeModule := exchangemodule.NewAppModule(appCodec, app.ExchangeKeeper, app.AccountKeeper, app.BankKeeper)
 
 	exchangeIBCModule := exchangemodule.NewIBCModule(app.ExchangeKeeper)
+	scopedOraclesKeeper := app.CapabilityKeeper.ScopeToModule(oraclesmoduletypes.ModuleName)
+	app.ScopedOraclesKeeper = scopedOraclesKeeper
+	app.OraclesKeeper = *oraclesmodulekeeper.NewKeeper(
+		appCodec,
+		keys[oraclesmoduletypes.StoreKey],
+		keys[oraclesmoduletypes.MemStoreKey],
+		app.GetSubspace(oraclesmoduletypes.ModuleName),
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		scopedOraclesKeeper,
+	)
+	oraclesModule := oraclesmodule.NewAppModule(appCodec, app.OraclesKeeper, app.AccountKeeper, app.BankKeeper)
+
+	oraclesIBCModule := oraclesmodule.NewIBCModule(app.OraclesKeeper)
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
@@ -565,6 +586,7 @@ func New(
 	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
 	ibcRouter.AddRoute(exchangemoduletypes.ModuleName, exchangeIBCModule)
+	ibcRouter.AddRoute(oraclesmoduletypes.ModuleName, oraclesIBCModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -617,6 +639,7 @@ func New(
 		icaModule,
 		nameserviceModule,
 		exchangeModule,
+		oraclesModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -651,6 +674,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
+		oraclesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -678,6 +702,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
+		oraclesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -710,6 +735,7 @@ func New(
 		consensusparamtypes.ModuleName,
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
+		oraclesmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
@@ -936,6 +962,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(nameservicemoduletypes.ModuleName)
 	paramsKeeper.Subspace(exchangemoduletypes.ModuleName)
+	paramsKeeper.Subspace(oraclesmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

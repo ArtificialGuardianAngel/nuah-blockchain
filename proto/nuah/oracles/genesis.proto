@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package nuah.oracles;
+
+import "gogoproto/gogo.proto";
+import "nuah/oracles/params.proto";
+
+option go_package = "nuah/x/oracles/types";
+
+// GenesisState defines the oracles module's genesis state.
+message GenesisState {
+  Params params  = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+}
+
