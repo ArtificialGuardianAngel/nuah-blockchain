@@ -3,12 +3,14 @@ package keeper
 import (
 	"context"
 
+	"nuah/x/oracles/types"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"nuah/x/oracles/types"
 )
 
 func (k Keeper) DataAll(goCtx context.Context, req *types.QueryAllDataRequest) (*types.QueryAllDataResponse, error) {
@@ -44,6 +46,23 @@ func (k Keeper) Data(goCtx context.Context, req *types.QueryGetDataRequest) (*ty
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	redisVal, err := client.Get(goCtx, "daily:"+req.Index).Result()
+	println(redisVal)
+	if err == nil {
+		data := types.Data{
+			Creator: "noone",
+			Index:   req.Index,
+			Key:     req.Index,
+			Value:   redisVal,
+		}
+		k.SetData(ctx, data)
+	}
 
 	val, found := k.GetData(
 		ctx,
