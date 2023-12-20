@@ -34,3 +34,16 @@ func (k Keeper) SaveVoucherDenom(ctx sdk.Context, port string, channel string, d
 		})
 	}
 }
+
+func (k Keeper) OriginalDenom(ctx sdk.Context, port string, channel string, voucher string) (string, bool) {
+	trace, exist := k.GetDenomTrace(ctx, voucher)
+	if exist {
+		// Check if original port and channel
+		if trace.Port == port && trace.Channel == channel {
+			return trace.Origin, true
+		}
+	}
+
+	// Not the original chain
+	return "", false
+}
