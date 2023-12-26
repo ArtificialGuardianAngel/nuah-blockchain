@@ -4,6 +4,7 @@ import Long from "long";
 import { SellOrderBook } from "./sell_order_book";
 import { BuyOrderBook } from "./buy_order_book";
 import { DenomTrace } from "./denom_trace";
+import { StableSupply } from "./stable_supply";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "nuah.exchange";
@@ -15,6 +16,8 @@ export interface GenesisState {
   sellOrderBookList: SellOrderBook[];
   buyOrderBookList: BuyOrderBook[];
   denomTraceList: DenomTrace[];
+  stableSupplyList: StableSupply[];
+  stableSupplyCount: Long;
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -24,6 +27,8 @@ function createBaseGenesisState(): GenesisState {
     sellOrderBookList: [],
     buyOrderBookList: [],
     denomTraceList: [],
+    stableSupplyList: [],
+    stableSupplyCount: Long.UZERO,
   };
 }
 
@@ -46,6 +51,12 @@ export const GenesisState = {
     }
     for (const v of message.denomTraceList) {
       DenomTrace.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.stableSupplyList) {
+      StableSupply.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (!message.stableSupplyCount.isZero()) {
+      writer.uint32(56).uint64(message.stableSupplyCount);
     }
     return writer;
   },
@@ -78,6 +89,14 @@ export const GenesisState = {
             DenomTrace.decode(reader, reader.uint32())
           );
           break;
+        case 6:
+          message.stableSupplyList.push(
+            StableSupply.decode(reader, reader.uint32())
+          );
+          break;
+        case 7:
+          message.stableSupplyCount = reader.uint64() as Long;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -99,6 +118,12 @@ export const GenesisState = {
       denomTraceList: Array.isArray(object?.denomTraceList)
         ? object.denomTraceList.map((e: any) => DenomTrace.fromJSON(e))
         : [],
+      stableSupplyList: Array.isArray(object?.stableSupplyList)
+        ? object.stableSupplyList.map((e: any) => StableSupply.fromJSON(e))
+        : [],
+      stableSupplyCount: isSet(object.stableSupplyCount)
+        ? Long.fromValue(object.stableSupplyCount)
+        : Long.UZERO,
     };
   },
 
@@ -128,6 +153,17 @@ export const GenesisState = {
     } else {
       obj.denomTraceList = [];
     }
+    if (message.stableSupplyList) {
+      obj.stableSupplyList = message.stableSupplyList.map((e) =>
+        e ? StableSupply.toJSON(e) : undefined
+      );
+    } else {
+      obj.stableSupplyList = [];
+    }
+    message.stableSupplyCount !== undefined &&
+      (obj.stableSupplyCount = (
+        message.stableSupplyCount || Long.UZERO
+      ).toString());
     return obj;
   },
 
@@ -146,6 +182,13 @@ export const GenesisState = {
       object.buyOrderBookList?.map((e) => BuyOrderBook.fromPartial(e)) || [];
     message.denomTraceList =
       object.denomTraceList?.map((e) => DenomTrace.fromPartial(e)) || [];
+    message.stableSupplyList =
+      object.stableSupplyList?.map((e) => StableSupply.fromPartial(e)) || [];
+    message.stableSupplyCount =
+      object.stableSupplyCount !== undefined &&
+      object.stableSupplyCount !== null
+        ? Long.fromValue(object.stableSupplyCount)
+        : Long.UZERO;
     return message;
   },
 };

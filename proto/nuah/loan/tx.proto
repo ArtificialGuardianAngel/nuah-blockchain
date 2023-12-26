@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package nuah.loan;
+
+option go_package = "nuah/x/loan/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc CreateRequest     (MsgCreateRequest    ) returns (MsgCreateRequestResponse    );
+  rpc CreateRequestBook (MsgCreateRequestBook) returns (MsgCreateRequestBookResponse);
+  rpc AcceptRequest     (MsgAcceptRequest    ) returns (MsgAcceptRequestResponse    );
+  rpc DeclineRequest    (MsgDeclineRequest   ) returns (MsgDeclineRequestResponse   );
+}
+message MsgCreateRequest {
+  string creator = 1;
+  string to      = 2;
+  int32  amount  = 3;
+  string denom   = 4;
+}
+
+message MsgCreateRequestResponse {}
+
+message MsgCreateRequestBook {
+  string creator = 1;
+  string to      = 2;
+}
+
+message MsgCreateRequestBookResponse {}
+
+message MsgAcceptRequest {
+  string creator = 1;
+  int32  id      = 2;
+}
+
+message MsgAcceptRequestResponse {}
+
+message MsgDeclineRequest {
+  string creator = 1;
+  int32  id      = 2;
+}
+
+message MsgDeclineRequestResponse {}
+

@@ -13,12 +13,16 @@ export interface ExchangeBuyOrderBook {
   index?: string;
   amountDenom?: string;
   priceDenom?: string;
+  book?: ExchangeOrderBook;
 }
 
 export interface ExchangeDenomTrace {
   index?: string;
-  port?: string;
-  channel?: string;
+
+  /**
+   * string port = 2;
+   * string channel = 3;
+   */
   origin?: string;
 }
 
@@ -30,7 +34,27 @@ export type ExchangeMsgSendBuyOrderResponse = object;
 
 export type ExchangeMsgSendCreatePairResponse = object;
 
-export type ExchangeMsgSendSellOrderResponse = object;
+export interface ExchangeMsgSendSellOrderResponse {
+  info?: string;
+}
+
+export interface ExchangeOrder {
+  /** @format int32 */
+  id?: number;
+  creator?: string;
+
+  /** @format int32 */
+  amount?: number;
+
+  /** @format int32 */
+  price?: number;
+}
+
+export interface ExchangeOrderBook {
+  /** @format int32 */
+  idCount?: number;
+  orders?: ExchangeOrder[];
+}
 
 /**
  * Params defines the parameters for the module.
@@ -82,6 +106,21 @@ export interface ExchangeQueryAllSellOrderBookResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface ExchangeQueryAllStableSupplyResponse {
+  StableSupply?: ExchangeStableSupply[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface ExchangeQueryGetBuyOrderBookResponse {
   buyOrderBook?: ExchangeBuyOrderBook;
 }
@@ -92,6 +131,10 @@ export interface ExchangeQueryGetDenomTraceResponse {
 
 export interface ExchangeQueryGetSellOrderBookResponse {
   sellOrderBook?: ExchangeSellOrderBook;
+}
+
+export interface ExchangeQueryGetStableSupplyResponse {
+  StableSupply?: ExchangeStableSupply;
 }
 
 /**
@@ -106,6 +149,19 @@ export interface ExchangeSellOrderBook {
   index?: string;
   amountDenom?: string;
   priceDenom?: string;
+  book?: ExchangeOrderBook;
+}
+
+export interface ExchangeStableSupply {
+  /** @format uint64 */
+  id?: string;
+  denom?: string;
+
+  /** @format uint64 */
+  supply?: string;
+
+  /** @format uint64 */
+  inUse?: string;
 }
 
 export interface ProtobufAny {
@@ -450,6 +506,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   querySellOrderBook = (index: string, params: RequestParams = {}) =>
     this.request<ExchangeQueryGetSellOrderBookResponse, RpcStatus>({
       path: `/nuah/exchange/sell_order_book/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStableSupplyAll
+   * @request GET:/nuah/exchange/stable_supply
+   */
+  queryStableSupplyAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<ExchangeQueryAllStableSupplyResponse, RpcStatus>({
+      path: `/nuah/exchange/stable_supply`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStableSupply
+   * @summary Queries a list of StableSupply items.
+   * @request GET:/nuah/exchange/stable_supply/{id}
+   */
+  queryStableSupply = (id: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetStableSupplyResponse, RpcStatus>({
+      path: `/nuah/exchange/stable_supply/${id}`,
       method: "GET",
       format: "json",
       ...params,

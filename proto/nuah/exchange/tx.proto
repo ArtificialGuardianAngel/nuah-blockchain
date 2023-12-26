@@ -13,60 +13,62 @@ service Msg {
   rpc CancelBuyOrder  (MsgCancelBuyOrder ) returns (MsgCancelBuyOrderResponse );
 }
 message MsgSendCreatePair {
-  string sourceDenom      = 5;
-  string targetDenom      = 6;
+  string sourceDenom      = 3;
+  string targetDenom      = 4;
   string creator          = 1;
-  string port             = 2;
-  string channelID        = 3;
-  uint64 timeoutTimestamp = 4;
+  // string port             = 2;
+  // string channelID        = 3;
+  uint64 timeoutTimestamp = 2;
 }
 
 message MsgSendCreatePairResponse {}
 
 message MsgSendSellOrder {
-  string amountDenom      = 5;
-  int32  amount           = 6;
-  string priceDenom       = 7;
-  int32  price            = 8;
+  string amountDenom      = 3;
+  int32  amount           = 4;
+  string priceDenom       = 5;
+  int32  price            = 6;
   string creator          = 1;
-  string port             = 2;
-  string channelID        = 3;
-  uint64 timeoutTimestamp = 4;
+  // string port             = 2;
+  // string channelID        = 3;
+  uint64 timeoutTimestamp = 2;
 }
 
-message MsgSendSellOrderResponse {}
+message MsgSendSellOrderResponse {
+  string info = 1;
+}
 
 message MsgSendBuyOrder {
-  string amountDenom      = 5;
-  int32  amount           = 6;
-  string priceDenom       = 7;
-  int32  price            = 8;
+  string amountDenom      = 3;
+  int32  amount           = 4;
+  string priceDenom       = 5;
+  int32  price            = 6;
   string creator          = 1;
-  string port             = 2;
-  string channelID        = 3;
-  uint64 timeoutTimestamp = 4;
+  // string port             = 2;
+  // string channelID        = 3;
+  uint64 timeoutTimestamp = 2;
 }
 
 message MsgSendBuyOrderResponse {}
 
 message MsgCancelSellOrder {
   string creator     = 1;
-  string port        = 2;
-  string channel     = 3;
-  string amountDenom = 4;
-  string priceDenom  = 5;
-  int32  orderID     = 6;
+  // string port        = 2;
+  // string channel     = 3;
+  string amountDenom = 2;
+  string priceDenom  = 3;
+  int32  orderID     = 4;
 }
 
 message MsgCancelSellOrderResponse {}
 
 message MsgCancelBuyOrder {
   string creator     = 1;
-  string port        = 2;
-  string channel     = 3;
-  string amountDenom = 4;
-  string priceDenom  = 5;
-  int32  orderID     = 6;
+  // string port        = 2;
+  // string channel     = 3;
+  string amountDenom = 2;
+  string priceDenom  = 3;
+  int32  orderID     = 4;
 }
 
 message MsgCancelBuyOrderResponse {}

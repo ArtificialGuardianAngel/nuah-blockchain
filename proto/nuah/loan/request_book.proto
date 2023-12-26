@@ -1,0 +1,12 @@
+syntax = "proto3";
+package nuah.loan;
+
+import "nuah/loan/request.proto";
+
+option go_package = "nuah/x/loan/types";
+
+message RequestBook {
+  string index = 1; 
+  RequestBookItem book = 2;
+}
+

@@ -7,6 +7,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "nuah/nameservice/params.proto";
 import "nuah/nameservice/whois.proto";
+import "nuah/nameservice/whois_by_value.proto";
 
 option go_package = "nuah/x/nameservice/types";
 
@@ -26,6 +27,16 @@ service Query {
   }
   rpc WhoisAll (QueryAllWhoisRequest) returns (QueryAllWhoisResponse) {
     option (google.api.http).get = "/nuah/nameservice/whois";
+  
+  }
+  
+  // Queries a list of WhoisByValue items.
+  rpc WhoisByValue    (QueryGetWhoisByValueRequest) returns (QueryGetWhoisByValueResponse) {
+    option (google.api.http).get = "/nuah/nameservice/whois_by_value/{index}";
+  
+  }
+  rpc WhoisByValueAll (QueryAllWhoisByValueRequest) returns (QueryAllWhoisByValueResponse) {
+    option (google.api.http).get = "/nuah/nameservice/whois_by_value";
   
   }
 }
@@ -54,5 +65,22 @@ message QueryAllWhoisRequest {
 message QueryAllWhoisResponse {
   repeated Whois                                  whois      = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetWhoisByValueRequest {
+  string index = 1;
+}
+
+message QueryGetWhoisByValueResponse {
+  WhoisByValue whoisByValue = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllWhoisByValueRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllWhoisByValueResponse {
+  repeated WhoisByValue                           whoisByValue = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination   = 2;
 }
 

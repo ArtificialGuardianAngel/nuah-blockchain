@@ -14,13 +14,15 @@ accounts:
   - 200000000stake
 - name: bob
   coins:
-  - 10000token
-  - 100000000stake
+  - 1000000nuah
+  - 1000000aga
+  - 1000000000000nuahp
 faucet:
   name: bob
   coins:
-  - 5token
-  - 100000nuahp
+  - 5nuah
+  - 5aga
+  - 1000nuahp
 client:
   typescript:
     path: ts-client

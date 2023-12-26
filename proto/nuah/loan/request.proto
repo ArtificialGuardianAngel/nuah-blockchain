@@ -1,0 +1,17 @@
+syntax = "proto3";
+package nuah.loan;
+
+option go_package = "nuah/x/loan/types";
+
+message RequestBookItem {
+  int32 idCount = 1;
+  repeated Request requests = 2;
+}
+
+message Request {
+  int32 id = 1;
+  string creator = 2;
+  int32 amount = 3;
+  string denom = 4;
+  int32 accepted = 5;
+}

@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package nuah.loan;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "nuah/loan/params.proto";
+import "nuah/loan/request_book.proto";
+
+option go_package = "nuah/x/loan/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  
+  // Parameters queries the parameters of the module.
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/nuah/loan/params";
+  
+  }
+  
+  // Queries a list of RequestBook items.
+  rpc RequestBook    (QueryGetRequestBookRequest) returns (QueryGetRequestBookResponse) {
+    option (google.api.http).get = "/nuah/loan/request_book/{index}";
+  
+  }
+  rpc RequestBookAll (QueryAllRequestBookRequest) returns (QueryAllRequestBookResponse) {
+    option (google.api.http).get = "/nuah/loan/request_book";
+  
+  }
+}
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetRequestBookRequest {
+  string index = 1;
+}
+
+message QueryGetRequestBookResponse {
+  RequestBook requestBook = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllRequestBookRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllRequestBookResponse {
+  repeated RequestBook                            requestBook = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination  = 2;
+}
+

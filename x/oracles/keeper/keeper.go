@@ -3,6 +3,9 @@ package keeper
 import (
 	"fmt"
 
+	"nuah/x/exchange/keeper"
+	"nuah/x/oracles/types"
+
 	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -13,8 +16,6 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 	"github.com/cosmos/ibc-go/v7/modules/core/exported"
-
-	"nuah/x/oracles/types"
 )
 
 type (
@@ -27,6 +28,8 @@ type (
 		channelKeeper types.ChannelKeeper
 		portKeeper    types.PortKeeper
 		scopedKeeper  exported.ScopedKeeper
+
+		exchangeKeeper keeper.Keeper
 	}
 )
 

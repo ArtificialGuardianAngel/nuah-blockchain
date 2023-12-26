@@ -1,0 +1,12 @@
+syntax = "proto3";
+package nuah.exchange;
+
+option go_package = "nuah/x/exchange/types";
+
+message StableSupply {
+  uint64 id = 1;
+  string denom = 2; 
+  uint64 supply = 3; 
+  uint64 inUse = 4; 
+  
+}

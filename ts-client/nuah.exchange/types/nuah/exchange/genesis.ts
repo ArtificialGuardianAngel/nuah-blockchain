@@ -1,9 +1,11 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { BuyOrderBook } from "./buy_order_book";
 import { DenomTrace } from "./denom_trace";
 import { Params } from "./params";
 import { SellOrderBook } from "./sell_order_book";
+import { StableSupply } from "./stable_supply";
 
 export const protobufPackage = "nuah.exchange";
 
@@ -14,10 +16,20 @@ export interface GenesisState {
   sellOrderBookList: SellOrderBook[];
   buyOrderBookList: BuyOrderBook[];
   denomTraceList: DenomTrace[];
+  stableSupplyList: StableSupply[];
+  stableSupplyCount: number;
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, portId: "", sellOrderBookList: [], buyOrderBookList: [], denomTraceList: [] };
+  return {
+    params: undefined,
+    portId: "",
+    sellOrderBookList: [],
+    buyOrderBookList: [],
+    denomTraceList: [],
+    stableSupplyList: [],
+    stableSupplyCount: 0,
+  };
 }
 
 export const GenesisState = {
@@ -36,6 +48,12 @@ export const GenesisState = {
     }
     for (const v of message.denomTraceList) {
       DenomTrace.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.stableSupplyList) {
+      StableSupply.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.stableSupplyCount !== 0) {
+      writer.uint32(56).uint64(message.stableSupplyCount);
     }
     return writer;
   },
@@ -62,6 +80,12 @@ export const GenesisState = {
         case 5:
           message.denomTraceList.push(DenomTrace.decode(reader, reader.uint32()));
           break;
+        case 6:
+          message.stableSupplyList.push(StableSupply.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.stableSupplyCount = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -83,6 +107,10 @@ export const GenesisState = {
       denomTraceList: Array.isArray(object?.denomTraceList)
         ? object.denomTraceList.map((e: any) => DenomTrace.fromJSON(e))
         : [],
+      stableSupplyList: Array.isArray(object?.stableSupplyList)
+        ? object.stableSupplyList.map((e: any) => StableSupply.fromJSON(e))
+        : [],
+      stableSupplyCount: isSet(object.stableSupplyCount) ? Number(object.stableSupplyCount) : 0,
     };
   },
 
@@ -105,6 +133,12 @@ export const GenesisState = {
     } else {
       obj.denomTraceList = [];
     }
+    if (message.stableSupplyList) {
+      obj.stableSupplyList = message.stableSupplyList.map((e) => e ? StableSupply.toJSON(e) : undefined);
+    } else {
+      obj.stableSupplyList = [];
+    }
+    message.stableSupplyCount !== undefined && (obj.stableSupplyCount = Math.round(message.stableSupplyCount));
     return obj;
   },
 
@@ -117,9 +151,30 @@ export const GenesisState = {
     message.sellOrderBookList = object.sellOrderBookList?.map((e) => SellOrderBook.fromPartial(e)) || [];
     message.buyOrderBookList = object.buyOrderBookList?.map((e) => BuyOrderBook.fromPartial(e)) || [];
     message.denomTraceList = object.denomTraceList?.map((e) => DenomTrace.fromPartial(e)) || [];
+    message.stableSupplyList = object.stableSupplyList?.map((e) => StableSupply.fromPartial(e)) || [];
+    message.stableSupplyCount = object.stableSupplyCount ?? 0;
     return message;
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -131,6 +186,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

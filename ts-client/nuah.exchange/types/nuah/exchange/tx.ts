@@ -8,8 +8,10 @@ export interface MsgSendCreatePair {
   sourceDenom: string;
   targetDenom: string;
   creator: string;
-  port: string;
-  channelID: string;
+  /**
+   * string port             = 2;
+   * string channelID        = 3;
+   */
   timeoutTimestamp: number;
 }
 
@@ -22,12 +24,15 @@ export interface MsgSendSellOrder {
   priceDenom: string;
   price: number;
   creator: string;
-  port: string;
-  channelID: string;
+  /**
+   * string port             = 2;
+   * string channelID        = 3;
+   */
   timeoutTimestamp: number;
 }
 
 export interface MsgSendSellOrderResponse {
+  info: string;
 }
 
 export interface MsgSendBuyOrder {
@@ -36,8 +41,10 @@ export interface MsgSendBuyOrder {
   priceDenom: string;
   price: number;
   creator: string;
-  port: string;
-  channelID: string;
+  /**
+   * string port             = 2;
+   * string channelID        = 3;
+   */
   timeoutTimestamp: number;
 }
 
@@ -46,8 +53,10 @@ export interface MsgSendBuyOrderResponse {
 
 export interface MsgCancelSellOrder {
   creator: string;
-  port: string;
-  channel: string;
+  /**
+   * string port        = 2;
+   * string channel     = 3;
+   */
   amountDenom: string;
   priceDenom: string;
   orderID: number;
@@ -58,8 +67,10 @@ export interface MsgCancelSellOrderResponse {
 
 export interface MsgCancelBuyOrder {
   creator: string;
-  port: string;
-  channel: string;
+  /**
+   * string port        = 2;
+   * string channel     = 3;
+   */
   amountDenom: string;
   priceDenom: string;
   orderID: number;
@@ -69,28 +80,22 @@ export interface MsgCancelBuyOrderResponse {
 }
 
 function createBaseMsgSendCreatePair(): MsgSendCreatePair {
-  return { sourceDenom: "", targetDenom: "", creator: "", port: "", channelID: "", timeoutTimestamp: 0 };
+  return { sourceDenom: "", targetDenom: "", creator: "", timeoutTimestamp: 0 };
 }
 
 export const MsgSendCreatePair = {
   encode(message: MsgSendCreatePair, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.sourceDenom !== "") {
-      writer.uint32(42).string(message.sourceDenom);
+      writer.uint32(26).string(message.sourceDenom);
     }
     if (message.targetDenom !== "") {
-      writer.uint32(50).string(message.targetDenom);
+      writer.uint32(34).string(message.targetDenom);
     }
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.port !== "") {
-      writer.uint32(18).string(message.port);
-    }
-    if (message.channelID !== "") {
-      writer.uint32(26).string(message.channelID);
-    }
     if (message.timeoutTimestamp !== 0) {
-      writer.uint32(32).uint64(message.timeoutTimestamp);
+      writer.uint32(16).uint64(message.timeoutTimestamp);
     }
     return writer;
   },
@@ -102,22 +107,16 @@ export const MsgSendCreatePair = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 5:
+        case 3:
           message.sourceDenom = reader.string();
           break;
-        case 6:
+        case 4:
           message.targetDenom = reader.string();
           break;
         case 1:
           message.creator = reader.string();
           break;
         case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.channelID = reader.string();
-          break;
-        case 4:
           message.timeoutTimestamp = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -133,8 +132,6 @@ export const MsgSendCreatePair = {
       sourceDenom: isSet(object.sourceDenom) ? String(object.sourceDenom) : "",
       targetDenom: isSet(object.targetDenom) ? String(object.targetDenom) : "",
       creator: isSet(object.creator) ? String(object.creator) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channelID: isSet(object.channelID) ? String(object.channelID) : "",
       timeoutTimestamp: isSet(object.timeoutTimestamp) ? Number(object.timeoutTimestamp) : 0,
     };
   },
@@ -144,8 +141,6 @@ export const MsgSendCreatePair = {
     message.sourceDenom !== undefined && (obj.sourceDenom = message.sourceDenom);
     message.targetDenom !== undefined && (obj.targetDenom = message.targetDenom);
     message.creator !== undefined && (obj.creator = message.creator);
-    message.port !== undefined && (obj.port = message.port);
-    message.channelID !== undefined && (obj.channelID = message.channelID);
     message.timeoutTimestamp !== undefined && (obj.timeoutTimestamp = Math.round(message.timeoutTimestamp));
     return obj;
   },
@@ -155,8 +150,6 @@ export const MsgSendCreatePair = {
     message.sourceDenom = object.sourceDenom ?? "";
     message.targetDenom = object.targetDenom ?? "";
     message.creator = object.creator ?? "";
-    message.port = object.port ?? "";
-    message.channelID = object.channelID ?? "";
     message.timeoutTimestamp = object.timeoutTimestamp ?? 0;
     return message;
   },
@@ -202,43 +195,28 @@ export const MsgSendCreatePairResponse = {
 };
 
 function createBaseMsgSendSellOrder(): MsgSendSellOrder {
-  return {
-    amountDenom: "",
-    amount: 0,
-    priceDenom: "",
-    price: 0,
-    creator: "",
-    port: "",
-    channelID: "",
-    timeoutTimestamp: 0,
-  };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, creator: "", timeoutTimestamp: 0 };
 }
 
 export const MsgSendSellOrder = {
   encode(message: MsgSendSellOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.amountDenom !== "") {
-      writer.uint32(42).string(message.amountDenom);
+      writer.uint32(26).string(message.amountDenom);
     }
     if (message.amount !== 0) {
-      writer.uint32(48).int32(message.amount);
+      writer.uint32(32).int32(message.amount);
     }
     if (message.priceDenom !== "") {
-      writer.uint32(58).string(message.priceDenom);
+      writer.uint32(42).string(message.priceDenom);
     }
     if (message.price !== 0) {
-      writer.uint32(64).int32(message.price);
+      writer.uint32(48).int32(message.price);
     }
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.port !== "") {
-      writer.uint32(18).string(message.port);
-    }
-    if (message.channelID !== "") {
-      writer.uint32(26).string(message.channelID);
-    }
     if (message.timeoutTimestamp !== 0) {
-      writer.uint32(32).uint64(message.timeoutTimestamp);
+      writer.uint32(16).uint64(message.timeoutTimestamp);
     }
     return writer;
   },
@@ -250,28 +228,22 @@ export const MsgSendSellOrder = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 5:
+        case 3:
           message.amountDenom = reader.string();
           break;
-        case 6:
+        case 4:
           message.amount = reader.int32();
           break;
-        case 7:
+        case 5:
           message.priceDenom = reader.string();
           break;
-        case 8:
+        case 6:
           message.price = reader.int32();
           break;
         case 1:
           message.creator = reader.string();
           break;
         case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.channelID = reader.string();
-          break;
-        case 4:
           message.timeoutTimestamp = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -289,8 +261,6 @@ export const MsgSendSellOrder = {
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
       creator: isSet(object.creator) ? String(object.creator) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channelID: isSet(object.channelID) ? String(object.channelID) : "",
       timeoutTimestamp: isSet(object.timeoutTimestamp) ? Number(object.timeoutTimestamp) : 0,
     };
   },
@@ -302,8 +272,6 @@ export const MsgSendSellOrder = {
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
     message.creator !== undefined && (obj.creator = message.creator);
-    message.port !== undefined && (obj.port = message.port);
-    message.channelID !== undefined && (obj.channelID = message.channelID);
     message.timeoutTimestamp !== undefined && (obj.timeoutTimestamp = Math.round(message.timeoutTimestamp));
     return obj;
   },
@@ -315,19 +283,20 @@ export const MsgSendSellOrder = {
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
     message.creator = object.creator ?? "";
-    message.port = object.port ?? "";
-    message.channelID = object.channelID ?? "";
     message.timeoutTimestamp = object.timeoutTimestamp ?? 0;
     return message;
   },
 };
 
 function createBaseMsgSendSellOrderResponse(): MsgSendSellOrderResponse {
-  return {};
+  return { info: "" };
 }
 
 export const MsgSendSellOrderResponse = {
-  encode(_: MsgSendSellOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: MsgSendSellOrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.info !== "") {
+      writer.uint32(10).string(message.info);
+    }
     return writer;
   },
 
@@ -338,6 +307,9 @@ export const MsgSendSellOrderResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.info = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -346,59 +318,46 @@ export const MsgSendSellOrderResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgSendSellOrderResponse {
-    return {};
+  fromJSON(object: any): MsgSendSellOrderResponse {
+    return { info: isSet(object.info) ? String(object.info) : "" };
   },
 
-  toJSON(_: MsgSendSellOrderResponse): unknown {
+  toJSON(message: MsgSendSellOrderResponse): unknown {
     const obj: any = {};
+    message.info !== undefined && (obj.info = message.info);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgSendSellOrderResponse>, I>>(_: I): MsgSendSellOrderResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSendSellOrderResponse>, I>>(object: I): MsgSendSellOrderResponse {
     const message = createBaseMsgSendSellOrderResponse();
+    message.info = object.info ?? "";
     return message;
   },
 };
 
 function createBaseMsgSendBuyOrder(): MsgSendBuyOrder {
-  return {
-    amountDenom: "",
-    amount: 0,
-    priceDenom: "",
-    price: 0,
-    creator: "",
-    port: "",
-    channelID: "",
-    timeoutTimestamp: 0,
-  };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, creator: "", timeoutTimestamp: 0 };
 }
 
 export const MsgSendBuyOrder = {
   encode(message: MsgSendBuyOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.amountDenom !== "") {
-      writer.uint32(42).string(message.amountDenom);
+      writer.uint32(26).string(message.amountDenom);
     }
     if (message.amount !== 0) {
-      writer.uint32(48).int32(message.amount);
+      writer.uint32(32).int32(message.amount);
     }
     if (message.priceDenom !== "") {
-      writer.uint32(58).string(message.priceDenom);
+      writer.uint32(42).string(message.priceDenom);
     }
     if (message.price !== 0) {
-      writer.uint32(64).int32(message.price);
+      writer.uint32(48).int32(message.price);
     }
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.port !== "") {
-      writer.uint32(18).string(message.port);
-    }
-    if (message.channelID !== "") {
-      writer.uint32(26).string(message.channelID);
-    }
     if (message.timeoutTimestamp !== 0) {
-      writer.uint32(32).uint64(message.timeoutTimestamp);
+      writer.uint32(16).uint64(message.timeoutTimestamp);
     }
     return writer;
   },
@@ -410,28 +369,22 @@ export const MsgSendBuyOrder = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 5:
+        case 3:
           message.amountDenom = reader.string();
           break;
-        case 6:
+        case 4:
           message.amount = reader.int32();
           break;
-        case 7:
+        case 5:
           message.priceDenom = reader.string();
           break;
-        case 8:
+        case 6:
           message.price = reader.int32();
           break;
         case 1:
           message.creator = reader.string();
           break;
         case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.channelID = reader.string();
-          break;
-        case 4:
           message.timeoutTimestamp = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -449,8 +402,6 @@ export const MsgSendBuyOrder = {
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
       creator: isSet(object.creator) ? String(object.creator) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channelID: isSet(object.channelID) ? String(object.channelID) : "",
       timeoutTimestamp: isSet(object.timeoutTimestamp) ? Number(object.timeoutTimestamp) : 0,
     };
   },
@@ -462,8 +413,6 @@ export const MsgSendBuyOrder = {
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
     message.creator !== undefined && (obj.creator = message.creator);
-    message.port !== undefined && (obj.port = message.port);
-    message.channelID !== undefined && (obj.channelID = message.channelID);
     message.timeoutTimestamp !== undefined && (obj.timeoutTimestamp = Math.round(message.timeoutTimestamp));
     return obj;
   },
@@ -475,8 +424,6 @@ export const MsgSendBuyOrder = {
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
     message.creator = object.creator ?? "";
-    message.port = object.port ?? "";
-    message.channelID = object.channelID ?? "";
     message.timeoutTimestamp = object.timeoutTimestamp ?? 0;
     return message;
   },
@@ -522,7 +469,7 @@ export const MsgSendBuyOrderResponse = {
 };
 
 function createBaseMsgCancelSellOrder(): MsgCancelSellOrder {
-  return { creator: "", port: "", channel: "", amountDenom: "", priceDenom: "", orderID: 0 };
+  return { creator: "", amountDenom: "", priceDenom: "", orderID: 0 };
 }
 
 export const MsgCancelSellOrder = {
@@ -530,20 +477,14 @@ export const MsgCancelSellOrder = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.port !== "") {
-      writer.uint32(18).string(message.port);
-    }
-    if (message.channel !== "") {
-      writer.uint32(26).string(message.channel);
-    }
     if (message.amountDenom !== "") {
-      writer.uint32(34).string(message.amountDenom);
+      writer.uint32(18).string(message.amountDenom);
     }
     if (message.priceDenom !== "") {
-      writer.uint32(42).string(message.priceDenom);
+      writer.uint32(26).string(message.priceDenom);
     }
     if (message.orderID !== 0) {
-      writer.uint32(48).int32(message.orderID);
+      writer.uint32(32).int32(message.orderID);
     }
     return writer;
   },
@@ -559,18 +500,12 @@ export const MsgCancelSellOrder = {
           message.creator = reader.string();
           break;
         case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.channel = reader.string();
-          break;
-        case 4:
           message.amountDenom = reader.string();
           break;
-        case 5:
+        case 3:
           message.priceDenom = reader.string();
           break;
-        case 6:
+        case 4:
           message.orderID = reader.int32();
           break;
         default:
@@ -584,8 +519,6 @@ export const MsgCancelSellOrder = {
   fromJSON(object: any): MsgCancelSellOrder {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channel: isSet(object.channel) ? String(object.channel) : "",
       amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       orderID: isSet(object.orderID) ? Number(object.orderID) : 0,
@@ -595,8 +528,6 @@ export const MsgCancelSellOrder = {
   toJSON(message: MsgCancelSellOrder): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.port !== undefined && (obj.port = message.port);
-    message.channel !== undefined && (obj.channel = message.channel);
     message.amountDenom !== undefined && (obj.amountDenom = message.amountDenom);
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.orderID !== undefined && (obj.orderID = Math.round(message.orderID));
@@ -606,8 +537,6 @@ export const MsgCancelSellOrder = {
   fromPartial<I extends Exact<DeepPartial<MsgCancelSellOrder>, I>>(object: I): MsgCancelSellOrder {
     const message = createBaseMsgCancelSellOrder();
     message.creator = object.creator ?? "";
-    message.port = object.port ?? "";
-    message.channel = object.channel ?? "";
     message.amountDenom = object.amountDenom ?? "";
     message.priceDenom = object.priceDenom ?? "";
     message.orderID = object.orderID ?? 0;
@@ -655,7 +584,7 @@ export const MsgCancelSellOrderResponse = {
 };
 
 function createBaseMsgCancelBuyOrder(): MsgCancelBuyOrder {
-  return { creator: "", port: "", channel: "", amountDenom: "", priceDenom: "", orderID: 0 };
+  return { creator: "", amountDenom: "", priceDenom: "", orderID: 0 };
 }
 
 export const MsgCancelBuyOrder = {
@@ -663,20 +592,14 @@ export const MsgCancelBuyOrder = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.port !== "") {
-      writer.uint32(18).string(message.port);
-    }
-    if (message.channel !== "") {
-      writer.uint32(26).string(message.channel);
-    }
     if (message.amountDenom !== "") {
-      writer.uint32(34).string(message.amountDenom);
+      writer.uint32(18).string(message.amountDenom);
     }
     if (message.priceDenom !== "") {
-      writer.uint32(42).string(message.priceDenom);
+      writer.uint32(26).string(message.priceDenom);
     }
     if (message.orderID !== 0) {
-      writer.uint32(48).int32(message.orderID);
+      writer.uint32(32).int32(message.orderID);
     }
     return writer;
   },
@@ -692,18 +615,12 @@ export const MsgCancelBuyOrder = {
           message.creator = reader.string();
           break;
         case 2:
-          message.port = reader.string();
-          break;
-        case 3:
-          message.channel = reader.string();
-          break;
-        case 4:
           message.amountDenom = reader.string();
           break;
-        case 5:
+        case 3:
           message.priceDenom = reader.string();
           break;
-        case 6:
+        case 4:
           message.orderID = reader.int32();
           break;
         default:
@@ -717,8 +634,6 @@ export const MsgCancelBuyOrder = {
   fromJSON(object: any): MsgCancelBuyOrder {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
-      port: isSet(object.port) ? String(object.port) : "",
-      channel: isSet(object.channel) ? String(object.channel) : "",
       amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       orderID: isSet(object.orderID) ? Number(object.orderID) : 0,
@@ -728,8 +643,6 @@ export const MsgCancelBuyOrder = {
   toJSON(message: MsgCancelBuyOrder): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.port !== undefined && (obj.port = message.port);
-    message.channel !== undefined && (obj.channel = message.channel);
     message.amountDenom !== undefined && (obj.amountDenom = message.amountDenom);
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.orderID !== undefined && (obj.orderID = Math.round(message.orderID));
@@ -739,8 +652,6 @@ export const MsgCancelBuyOrder = {
   fromPartial<I extends Exact<DeepPartial<MsgCancelBuyOrder>, I>>(object: I): MsgCancelBuyOrder {
     const message = createBaseMsgCancelBuyOrder();
     message.creator = object.creator ?? "";
-    message.port = object.port ?? "";
-    message.channel = object.channel ?? "";
     message.amountDenom = object.amountDenom ?? "";
     message.priceDenom = object.priceDenom ?? "";
     message.orderID = object.orderID ?? 0;

@@ -9,6 +9,7 @@ import "nuah/exchange/params.proto";
 import "nuah/exchange/sell_order_book.proto";
 import "nuah/exchange/buy_order_book.proto";
 import "nuah/exchange/denom_trace.proto";
+import "nuah/exchange/stable_supply.proto";
 
 option go_package = "nuah/x/exchange/types";
 
@@ -48,6 +49,16 @@ service Query {
   }
   rpc DenomTraceAll (QueryAllDenomTraceRequest) returns (QueryAllDenomTraceResponse) {
     option (google.api.http).get = "/nuah/exchange/denom_trace";
+  
+  }
+  
+  // Queries a list of StableSupply items.
+  rpc StableSupply    (QueryGetStableSupplyRequest) returns (QueryGetStableSupplyResponse) {
+    option (google.api.http).get = "/nuah/exchange/stable_supply/{id}";
+  
+  }
+  rpc StableSupplyAll (QueryAllStableSupplyRequest) returns (QueryAllStableSupplyResponse) {
+    option (google.api.http).get = "/nuah/exchange/stable_supply";
   
   }
 }
@@ -110,5 +121,22 @@ message QueryAllDenomTraceRequest {
 message QueryAllDenomTraceResponse {
   repeated DenomTrace                             denomTrace = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetStableSupplyRequest {
+  uint64 id = 1;
+}
+
+message QueryGetStableSupplyResponse {
+  StableSupply StableSupply = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllStableSupplyRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllStableSupplyResponse {
+  repeated StableSupply                           StableSupply = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination   = 2;
 }
 

@@ -15,6 +15,7 @@ func DefaultGenesis() *GenesisState {
 		SellOrderBookList: []SellOrderBook{},
 		BuyOrderBookList:  []BuyOrderBook{},
 		DenomTraceList:    []DenomTrace{},
+		StableSupplyList:  []StableSupply{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -55,6 +56,18 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("duplicated index for denomTrace")
 		}
 		denomTraceIndexMap[index] = struct{}{}
+	}
+	// Check for duplicated ID in stableSupply
+	stableSupplyIdMap := make(map[uint64]bool)
+	stableSupplyCount := gs.GetStableSupplyCount()
+	for _, elem := range gs.StableSupplyList {
+		if _, ok := stableSupplyIdMap[elem.Id]; ok {
+			return fmt.Errorf("duplicated id for stableSupply")
+		}
+		if elem.Id >= stableSupplyCount {
+			return fmt.Errorf("stableSupply id should be lower or equal than the last id")
+		}
+		stableSupplyIdMap[elem.Id] = true
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 

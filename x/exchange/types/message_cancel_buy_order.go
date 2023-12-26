@@ -9,11 +9,9 @@ const TypeMsgCancelBuyOrder = "cancel_buy_order"
 
 var _ sdk.Msg = &MsgCancelBuyOrder{}
 
-func NewMsgCancelBuyOrder(creator string, port string, channel string, amountDenom string, priceDenom string, orderID int32) *MsgCancelBuyOrder {
+func NewMsgCancelBuyOrder(creator string, amountDenom string, priceDenom string, orderID int32) *MsgCancelBuyOrder {
 	return &MsgCancelBuyOrder{
 		Creator:     creator,
-		Port:        port,
-		Channel:     channel,
 		AmountDenom: amountDenom,
 		PriceDenom:  priceDenom,
 		OrderID:     orderID,

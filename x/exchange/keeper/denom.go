@@ -7,12 +7,12 @@ import (
 	"nuah/x/exchange/types"
 )
 
-func VoucherDenom(port string, channel string, denom string) string {
+func VoucherDenom(denom string) string {
 	// since SendPacket did not prefix the denomination, we must prefix denomination here
-	sourcePrefix := ibctransfertypes.GetDenomPrefix(port, channel)
+	// sourcePrefix := ibctransfertypes.GetDenomPrefix(port, channel)
 
 	// NOTE: sourcePrefix contains the trailing "/"
-	prefixedDenom := sourcePrefix + denom
+	prefixedDenom := denom
 
 	// construct the denomination trace from the full raw denomination
 	denomTrace := ibctransfertypes.ParseDenomTrace(prefixedDenom)
@@ -20,28 +20,24 @@ func VoucherDenom(port string, channel string, denom string) string {
 	return voucher[:16]
 }
 
-func (k Keeper) SaveVoucherDenom(ctx sdk.Context, port string, channel string, denom string) {
-	voucher := VoucherDenom(port, channel, denom)
+func (k Keeper) SaveVoucherDenom(ctx sdk.Context, denom string) {
+	voucher := VoucherDenom(denom)
 
 	// Store the origin denom
 	_, saved := k.GetDenomTrace(ctx, voucher)
 	if !saved {
 		k.SetDenomTrace(ctx, types.DenomTrace{
-			Index:   voucher,
-			Port:    port,
-			Channel: channel,
-			Origin:  denom,
+			Index:  voucher,
+			Origin: denom,
 		})
 	}
 }
 
-func (k Keeper) OriginalDenom(ctx sdk.Context, port string, channel string, voucher string) (string, bool) {
+func (k Keeper) OriginalDenom(ctx sdk.Context, voucher string) (string, bool) {
 	trace, exist := k.GetDenomTrace(ctx, voucher)
 	if exist {
 		// Check if original port and channel
-		if trace.Port == port && trace.Channel == channel {
-			return trace.Origin, true
-		}
+		return trace.Origin, true
 	}
 
 	// Not the original chain

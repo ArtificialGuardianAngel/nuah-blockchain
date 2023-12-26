@@ -29,6 +29,7 @@ export interface SellOrderPacketData {
   amount: number;
   priceDenom: string;
   price: number;
+  seller: string;
 }
 
 /** SellOrderPacketAck defines a struct for the packet acknowledgment */
@@ -43,6 +44,7 @@ export interface BuyOrderPacketData {
   amount: number;
   priceDenom: string;
   price: number;
+  buyer: string;
 }
 
 /** BuyOrderPacketAck defines a struct for the packet acknowledgment */
@@ -279,7 +281,7 @@ export const CreatePairPacketAck = {
 };
 
 function createBaseSellOrderPacketData(): SellOrderPacketData {
-  return { amountDenom: "", amount: 0, priceDenom: "", price: 0 };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, seller: "" };
 }
 
 export const SellOrderPacketData = {
@@ -295,6 +297,9 @@ export const SellOrderPacketData = {
     }
     if (message.price !== 0) {
       writer.uint32(32).int32(message.price);
+    }
+    if (message.seller !== "") {
+      writer.uint32(42).string(message.seller);
     }
     return writer;
   },
@@ -318,6 +323,9 @@ export const SellOrderPacketData = {
         case 4:
           message.price = reader.int32();
           break;
+        case 5:
+          message.seller = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -332,6 +340,7 @@ export const SellOrderPacketData = {
       amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
+      seller: isSet(object.seller) ? String(object.seller) : "",
     };
   },
 
@@ -341,6 +350,7 @@ export const SellOrderPacketData = {
     message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
+    message.seller !== undefined && (obj.seller = message.seller);
     return obj;
   },
 
@@ -350,6 +360,7 @@ export const SellOrderPacketData = {
     message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
+    message.seller = object.seller ?? "";
     return message;
   },
 };
@@ -413,7 +424,7 @@ export const SellOrderPacketAck = {
 };
 
 function createBaseBuyOrderPacketData(): BuyOrderPacketData {
-  return { amountDenom: "", amount: 0, priceDenom: "", price: 0 };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, buyer: "" };
 }
 
 export const BuyOrderPacketData = {
@@ -429,6 +440,9 @@ export const BuyOrderPacketData = {
     }
     if (message.price !== 0) {
       writer.uint32(32).int32(message.price);
+    }
+    if (message.buyer !== "") {
+      writer.uint32(42).string(message.buyer);
     }
     return writer;
   },
@@ -452,6 +466,9 @@ export const BuyOrderPacketData = {
         case 4:
           message.price = reader.int32();
           break;
+        case 5:
+          message.buyer = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -466,6 +483,7 @@ export const BuyOrderPacketData = {
       amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
+      buyer: isSet(object.buyer) ? String(object.buyer) : "",
     };
   },
 
@@ -475,6 +493,7 @@ export const BuyOrderPacketData = {
     message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
+    message.buyer !== undefined && (obj.buyer = message.buyer);
     return obj;
   },
 
@@ -484,6 +503,7 @@ export const BuyOrderPacketData = {
     message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
+    message.buyer = object.buyer ?? "";
     return message;
   },
 };

@@ -28,12 +28,12 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgSendCreatePair struct {
-	SourceDenom      string `protobuf:"bytes,5,opt,name=sourceDenom,proto3" json:"sourceDenom,omitempty"`
-	TargetDenom      string `protobuf:"bytes,6,opt,name=targetDenom,proto3" json:"targetDenom,omitempty"`
-	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Port             string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	ChannelID        string `protobuf:"bytes,3,opt,name=channelID,proto3" json:"channelID,omitempty"`
-	TimeoutTimestamp uint64 `protobuf:"varint,4,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
+	SourceDenom string `protobuf:"bytes,3,opt,name=sourceDenom,proto3" json:"sourceDenom,omitempty"`
+	TargetDenom string `protobuf:"bytes,4,opt,name=targetDenom,proto3" json:"targetDenom,omitempty"`
+	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// string port             = 2;
+	// string channelID        = 3;
+	TimeoutTimestamp uint64 `protobuf:"varint,2,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
 }
 
 func (m *MsgSendCreatePair) Reset()         { *m = MsgSendCreatePair{} }
@@ -90,20 +90,6 @@ func (m *MsgSendCreatePair) GetCreator() string {
 	return ""
 }
 
-func (m *MsgSendCreatePair) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *MsgSendCreatePair) GetChannelID() string {
-	if m != nil {
-		return m.ChannelID
-	}
-	return ""
-}
-
 func (m *MsgSendCreatePair) GetTimeoutTimestamp() uint64 {
 	if m != nil {
 		return m.TimeoutTimestamp
@@ -148,14 +134,14 @@ func (m *MsgSendCreatePairResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSendCreatePairResponse proto.InternalMessageInfo
 
 type MsgSendSellOrder struct {
-	AmountDenom      string `protobuf:"bytes,5,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
-	Amount           int32  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`
-	PriceDenom       string `protobuf:"bytes,7,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
-	Price            int32  `protobuf:"varint,8,opt,name=price,proto3" json:"price,omitempty"`
-	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Port             string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	ChannelID        string `protobuf:"bytes,3,opt,name=channelID,proto3" json:"channelID,omitempty"`
-	TimeoutTimestamp uint64 `protobuf:"varint,4,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
+	AmountDenom string `protobuf:"bytes,3,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
+	Amount      int32  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	PriceDenom  string `protobuf:"bytes,5,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
+	Price       int32  `protobuf:"varint,6,opt,name=price,proto3" json:"price,omitempty"`
+	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// string port             = 2;
+	// string channelID        = 3;
+	TimeoutTimestamp uint64 `protobuf:"varint,2,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
 }
 
 func (m *MsgSendSellOrder) Reset()         { *m = MsgSendSellOrder{} }
@@ -226,20 +212,6 @@ func (m *MsgSendSellOrder) GetCreator() string {
 	return ""
 }
 
-func (m *MsgSendSellOrder) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *MsgSendSellOrder) GetChannelID() string {
-	if m != nil {
-		return m.ChannelID
-	}
-	return ""
-}
-
 func (m *MsgSendSellOrder) GetTimeoutTimestamp() uint64 {
 	if m != nil {
 		return m.TimeoutTimestamp
@@ -248,6 +220,7 @@ func (m *MsgSendSellOrder) GetTimeoutTimestamp() uint64 {
 }
 
 type MsgSendSellOrderResponse struct {
+	Info string `protobuf:"bytes,1,opt,name=info,proto3" json:"info,omitempty"`
 }
 
 func (m *MsgSendSellOrderResponse) Reset()         { *m = MsgSendSellOrderResponse{} }
@@ -283,15 +256,22 @@ func (m *MsgSendSellOrderResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSendSellOrderResponse proto.InternalMessageInfo
 
+func (m *MsgSendSellOrderResponse) GetInfo() string {
+	if m != nil {
+		return m.Info
+	}
+	return ""
+}
+
 type MsgSendBuyOrder struct {
-	AmountDenom      string `protobuf:"bytes,5,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
-	Amount           int32  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"`
-	PriceDenom       string `protobuf:"bytes,7,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
-	Price            int32  `protobuf:"varint,8,opt,name=price,proto3" json:"price,omitempty"`
-	Creator          string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Port             string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	ChannelID        string `protobuf:"bytes,3,opt,name=channelID,proto3" json:"channelID,omitempty"`
-	TimeoutTimestamp uint64 `protobuf:"varint,4,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
+	AmountDenom string `protobuf:"bytes,3,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
+	Amount      int32  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	PriceDenom  string `protobuf:"bytes,5,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
+	Price       int32  `protobuf:"varint,6,opt,name=price,proto3" json:"price,omitempty"`
+	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// string port             = 2;
+	// string channelID        = 3;
+	TimeoutTimestamp uint64 `protobuf:"varint,2,opt,name=timeoutTimestamp,proto3" json:"timeoutTimestamp,omitempty"`
 }
 
 func (m *MsgSendBuyOrder) Reset()         { *m = MsgSendBuyOrder{} }
@@ -362,20 +342,6 @@ func (m *MsgSendBuyOrder) GetCreator() string {
 	return ""
 }
 
-func (m *MsgSendBuyOrder) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *MsgSendBuyOrder) GetChannelID() string {
-	if m != nil {
-		return m.ChannelID
-	}
-	return ""
-}
-
 func (m *MsgSendBuyOrder) GetTimeoutTimestamp() uint64 {
 	if m != nil {
 		return m.TimeoutTimestamp
@@ -420,12 +386,12 @@ func (m *MsgSendBuyOrderResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSendBuyOrderResponse proto.InternalMessageInfo
 
 type MsgCancelSellOrder struct {
-	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Port        string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	Channel     string `protobuf:"bytes,3,opt,name=channel,proto3" json:"channel,omitempty"`
-	AmountDenom string `protobuf:"bytes,4,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
-	PriceDenom  string `protobuf:"bytes,5,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
-	OrderID     int32  `protobuf:"varint,6,opt,name=orderID,proto3" json:"orderID,omitempty"`
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// string port        = 2;
+	// string channel     = 3;
+	AmountDenom string `protobuf:"bytes,2,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
+	PriceDenom  string `protobuf:"bytes,3,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
+	OrderID     int32  `protobuf:"varint,4,opt,name=orderID,proto3" json:"orderID,omitempty"`
 }
 
 func (m *MsgCancelSellOrder) Reset()         { *m = MsgCancelSellOrder{} }
@@ -464,20 +430,6 @@ var xxx_messageInfo_MsgCancelSellOrder proto.InternalMessageInfo
 func (m *MsgCancelSellOrder) GetCreator() string {
 	if m != nil {
 		return m.Creator
-	}
-	return ""
-}
-
-func (m *MsgCancelSellOrder) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *MsgCancelSellOrder) GetChannel() string {
-	if m != nil {
-		return m.Channel
 	}
 	return ""
 }
@@ -540,12 +492,12 @@ func (m *MsgCancelSellOrderResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgCancelSellOrderResponse proto.InternalMessageInfo
 
 type MsgCancelBuyOrder struct {
-	Creator     string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Port        string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	Channel     string `protobuf:"bytes,3,opt,name=channel,proto3" json:"channel,omitempty"`
-	AmountDenom string `protobuf:"bytes,4,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
-	PriceDenom  string `protobuf:"bytes,5,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
-	OrderID     int32  `protobuf:"varint,6,opt,name=orderID,proto3" json:"orderID,omitempty"`
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// string port        = 2;
+	// string channel     = 3;
+	AmountDenom string `protobuf:"bytes,2,opt,name=amountDenom,proto3" json:"amountDenom,omitempty"`
+	PriceDenom  string `protobuf:"bytes,3,opt,name=priceDenom,proto3" json:"priceDenom,omitempty"`
+	OrderID     int32  `protobuf:"varint,4,opt,name=orderID,proto3" json:"orderID,omitempty"`
 }
 
 func (m *MsgCancelBuyOrder) Reset()         { *m = MsgCancelBuyOrder{} }
@@ -584,20 +536,6 @@ var xxx_messageInfo_MsgCancelBuyOrder proto.InternalMessageInfo
 func (m *MsgCancelBuyOrder) GetCreator() string {
 	if m != nil {
 		return m.Creator
-	}
-	return ""
-}
-
-func (m *MsgCancelBuyOrder) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *MsgCancelBuyOrder) GetChannel() string {
-	if m != nil {
-		return m.Channel
 	}
 	return ""
 }
@@ -675,39 +613,38 @@ func init() {
 func init() { proto.RegisterFile("nuah/exchange/tx.proto", fileDescriptor_6eb71e8aab3c0bbb) }
 
 var fileDescriptor_6eb71e8aab3c0bbb = []byte{
-	// 509 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x55, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0xce, 0x92, 0x3f, 0x3a, 0xd0, 0x1f, 0x56, 0x50, 0xb6, 0xa6, 0x32, 0x21, 0x07, 0x08, 0x1c,
-	0x12, 0x09, 0xde, 0xa0, 0xcd, 0xa5, 0x87, 0x08, 0x94, 0x22, 0x24, 0x50, 0x25, 0x64, 0xd2, 0x91,
-	0x1b, 0x29, 0xf6, 0x5a, 0xeb, 0xb5, 0x94, 0xbe, 0x05, 0x6f, 0x03, 0x8f, 0xc0, 0x8d, 0x5e, 0x90,
-	0x38, 0xa2, 0xe4, 0x29, 0xe0, 0x84, 0xbc, 0xeb, 0xdd, 0xfa, 0xa7, 0x60, 0x71, 0x42, 0x88, 0x9b,
-	0xe7, 0x9b, 0x6f, 0xd6, 0xf3, 0x7d, 0xbb, 0x3b, 0x0b, 0xbb, 0x61, 0xe2, 0x9d, 0x8d, 0x70, 0x39,
-	0x3b, 0xf3, 0x42, 0x1f, 0x47, 0x72, 0x39, 0x8c, 0x04, 0x97, 0x9c, 0x6e, 0xa6, 0xf8, 0xd0, 0xe0,
-	0xfd, 0xcf, 0x04, 0x6e, 0x4d, 0x62, 0xff, 0x18, 0xc3, 0xd3, 0x43, 0x81, 0x9e, 0xc4, 0x17, 0xde,
-	0x5c, 0xd0, 0x1e, 0xdc, 0x88, 0x79, 0x22, 0x66, 0x38, 0xc6, 0x90, 0x07, 0xac, 0xdd, 0x23, 0x83,
-	0x8d, 0x69, 0x1e, 0x4a, 0x19, 0xd2, 0x13, 0x3e, 0x4a, 0xcd, 0xe8, 0x68, 0x46, 0x0e, 0xa2, 0x0c,
-	0xba, 0xb3, 0x74, 0x45, 0x2e, 0x18, 0x51, 0x59, 0x13, 0x52, 0x0a, 0xad, 0x88, 0x0b, 0xc9, 0xae,
-	0x29, 0x58, 0x7d, 0xd3, 0x7d, 0xd8, 0x48, 0x3b, 0x0a, 0x71, 0x71, 0x34, 0x66, 0x4d, 0x95, 0xb8,
-	0x04, 0xe8, 0x13, 0xd8, 0x91, 0xf3, 0x00, 0x79, 0x22, 0x5f, 0xce, 0x03, 0x8c, 0xa5, 0x17, 0x44,
-	0xac, 0xd5, 0x23, 0x83, 0xd6, 0xb4, 0x82, 0xf7, 0xef, 0xc1, 0x5e, 0x45, 0xd0, 0x14, 0xe3, 0x88,
-	0x87, 0x31, 0xf6, 0x7f, 0x10, 0xd8, 0xc9, 0xb2, 0xc7, 0xb8, 0x58, 0x3c, 0x17, 0xa7, 0xa8, 0xd4,
-	0x7a, 0x01, 0x4f, 0x42, 0x59, 0x50, 0x9b, 0x83, 0xe8, 0x2e, 0x74, 0x74, 0xa8, 0x84, 0xb6, 0xa7,
-	0x59, 0x44, 0x5d, 0x80, 0x48, 0xcc, 0x8d, 0x4d, 0x5d, 0x55, 0x98, 0x43, 0xe8, 0x6d, 0x68, 0xab,
-	0x88, 0x5d, 0x57, 0x65, 0x3a, 0xf8, 0x6b, 0xce, 0x38, 0xc0, 0xca, 0xda, 0xad, 0x31, 0xdf, 0x09,
-	0x6c, 0x67, 0xc9, 0x83, 0xe4, 0xfc, 0xff, 0xf2, 0x65, 0x0f, 0xee, 0x96, 0xa4, 0x5b, 0x5b, 0x3e,
-	0x12, 0xa0, 0x93, 0xd8, 0x3f, 0xf4, 0xc2, 0x19, 0x2e, 0x2e, 0x4f, 0xcc, 0x9f, 0x75, 0x9a, 0xb2,
-	0x75, 0x63, 0x59, 0x9f, 0x26, 0x2c, 0x3b, 0xdc, 0xaa, 0x3a, 0x5c, 0x74, 0xb2, 0x5d, 0x71, 0x92,
-	0x41, 0x97, 0xa7, 0x2d, 0x1d, 0x8d, 0xb3, 0x2d, 0x30, 0x61, 0x7f, 0x1f, 0x9c, 0x6a, 0xe7, 0x56,
-	0xd8, 0x07, 0x7d, 0xef, 0x75, 0xda, 0xee, 0xf8, 0xbf, 0xa0, 0x4b, 0xdf, 0xef, 0x62, 0xe3, 0x46,
-	0xd6, 0xd3, 0x2f, 0x4d, 0x68, 0x4e, 0x62, 0x9f, 0x9e, 0xc0, 0x56, 0x79, 0xa4, 0x0d, 0x0b, 0x83,
-	0x6f, 0x58, 0x99, 0x11, 0xce, 0xa0, 0x8e, 0x61, 0xfe, 0x42, 0x5f, 0xc3, 0x66, 0x71, 0x82, 0xdc,
-	0xbf, 0xba, 0xd4, 0x12, 0x9c, 0x47, 0x35, 0x04, 0xbb, 0xf4, 0x2b, 0xb8, 0x59, 0xb8, 0x83, 0xee,
-	0xd5, 0x85, 0x26, 0xef, 0x3c, 0xfc, 0x7d, 0xde, 0xae, 0xfb, 0x16, 0xb6, 0xcb, 0x87, 0xf8, 0x41,
-	0xb5, 0xb4, 0x44, 0x71, 0x1e, 0xd7, 0x52, 0xec, 0x0f, 0x4e, 0x60, 0xab, 0x74, 0x98, 0x7a, 0xbf,
-	0x2a, 0xb6, 0xcd, 0x0f, 0xea, 0x18, 0x66, 0xf5, 0x83, 0xd1, 0xa7, 0x95, 0x4b, 0x2e, 0x56, 0x2e,
-	0xf9, 0xb6, 0x72, 0xc9, 0xfb, 0xb5, 0xdb, 0xb8, 0x58, 0xbb, 0x8d, 0xaf, 0x6b, 0xb7, 0xf1, 0xe6,
-	0x8e, 0x7a, 0xe7, 0x96, 0xb9, 0x97, 0xee, 0x3c, 0xc2, 0xf8, 0x5d, 0x47, 0xbd, 0x76, 0xcf, 0x7e,
-	0x06, 0x00, 0x00, 0xff, 0xff, 0xa1, 0x5b, 0x24, 0x85, 0x07, 0x07, 0x00, 0x00,
+	// 486 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x55, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xce, 0x36, 0x3f, 0x15, 0x03, 0xfd, 0x61, 0x05, 0xc5, 0x35, 0xc8, 0x04, 0x1f, 0x20, 0x70,
+	0x70, 0x24, 0x78, 0x83, 0xb6, 0x17, 0x0e, 0x11, 0x28, 0x45, 0x48, 0xa0, 0x4a, 0xc8, 0xa4, 0x83,
+	0x6b, 0x29, 0xde, 0xb5, 0x76, 0xd7, 0x52, 0xfa, 0x08, 0x70, 0xe2, 0x05, 0x78, 0x1e, 0x7a, 0xec,
+	0x05, 0x89, 0x23, 0x4a, 0x5e, 0x04, 0x65, 0xed, 0x5d, 0xfc, 0xd3, 0x90, 0x0b, 0x12, 0xea, 0xcd,
+	0x33, 0xf3, 0x7d, 0xb3, 0xdf, 0xb7, 0xbb, 0xe3, 0x85, 0x3d, 0x96, 0x85, 0x67, 0x43, 0x9c, 0x4d,
+	0xce, 0x42, 0x16, 0xe1, 0x50, 0xcd, 0x82, 0x54, 0x70, 0xc5, 0xe9, 0xd6, 0x32, 0x1f, 0x98, 0xbc,
+	0xff, 0x8d, 0xc0, 0xed, 0x91, 0x8c, 0x8e, 0x91, 0x9d, 0x1e, 0x0a, 0x0c, 0x15, 0xbe, 0x0e, 0x63,
+	0x41, 0xfb, 0x70, 0x53, 0xf2, 0x4c, 0x4c, 0xf0, 0x08, 0x19, 0x4f, 0x9c, 0x76, 0x9f, 0x0c, 0x6e,
+	0x8c, 0xcb, 0xa9, 0x25, 0x42, 0x85, 0x22, 0x42, 0x95, 0x23, 0x3a, 0x39, 0xa2, 0x94, 0xa2, 0x0e,
+	0x6c, 0x4e, 0x96, 0x1d, 0xb9, 0x70, 0x88, 0xae, 0x9a, 0x90, 0x3e, 0x83, 0x5d, 0x15, 0x27, 0xc8,
+	0x33, 0xf5, 0x26, 0x4e, 0x50, 0xaa, 0x30, 0x49, 0x9d, 0x8d, 0x3e, 0x19, 0x74, 0xc6, 0x8d, 0xbc,
+	0x7f, 0x1f, 0xf6, 0x1b, 0xf2, 0xc6, 0x28, 0x53, 0xce, 0x24, 0xfa, 0x17, 0x04, 0x76, 0x8b, 0xea,
+	0x31, 0x4e, 0xa7, 0xaf, 0xc4, 0x29, 0x6a, 0xed, 0x61, 0xc2, 0x33, 0xa6, 0x2a, 0xda, 0x4b, 0x29,
+	0xba, 0x07, 0xbd, 0x3c, 0xd4, 0xb2, 0xbb, 0xe3, 0x22, 0xa2, 0x1e, 0x40, 0x2a, 0x62, 0x63, 0xba,
+	0xab, 0x89, 0xa5, 0x0c, 0xbd, 0x03, 0x5d, 0x1d, 0x39, 0x3d, 0x4d, 0xcb, 0x83, 0x7f, 0xe4, 0x33,
+	0x00, 0xa7, 0xee, 0xc4, 0xd8, 0xa4, 0x14, 0x3a, 0x31, 0xfb, 0xc4, 0x8b, 0xf6, 0xfa, 0xdb, 0xff,
+	0x4e, 0x60, 0xa7, 0x20, 0x1c, 0x64, 0xe7, 0xd7, 0xd9, 0xf9, 0x3e, 0xdc, 0xab, 0x19, 0xb1, 0xe7,
+	0xfb, 0x85, 0x00, 0x1d, 0xc9, 0xe8, 0x30, 0x64, 0x13, 0x9c, 0xfe, 0x39, 0xe1, 0xd5, 0xeb, 0xd6,
+	0x76, 0x60, 0xa3, 0xb9, 0x03, 0x55, 0xa7, 0xed, 0x86, 0x53, 0x07, 0x36, 0xf9, 0x72, 0x91, 0x97,
+	0x47, 0xc5, 0x16, 0x99, 0xd0, 0x7f, 0x00, 0x6e, 0x53, 0x8b, 0x95, 0xfa, 0x39, 0x9f, 0xa3, 0xbc,
+	0x6c, 0x4f, 0xe4, 0xff, 0x28, 0xcd, 0x67, 0xa6, 0x2a, 0xc5, 0x08, 0x7d, 0xfe, 0xa3, 0x0d, 0xed,
+	0x91, 0x8c, 0xe8, 0x09, 0x6c, 0xd7, 0x87, 0x3e, 0xa8, 0xfc, 0x1a, 0x82, 0xc6, 0xdc, 0xb9, 0x83,
+	0x75, 0x08, 0x7b, 0x65, 0xdf, 0xc1, 0x56, 0x75, 0x2a, 0x1f, 0x5e, 0x4d, 0xb5, 0x00, 0xf7, 0xc9,
+	0x1a, 0x80, 0x6d, 0xfd, 0x16, 0x6e, 0x55, 0x6e, 0xbd, 0x77, 0x35, 0xd1, 0xd4, 0xdd, 0xc7, 0x7f,
+	0xaf, 0xdb, 0xbe, 0x1f, 0x60, 0xa7, 0x7e, 0xd1, 0x1e, 0x35, 0xa9, 0x35, 0x88, 0xfb, 0x74, 0x2d,
+	0xc4, 0x2e, 0x70, 0x02, 0xdb, 0xb5, 0xeb, 0xd1, 0x5f, 0x45, 0xb6, 0xe2, 0x07, 0xeb, 0x10, 0xa6,
+	0xfb, 0xc1, 0xf0, 0x62, 0xee, 0x91, 0xcb, 0xb9, 0x47, 0x7e, 0xcd, 0x3d, 0xf2, 0x75, 0xe1, 0xb5,
+	0x2e, 0x17, 0x5e, 0xeb, 0xe7, 0xc2, 0x6b, 0xbd, 0xbf, 0xab, 0x5f, 0x82, 0x59, 0xe9, 0x2d, 0x38,
+	0x4f, 0x51, 0x7e, 0xec, 0xe9, 0xf7, 0xe0, 0xc5, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4e, 0x27,
+	0xa7, 0x13, 0x29, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -959,33 +896,19 @@ func (m *MsgSendCreatePair) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.TargetDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.TargetDenom)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x22
 	}
 	if len(m.SourceDenom) > 0 {
 		i -= len(m.SourceDenom)
 		copy(dAtA[i:], m.SourceDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.SourceDenom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x1a
 	}
 	if m.TimeoutTimestamp != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.TimeoutTimestamp))
 		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.ChannelID) > 0 {
-		i -= len(m.ChannelID)
-		copy(dAtA[i:], m.ChannelID)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelID)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Port)))
-		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
@@ -1043,45 +966,31 @@ func (m *MsgSendSellOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Price != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.Price))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x30
 	}
 	if len(m.PriceDenom) > 0 {
 		i -= len(m.PriceDenom)
 		copy(dAtA[i:], m.PriceDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.PriceDenom)))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x2a
 	}
 	if m.Amount != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.Amount))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x20
 	}
 	if len(m.AmountDenom) > 0 {
 		i -= len(m.AmountDenom)
 		copy(dAtA[i:], m.AmountDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.AmountDenom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x1a
 	}
 	if m.TimeoutTimestamp != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.TimeoutTimestamp))
 		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.ChannelID) > 0 {
-		i -= len(m.ChannelID)
-		copy(dAtA[i:], m.ChannelID)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelID)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Port)))
-		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
@@ -1113,6 +1022,13 @@ func (m *MsgSendSellOrderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if len(m.Info) > 0 {
+		i -= len(m.Info)
+		copy(dAtA[i:], m.Info)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Info)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -1139,45 +1055,31 @@ func (m *MsgSendBuyOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Price != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.Price))
 		i--
-		dAtA[i] = 0x40
+		dAtA[i] = 0x30
 	}
 	if len(m.PriceDenom) > 0 {
 		i -= len(m.PriceDenom)
 		copy(dAtA[i:], m.PriceDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.PriceDenom)))
 		i--
-		dAtA[i] = 0x3a
+		dAtA[i] = 0x2a
 	}
 	if m.Amount != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.Amount))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x20
 	}
 	if len(m.AmountDenom) > 0 {
 		i -= len(m.AmountDenom)
 		copy(dAtA[i:], m.AmountDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.AmountDenom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x1a
 	}
 	if m.TimeoutTimestamp != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.TimeoutTimestamp))
 		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.ChannelID) > 0 {
-		i -= len(m.ChannelID)
-		copy(dAtA[i:], m.ChannelID)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelID)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Port)))
-		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
@@ -1235,33 +1137,19 @@ func (m *MsgCancelSellOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.OrderID != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.OrderID))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x20
 	}
 	if len(m.PriceDenom) > 0 {
 		i -= len(m.PriceDenom)
 		copy(dAtA[i:], m.PriceDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.PriceDenom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x1a
 	}
 	if len(m.AmountDenom) > 0 {
 		i -= len(m.AmountDenom)
 		copy(dAtA[i:], m.AmountDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.AmountDenom)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Channel) > 0 {
-		i -= len(m.Channel)
-		copy(dAtA[i:], m.Channel)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Channel)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Port)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1321,33 +1209,19 @@ func (m *MsgCancelBuyOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.OrderID != 0 {
 		i = encodeVarintTx(dAtA, i, uint64(m.OrderID))
 		i--
-		dAtA[i] = 0x30
+		dAtA[i] = 0x20
 	}
 	if len(m.PriceDenom) > 0 {
 		i -= len(m.PriceDenom)
 		copy(dAtA[i:], m.PriceDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.PriceDenom)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x1a
 	}
 	if len(m.AmountDenom) > 0 {
 		i -= len(m.AmountDenom)
 		copy(dAtA[i:], m.AmountDenom)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.AmountDenom)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Channel) > 0 {
-		i -= len(m.Channel)
-		copy(dAtA[i:], m.Channel)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Channel)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Port)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -1405,14 +1279,6 @@ func (m *MsgSendCreatePair) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelID)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	if m.TimeoutTimestamp != 0 {
 		n += 1 + sovTx(uint64(m.TimeoutTimestamp))
 	}
@@ -1446,14 +1312,6 @@ func (m *MsgSendSellOrder) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelID)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	if m.TimeoutTimestamp != 0 {
 		n += 1 + sovTx(uint64(m.TimeoutTimestamp))
 	}
@@ -1480,6 +1338,10 @@ func (m *MsgSendSellOrderResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.Info)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
 	return n
 }
 
@@ -1490,14 +1352,6 @@ func (m *MsgSendBuyOrder) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Creator)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelID)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1540,14 +1394,6 @@ func (m *MsgCancelSellOrder) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Channel)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	l = len(m.AmountDenom)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1578,14 +1424,6 @@ func (m *MsgCancelBuyOrder) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Creator)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Channel)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -1680,70 +1518,6 @@ func (m *MsgSendCreatePair) Unmarshal(dAtA []byte) error {
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutTimestamp", wireType)
 			}
@@ -1762,7 +1536,7 @@ func (m *MsgSendCreatePair) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SourceDenom", wireType)
 			}
@@ -1794,7 +1568,7 @@ func (m *MsgSendCreatePair) Unmarshal(dAtA []byte) error {
 			}
 			m.SourceDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TargetDenom", wireType)
 			}
@@ -1959,70 +1733,6 @@ func (m *MsgSendSellOrder) Unmarshal(dAtA []byte) error {
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutTimestamp", wireType)
 			}
@@ -2041,7 +1751,7 @@ func (m *MsgSendSellOrder) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AmountDenom", wireType)
 			}
@@ -2073,7 +1783,7 @@ func (m *MsgSendSellOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.AmountDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2092,7 +1802,7 @@ func (m *MsgSendSellOrder) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PriceDenom", wireType)
 			}
@@ -2124,7 +1834,7 @@ func (m *MsgSendSellOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.PriceDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 8:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Price", wireType)
 			}
@@ -2193,6 +1903,38 @@ func (m *MsgSendSellOrderResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgSendSellOrderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Info", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Info = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -2276,70 +2018,6 @@ func (m *MsgSendBuyOrder) Unmarshal(dAtA []byte) error {
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutTimestamp", wireType)
 			}
@@ -2358,7 +2036,7 @@ func (m *MsgSendBuyOrder) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AmountDenom", wireType)
 			}
@@ -2390,7 +2068,7 @@ func (m *MsgSendBuyOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.AmountDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 			}
@@ -2409,7 +2087,7 @@ func (m *MsgSendBuyOrder) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 7:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PriceDenom", wireType)
 			}
@@ -2441,7 +2119,7 @@ func (m *MsgSendBuyOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.PriceDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 8:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Price", wireType)
 			}
@@ -2594,70 +2272,6 @@ func (m *MsgCancelSellOrder) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Channel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AmountDenom", wireType)
 			}
 			var stringLen uint64
@@ -2688,7 +2302,7 @@ func (m *MsgCancelSellOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.AmountDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PriceDenom", wireType)
 			}
@@ -2720,7 +2334,7 @@ func (m *MsgCancelSellOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.PriceDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field OrderID", wireType)
 			}
@@ -2873,70 +2487,6 @@ func (m *MsgCancelBuyOrder) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Channel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AmountDenom", wireType)
 			}
 			var stringLen uint64
@@ -2967,7 +2517,7 @@ func (m *MsgCancelBuyOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.AmountDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PriceDenom", wireType)
 			}
@@ -2999,7 +2549,7 @@ func (m *MsgCancelBuyOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.PriceDenom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field OrderID", wireType)
 			}

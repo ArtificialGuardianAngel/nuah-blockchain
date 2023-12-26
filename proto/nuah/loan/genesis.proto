@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package nuah.loan;
+
+import "gogoproto/gogo.proto";
+import "nuah/loan/params.proto";
+import "nuah/loan/request_book.proto";
+
+option go_package = "nuah/x/loan/types";
+
+// GenesisState defines the loan module's genesis state.
+message GenesisState {
+           Params      params          = 1 [(gogoproto.nullable) = false];
+  repeated RequestBook requestBookList = 2 [(gogoproto.nullable) = false];
+}
+

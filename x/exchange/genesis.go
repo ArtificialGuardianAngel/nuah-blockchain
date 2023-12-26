@@ -7,6 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// defaultStableSupply
+
 // InitGenesis initializes the module's state from a provided genesis state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// Set all the sellOrderBook
@@ -21,6 +23,19 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.DenomTraceList {
 		k.SetDenomTrace(ctx, elem)
 	}
+	// Set all the stableSupply
+	for _, elem := range genState.StableSupplyList {
+		k.SetStableSupply(ctx, elem)
+	}
+	if len(genState.StableSupplyList) == 0 {
+		for _, elem := range k.NewStableSupply() {
+			k.SetStableSupply(ctx, elem)
+			// k.CreatePair(ctx, &types.MsgSendCreatePair{SourceDenom: elem.Denom, TargetDenom: "USDn", Creator: "system", TimeoutTimestamp: 999999999999999})
+		}
+	}
+
+	// Set stableSupply count
+	k.SetStableSupplyCount(ctx, genState.StableSupplyCount)
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetPort(ctx, genState.PortId)
 	// Only try to bind to port if it is not already bound, since we may already own
@@ -45,6 +60,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.SellOrderBookList = k.GetAllSellOrderBook(ctx)
 	genesis.BuyOrderBookList = k.GetAllBuyOrderBook(ctx)
 	genesis.DenomTraceList = k.GetAllDenomTrace(ctx)
+	genesis.StableSupplyList = k.GetAllStableSupply(ctx)
+	genesis.StableSupplyCount = k.GetStableSupplyCount(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

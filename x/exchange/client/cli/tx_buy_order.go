@@ -3,22 +3,22 @@ package cli
 import (
 	"strconv"
 
+	"nuah/x/exchange/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	channelutils "github.com/cosmos/ibc-go/v7/modules/core/04-channel/client/utils"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"nuah/x/exchange/types"
 )
 
 var _ = strconv.Itoa(0)
 
 func CmdSendBuyOrder() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-buy-order [src-port] [src-channel] [amount-denom] [amount] [price-denom] [price]",
+		Use:   "send-buy-order [amount-denom] [amount] [price-denom] [price]",
 		Short: "Send a buy-order over IBC",
-		Args:  cobra.ExactArgs(6),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -26,16 +26,14 @@ func CmdSendBuyOrder() *cobra.Command {
 			}
 
 			creator := clientCtx.GetFromAddress().String()
-			srcPort := args[0]
-			srcChannel := args[1]
 
-			argAmountDenom := args[2]
-			argAmount, err := cast.ToInt32E(args[3])
+			argAmountDenom := args[1]
+			argAmount, err := cast.ToInt32E(args[2])
 			if err != nil {
 				return err
 			}
-			argPriceDenom := args[4]
-			argPrice, err := cast.ToInt32E(args[5])
+			argPriceDenom := args[3]
+			argPrice, err := cast.ToInt32E(args[4])
 			if err != nil {
 				return err
 			}
@@ -45,15 +43,8 @@ func CmdSendBuyOrder() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			consensusState, _, _, err := channelutils.QueryLatestConsensusState(clientCtx, srcPort, srcChannel)
-			if err != nil {
-				return err
-			}
-			if timeoutTimestamp != 0 {
-				timeoutTimestamp = consensusState.GetTimestamp() + timeoutTimestamp
-			}
 
-			msg := types.NewMsgSendBuyOrder(creator, srcPort, srcChannel, timeoutTimestamp, argAmountDenom, argAmount, argPriceDenom, argPrice)
+			msg := types.NewMsgSendBuyOrder(creator, timeoutTimestamp, argAmountDenom, argAmount, argPriceDenom, argPrice)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

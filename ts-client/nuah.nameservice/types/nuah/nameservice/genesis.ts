@@ -2,6 +2,7 @@
 import _m0 from "protobufjs/minimal";
 import { Params } from "./params";
 import { Whois } from "./whois";
+import { WhoisByValue } from "./whois_by_value";
 
 export const protobufPackage = "nuah.nameservice";
 
@@ -9,10 +10,11 @@ export const protobufPackage = "nuah.nameservice";
 export interface GenesisState {
   params: Params | undefined;
   whoisList: Whois[];
+  whoisByValueList: WhoisByValue[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, whoisList: [] };
+  return { params: undefined, whoisList: [], whoisByValueList: [] };
 }
 
 export const GenesisState = {
@@ -22,6 +24,9 @@ export const GenesisState = {
     }
     for (const v of message.whoisList) {
       Whois.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.whoisByValueList) {
+      WhoisByValue.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -39,6 +44,9 @@ export const GenesisState = {
         case 2:
           message.whoisList.push(Whois.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.whoisByValueList.push(WhoisByValue.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -51,6 +59,9 @@ export const GenesisState = {
     return {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       whoisList: Array.isArray(object?.whoisList) ? object.whoisList.map((e: any) => Whois.fromJSON(e)) : [],
+      whoisByValueList: Array.isArray(object?.whoisByValueList)
+        ? object.whoisByValueList.map((e: any) => WhoisByValue.fromJSON(e))
+        : [],
     };
   },
 
@@ -62,6 +73,11 @@ export const GenesisState = {
     } else {
       obj.whoisList = [];
     }
+    if (message.whoisByValueList) {
+      obj.whoisByValueList = message.whoisByValueList.map((e) => e ? WhoisByValue.toJSON(e) : undefined);
+    } else {
+      obj.whoisByValueList = [];
+    }
     return obj;
   },
 
@@ -71,6 +87,7 @@ export const GenesisState = {
       ? Params.fromPartial(object.params)
       : undefined;
     message.whoisList = object.whoisList?.map((e) => Whois.fromPartial(e)) || [];
+    message.whoisByValueList = object.whoisByValueList?.map((e) => WhoisByValue.fromPartial(e)) || [];
     return message;
   },
 };

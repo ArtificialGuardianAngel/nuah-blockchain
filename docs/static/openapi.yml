@@ -46666,12 +46666,11 @@ paths:
                   properties:
                     index:
                       type: string
-                    port:
-                      type: string
-                    channel:
-                      type: string
                     origin:
                       type: string
+                      title: |-
+                        string port = 2; 
+                        string channel = 3;
               pagination:
                 type: object
                 properties:
@@ -46792,12 +46791,11 @@ paths:
                 properties:
                   index:
                     type: string
-                  port:
-                    type: string
-                  channel:
-                    type: string
                   origin:
                     type: string
+                    title: |-
+                      string port = 2; 
+                      string channel = 3;
         default:
           description: An unexpected error response.
           schema:
@@ -47072,6 +47070,431 @@ paths:
           type: string
       tags:
         - Query
+  /nuah/exchange/stable_supply:
+    get:
+      operationId: NuahExchangeStableSupplyAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              StableSupply:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uint64
+                    denom:
+                      type: string
+                    supply:
+                      type: string
+                      format: uint64
+                    inUse:
+                      type: string
+                      format: uint64
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /nuah/exchange/stable_supply/{id}:
+    get:
+      summary: Queries a list of StableSupply items.
+      operationId: NuahExchangeStableSupply
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              StableSupply:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uint64
+                  denom:
+                    type: string
+                  supply:
+                    type: string
+                    format: uint64
+                  inUse:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
+  /nuah/loan/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: NuahLoanParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /nuah/loan/request_book:
+    get:
+      operationId: NuahLoanRequestBookAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              requestBook:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: string
+                    book:
+                      type: object
+                      properties:
+                        idCount:
+                          type: integer
+                          format: int32
+                        requests:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                format: int32
+                              creator:
+                                type: string
+                              amount:
+                                type: integer
+                                format: int32
+                              denom:
+                                type: string
+                              accepted:
+                                type: integer
+                                format: int32
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /nuah/loan/request_book/{index}:
+    get:
+      summary: Queries a list of RequestBook items.
+      operationId: NuahLoanRequestBook
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              requestBook:
+                type: object
+                properties:
+                  index:
+                    type: string
+                  book:
+                    type: object
+                    properties:
+                      idCount:
+                        type: integer
+                        format: int32
+                      requests:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            creator:
+                              type: string
+                            amount:
+                              type: integer
+                              format: int32
+                            denom:
+                              type: string
+                            accepted:
+                              type: integer
+                              format: int32
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /nuah/nameservice/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -47255,6 +47678,171 @@ paths:
                   value:
                     type: string
                   owner:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /nuah/nameservice/whois_by_value:
+    get:
+      operationId: NuahNameserviceWhoisByValueAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              whoisByValue:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: string
+                    whoisIndex:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /nuah/nameservice/whois_by_value/{index}:
+    get:
+      summary: Queries a list of WhoisByValue items.
+      operationId: NuahNameserviceWhoisByValue
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              whoisByValue:
+                type: object
+                properties:
+                  index:
+                    type: string
+                  whoisIndex:
                     type: string
         default:
           description: An unexpected error response.
@@ -76265,12 +76853,11 @@ definitions:
     properties:
       index:
         type: string
-      port:
-        type: string
-      channel:
-        type: string
       origin:
         type: string
+        title: |-
+          string port = 2; 
+          string channel = 3;
   nuah.exchange.MsgCancelBuyOrderResponse:
     type: object
   nuah.exchange.MsgCancelSellOrderResponse:
@@ -76281,6 +76868,9 @@ definitions:
     type: object
   nuah.exchange.MsgSendSellOrderResponse:
     type: object
+    properties:
+      info:
+        type: string
   nuah.exchange.Order:
     type: object
     properties:
@@ -76392,12 +76982,11 @@ definitions:
           properties:
             index:
               type: string
-            port:
-              type: string
-            channel:
-              type: string
             origin:
               type: string
+              title: |-
+                string port = 2; 
+                string channel = 3;
       pagination:
         type: object
         properties:
@@ -76486,6 +77075,51 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  nuah.exchange.QueryAllStableSupplyResponse:
+    type: object
+    properties:
+      StableSupply:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uint64
+            denom:
+              type: string
+            supply:
+              type: string
+              format: uint64
+            inUse:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   nuah.exchange.QueryGetBuyOrderBookResponse:
     type: object
     properties:
@@ -76528,12 +77162,11 @@ definitions:
         properties:
           index:
             type: string
-          port:
-            type: string
-          channel:
-            type: string
           origin:
             type: string
+            title: |-
+              string port = 2; 
+              string channel = 3;
   nuah.exchange.QueryGetSellOrderBookResponse:
     type: object
     properties:
@@ -76568,6 +77201,23 @@ definitions:
                     price:
                       type: integer
                       format: int32
+  nuah.exchange.QueryGetStableSupplyResponse:
+    type: object
+    properties:
+      StableSupply:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uint64
+          denom:
+            type: string
+          supply:
+            type: string
+            format: uint64
+          inUse:
+            type: string
+            format: uint64
   nuah.exchange.QueryParamsResponse:
     type: object
     properties:
@@ -76606,6 +77256,199 @@ definitions:
                 price:
                   type: integer
                   format: int32
+  nuah.exchange.StableSupply:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+      denom:
+        type: string
+      supply:
+        type: string
+        format: uint64
+      inUse:
+        type: string
+        format: uint64
+  nuah.loan.MsgAcceptRequestResponse:
+    type: object
+  nuah.loan.MsgCreateRequestBookResponse:
+    type: object
+  nuah.loan.MsgCreateRequestResponse:
+    type: object
+  nuah.loan.MsgDeclineRequestResponse:
+    type: object
+  nuah.loan.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  nuah.loan.QueryAllRequestBookResponse:
+    type: object
+    properties:
+      requestBook:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: string
+            book:
+              type: object
+              properties:
+                idCount:
+                  type: integer
+                  format: int32
+                requests:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      creator:
+                        type: string
+                      amount:
+                        type: integer
+                        format: int32
+                      denom:
+                        type: string
+                      accepted:
+                        type: integer
+                        format: int32
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  nuah.loan.QueryGetRequestBookResponse:
+    type: object
+    properties:
+      requestBook:
+        type: object
+        properties:
+          index:
+            type: string
+          book:
+            type: object
+            properties:
+              idCount:
+                type: integer
+                format: int32
+              requests:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int32
+                    creator:
+                      type: string
+                    amount:
+                      type: integer
+                      format: int32
+                    denom:
+                      type: string
+                    accepted:
+                      type: integer
+                      format: int32
+  nuah.loan.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
+  nuah.loan.Request:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      creator:
+        type: string
+      amount:
+        type: integer
+        format: int32
+      denom:
+        type: string
+      accepted:
+        type: integer
+        format: int32
+  nuah.loan.RequestBook:
+    type: object
+    properties:
+      index:
+        type: string
+      book:
+        type: object
+        properties:
+          idCount:
+            type: integer
+            format: int32
+          requests:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                creator:
+                  type: string
+                amount:
+                  type: integer
+                  format: int32
+                denom:
+                  type: string
+                accepted:
+                  type: integer
+                  format: int32
+  nuah.loan.RequestBookItem:
+    type: object
+    properties:
+      idCount:
+        type: integer
+        format: int32
+      requests:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+            creator:
+              type: string
+            amount:
+              type: integer
+              format: int32
+            denom:
+              type: string
+            accepted:
+              type: integer
+              format: int32
   nuah.nameservice.MsgCheckNameResponse:
     type: object
     properties:
@@ -76620,6 +77463,44 @@ definitions:
   nuah.nameservice.Params:
     type: object
     description: Params defines the parameters for the module.
+  nuah.nameservice.QueryAllWhoisByValueResponse:
+    type: object
+    properties:
+      whoisByValue:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: string
+            whoisIndex:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   nuah.nameservice.QueryAllWhoisResponse:
     type: object
     properties:
@@ -76662,6 +77543,16 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  nuah.nameservice.QueryGetWhoisByValueResponse:
+    type: object
+    properties:
+      whoisByValue:
+        type: object
+        properties:
+          index:
+            type: string
+          whoisIndex:
+            type: string
   nuah.nameservice.QueryGetWhoisResponse:
     type: object
     properties:
@@ -76693,6 +77584,13 @@ definitions:
       value:
         type: string
       owner:
+        type: string
+  nuah.nameservice.WhoisByValue:
+    type: object
+    properties:
+      index:
+        type: string
+      whoisIndex:
         type: string
   nuah.oracles.Data:
     type: object

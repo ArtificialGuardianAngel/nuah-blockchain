@@ -46,6 +46,15 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "1",
 					},
 				},
+				StableSupplyList: []types.StableSupply{
+					{
+						Id: 0,
+					},
+					{
+						Id: 1,
+					},
+				},
+				StableSupplyCount: 2,
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -89,6 +98,32 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "0",
 					},
 				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated stableSupply",
+			genState: &types.GenesisState{
+				StableSupplyList: []types.StableSupply{
+					{
+						Id: 0,
+					},
+					{
+						Id: 0,
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "invalid stableSupply count",
+			genState: &types.GenesisState{
+				StableSupplyList: []types.StableSupply{
+					{
+						Id: 1,
+					},
+				},
+				StableSupplyCount: 0,
 			},
 			valid: false,
 		},

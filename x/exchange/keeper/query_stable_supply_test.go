@@ -1,10 +1,10 @@
 package keeper_test
 
 import (
-	"strconv"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
@@ -12,42 +12,33 @@ import (
 
 	keepertest "nuah/testutil/keeper"
 	"nuah/testutil/nullify"
-	"nuah/x/nameservice/types"
+	"nuah/x/exchange/types"
 )
 
-// Prevent strconv unused error
-var _ = strconv.IntSize
-
-func TestWhoisQuerySingle(t *testing.T) {
-	keeper, ctx := keepertest.NameserviceKeeper(t)
+func TestStableSupplyQuerySingle(t *testing.T) {
+	keeper, ctx := keepertest.ExchangeKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNWhois(keeper, ctx, 2)
+	msgs := createNStableSupply(keeper, ctx, 2)
 	tests := []struct {
 		desc     string
-		request  *types.QueryGetWhoisRequest
-		response *types.QueryGetWhoisResponse
+		request  *types.QueryGetStableSupplyRequest
+		response *types.QueryGetStableSupplyResponse
 		err      error
 	}{
 		{
-			desc: "First",
-			request: &types.QueryGetWhoisRequest{
-				Index: msgs[0].Index,
-			},
-			response: &types.QueryGetWhoisResponse{Whois: msgs[0]},
+			desc:     "First",
+			request:  &types.QueryGetStableSupplyRequest{Id: msgs[0].Id},
+			response: &types.QueryGetStableSupplyResponse{StableSupply: msgs[0]},
 		},
 		{
-			desc: "Second",
-			request: &types.QueryGetWhoisRequest{
-				Index: msgs[1].Index,
-			},
-			response: &types.QueryGetWhoisResponse{Whois: msgs[1]},
+			desc:     "Second",
+			request:  &types.QueryGetStableSupplyRequest{Id: msgs[1].Id},
+			response: &types.QueryGetStableSupplyResponse{StableSupply: msgs[1]},
 		},
 		{
-			desc: "KeyNotFound",
-			request: &types.QueryGetWhoisRequest{
-				Index: strconv.Itoa(100000),
-			},
-			err: status.Error(codes.NotFound, "not found"),
+			desc:    "KeyNotFound",
+			request: &types.QueryGetStableSupplyRequest{Id: uint64(len(msgs))},
+			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc: "InvalidRequest",
@@ -56,7 +47,7 @@ func TestWhoisQuerySingle(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Whois(wctx, tc.request)
+			response, err := keeper.StableSupply(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -70,13 +61,13 @@ func TestWhoisQuerySingle(t *testing.T) {
 	}
 }
 
-func TestWhoisQueryPaginated(t *testing.T) {
-	keeper, ctx := keepertest.NameserviceKeeper(t)
+func TestStableSupplyQueryPaginated(t *testing.T) {
+	keeper, ctx := keepertest.ExchangeKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNWhois(keeper, ctx, 5)
+	msgs := createNStableSupply(keeper, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllWhoisRequest {
-		return &types.QueryAllWhoisRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllStableSupplyRequest {
+		return &types.QueryAllStableSupplyRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -88,12 +79,12 @@ func TestWhoisQueryPaginated(t *testing.T) {
 	t.Run("ByOffset", func(t *testing.T) {
 		step := 2
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.WhoisAll(wctx, request(nil, uint64(i), uint64(step), false))
+			resp, err := keeper.StableSupplyAll(wctx, request(nil, uint64(i), uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Whois), step)
+			require.LessOrEqual(t, len(resp.StableSupply), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Whois),
+				nullify.Fill(resp.StableSupply),
 			)
 		}
 	})
@@ -101,27 +92,27 @@ func TestWhoisQueryPaginated(t *testing.T) {
 		step := 2
 		var next []byte
 		for i := 0; i < len(msgs); i += step {
-			resp, err := keeper.WhoisAll(wctx, request(next, 0, uint64(step), false))
+			resp, err := keeper.StableSupplyAll(wctx, request(next, 0, uint64(step), false))
 			require.NoError(t, err)
-			require.LessOrEqual(t, len(resp.Whois), step)
+			require.LessOrEqual(t, len(resp.StableSupply), step)
 			require.Subset(t,
 				nullify.Fill(msgs),
-				nullify.Fill(resp.Whois),
+				nullify.Fill(resp.StableSupply),
 			)
 			next = resp.Pagination.NextKey
 		}
 	})
 	t.Run("Total", func(t *testing.T) {
-		resp, err := keeper.WhoisAll(wctx, request(nil, 0, 0, true))
+		resp, err := keeper.StableSupplyAll(wctx, request(nil, 0, 0, true))
 		require.NoError(t, err)
 		require.Equal(t, len(msgs), int(resp.Pagination.Total))
 		require.ElementsMatch(t,
 			nullify.Fill(msgs),
-			nullify.Fill(resp.Whois),
+			nullify.Fill(resp.StableSupply),
 		)
 	})
 	t.Run("InvalidRequest", func(t *testing.T) {
-		_, err := keeper.WhoisAll(wctx, nil)
+		_, err := keeper.StableSupplyAll(wctx, nil)
 		require.ErrorIs(t, err, status.Error(codes.InvalidArgument, "invalid request"))
 	})
 }

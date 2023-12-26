@@ -5,8 +5,8 @@ option go_package = "nuah/x/exchange/types";
 
 message DenomTrace {
   string index = 1; 
-  string port = 2; 
-  string channel = 3; 
-  string origin = 4; 
+  // string port = 2; 
+  // string channel = 3; 
+  string origin = 2; 
 }
 

@@ -3,27 +3,26 @@ package cli
 import (
 	"strconv"
 
+	"nuah/x/exchange/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"nuah/x/exchange/types"
 )
 
 var _ = strconv.Itoa(0)
 
 func CmdCancelSellOrder() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cancel-sell-order [port] [channel] [amount-denom] [price-denom] [order-id]",
+		Use:   "cancel-sell-order [amount-denom] [price-denom] [order-id]",
 		Short: "Cancel a sell order",
-		Args:  cobra.ExactArgs(5),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argPort := args[0]
-			argChannel := args[1]
-			argAmountDenom := args[2]
-			argPriceDenom := args[3]
-			argOrderID, err := cast.ToInt32E(args[4])
+			argAmountDenom := args[0]
+			argPriceDenom := args[1]
+			argOrderID, err := cast.ToInt32E(args[2])
 			if err != nil {
 				return err
 			}
@@ -35,8 +34,6 @@ func CmdCancelSellOrder() *cobra.Command {
 
 			msg := types.NewMsgCancelSellOrder(
 				clientCtx.GetFromAddress().String(),
-				argPort,
-				argChannel,
 				argAmountDenom,
 				argPriceDenom,
 				argOrderID,

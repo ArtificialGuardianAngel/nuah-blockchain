@@ -38,6 +38,15 @@ func TestGenesis(t *testing.T) {
 				Index: "1",
 			},
 		},
+		StableSupplyList: []types.StableSupply{
+			{
+				Id: 0,
+			},
+			{
+				Id: 1,
+			},
+		},
+		StableSupplyCount: 2,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -54,5 +63,7 @@ func TestGenesis(t *testing.T) {
 	require.ElementsMatch(t, genesisState.SellOrderBookList, got.SellOrderBookList)
 	require.ElementsMatch(t, genesisState.BuyOrderBookList, got.BuyOrderBookList)
 	require.ElementsMatch(t, genesisState.DenomTraceList, got.DenomTraceList)
+	require.ElementsMatch(t, genesisState.StableSupplyList, got.StableSupplyList)
+	require.Equal(t, genesisState.StableSupplyCount, got.StableSupplyCount)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

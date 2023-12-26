@@ -23,10 +23,10 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type DenomTrace struct {
-	Index   string `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
-	Port    string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
-	Channel string `protobuf:"bytes,3,opt,name=channel,proto3" json:"channel,omitempty"`
-	Origin  string `protobuf:"bytes,4,opt,name=origin,proto3" json:"origin,omitempty"`
+	Index string `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
+	// string port = 2;
+	// string channel = 3;
+	Origin string `protobuf:"bytes,2,opt,name=origin,proto3" json:"origin,omitempty"`
 }
 
 func (m *DenomTrace) Reset()         { *m = DenomTrace{} }
@@ -69,20 +69,6 @@ func (m *DenomTrace) GetIndex() string {
 	return ""
 }
 
-func (m *DenomTrace) GetPort() string {
-	if m != nil {
-		return m.Port
-	}
-	return ""
-}
-
-func (m *DenomTrace) GetChannel() string {
-	if m != nil {
-		return m.Channel
-	}
-	return ""
-}
-
 func (m *DenomTrace) GetOrigin() string {
 	if m != nil {
 		return m.Origin
@@ -97,19 +83,17 @@ func init() {
 func init() { proto.RegisterFile("nuah/exchange/denom_trace.proto", fileDescriptor_bf4709242348b0c7) }
 
 var fileDescriptor_bf4709242348b0c7 = []byte{
-	// 181 bytes of a gzipped FileDescriptorProto
+	// 153 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0xcf, 0x2b, 0x4d, 0xcc,
 	0xd0, 0x4f, 0xad, 0x48, 0xce, 0x48, 0xcc, 0x4b, 0x4f, 0xd5, 0x4f, 0x49, 0xcd, 0xcb, 0xcf, 0x8d,
 	0x2f, 0x29, 0x4a, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x05, 0x29, 0xd0,
-	0x83, 0x29, 0x50, 0xca, 0xe0, 0xe2, 0x72, 0x01, 0xa9, 0x09, 0x01, 0x29, 0x11, 0x12, 0xe1, 0x62,
-	0xcd, 0xcc, 0x4b, 0x49, 0xad, 0x90, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x70, 0x84, 0x84,
-	0xb8, 0x58, 0x0a, 0xf2, 0x8b, 0x4a, 0x24, 0x98, 0xc0, 0x82, 0x60, 0xb6, 0x90, 0x04, 0x17, 0x3b,
-	0xc8, 0x84, 0xbc, 0xd4, 0x1c, 0x09, 0x66, 0xb0, 0x30, 0x8c, 0x2b, 0x24, 0xc6, 0xc5, 0x96, 0x5f,
-	0x94, 0x99, 0x9e, 0x99, 0x27, 0xc1, 0x02, 0x96, 0x80, 0xf2, 0x9c, 0xf4, 0x4f, 0x3c, 0x92, 0x63,
-	0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96,
-	0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0x4a, 0x14, 0xec, 0xe6, 0x0a, 0x84, 0xab, 0x4b, 0x2a, 0x0b,
-	0x52, 0x8b, 0x93, 0xd8, 0xc0, 0x0e, 0x36, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x14, 0xf0, 0x11,
-	0x17, 0xd3, 0x00, 0x00, 0x00,
+	0x83, 0x29, 0x50, 0xb2, 0xe2, 0xe2, 0x72, 0x01, 0xa9, 0x09, 0x01, 0x29, 0x11, 0x12, 0xe1, 0x62,
+	0xcd, 0xcc, 0x4b, 0x49, 0xad, 0x90, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0x70, 0x84, 0xc4,
+	0xb8, 0xd8, 0xf2, 0x8b, 0x32, 0xd3, 0x33, 0xf3, 0x24, 0x98, 0xc0, 0xc2, 0x50, 0x9e, 0x93, 0xfe,
+	0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7, 0x38, 0xe1, 0xb1, 0x1c,
+	0xc3, 0x85, 0xc7, 0x72, 0x0c, 0x37, 0x1e, 0xcb, 0x31, 0x44, 0x89, 0x82, 0x5d, 0x51, 0x81, 0x70,
+	0x47, 0x49, 0x65, 0x41, 0x6a, 0x71, 0x12, 0x1b, 0xd8, 0x09, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0xea, 0x14, 0x3b, 0xc9, 0xa5, 0x00, 0x00, 0x00,
 }
 
 func (m *DenomTrace) Marshal() (dAtA []byte, err error) {
@@ -136,20 +120,6 @@ func (m *DenomTrace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Origin)
 		copy(dAtA[i:], m.Origin)
 		i = encodeVarintDenomTrace(dAtA, i, uint64(len(m.Origin)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Channel) > 0 {
-		i -= len(m.Channel)
-		copy(dAtA[i:], m.Channel)
-		i = encodeVarintDenomTrace(dAtA, i, uint64(len(m.Channel)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Port) > 0 {
-		i -= len(m.Port)
-		copy(dAtA[i:], m.Port)
-		i = encodeVarintDenomTrace(dAtA, i, uint64(len(m.Port)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -181,14 +151,6 @@ func (m *DenomTrace) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Index)
-	if l > 0 {
-		n += 1 + l + sovDenomTrace(uint64(l))
-	}
-	l = len(m.Port)
-	if l > 0 {
-		n += 1 + l + sovDenomTrace(uint64(l))
-	}
-	l = len(m.Channel)
 	if l > 0 {
 		n += 1 + l + sovDenomTrace(uint64(l))
 	}
@@ -267,70 +229,6 @@ func (m *DenomTrace) Unmarshal(dAtA []byte) error {
 			m.Index = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDenomTrace
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDenomTrace
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDenomTrace
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Port = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDenomTrace
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDenomTrace
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDenomTrace
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Channel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Origin", wireType)
 			}

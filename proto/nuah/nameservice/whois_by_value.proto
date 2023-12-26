@@ -1,0 +1,10 @@
+syntax = "proto3";
+package nuah.nameservice;
+
+option go_package = "nuah/x/nameservice/types";
+
+message WhoisByValue {
+  string index = 1; 
+  string whoisIndex = 2; 
+}
+

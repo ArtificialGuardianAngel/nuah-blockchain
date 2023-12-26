@@ -30,6 +30,14 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "1",
 					},
 				},
+				WhoisByValueList: []types.WhoisByValue{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -38,6 +46,20 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "duplicated whois",
 			genState: &types.GenesisState{
 				WhoisList: []types.Whois{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated whoisByValue",
+			genState: &types.GenesisState{
+				WhoisByValueList: []types.WhoisByValue{
 					{
 						Index: "0",
 					},

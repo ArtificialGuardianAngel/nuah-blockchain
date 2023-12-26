@@ -3,9 +3,10 @@ package types
 import (
 	"testing"
 
+	"nuah/testutil/sample"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"nuah/testutil/sample"
 )
 
 func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
@@ -18,8 +19,6 @@ func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
 			name: "invalid address",
 			msg: MsgSendCreatePair{
 				Creator:          "invalid_address",
-				Port:             "port",
-				ChannelID:        "channel-0",
 				TimeoutTimestamp: 100,
 			},
 			err: sdkerrors.ErrInvalidAddress,
@@ -27,8 +26,6 @@ func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
 			name: "invalid port",
 			msg: MsgSendCreatePair{
 				Creator:          sample.AccAddress(),
-				Port:             "",
-				ChannelID:        "channel-0",
 				TimeoutTimestamp: 100,
 			},
 			err: sdkerrors.ErrInvalidRequest,
@@ -36,8 +33,6 @@ func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
 			name: "invalid channel",
 			msg: MsgSendCreatePair{
 				Creator:          sample.AccAddress(),
-				Port:             "port",
-				ChannelID:        "",
 				TimeoutTimestamp: 100,
 			},
 			err: sdkerrors.ErrInvalidRequest,
@@ -45,8 +40,6 @@ func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
 			name: "invalid timeout",
 			msg: MsgSendCreatePair{
 				Creator:          sample.AccAddress(),
-				Port:             "port",
-				ChannelID:        "channel-0",
 				TimeoutTimestamp: 0,
 			},
 			err: sdkerrors.ErrInvalidRequest,
@@ -54,8 +47,6 @@ func TestMsgSendCreatePair_ValidateBasic(t *testing.T) {
 			name: "valid message",
 			msg: MsgSendCreatePair{
 				Creator:          sample.AccAddress(),
-				Port:             "port",
-				ChannelID:        "channel-0",
 				TimeoutTimestamp: 100,
 			},
 		},

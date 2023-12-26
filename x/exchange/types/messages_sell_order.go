@@ -11,8 +11,6 @@ var _ sdk.Msg = &MsgSendSellOrder{}
 
 func NewMsgSendSellOrder(
 	creator string,
-	port string,
-	channelID string,
 	timeoutTimestamp uint64,
 	amountDenom string,
 	amount int32,
@@ -21,8 +19,6 @@ func NewMsgSendSellOrder(
 ) *MsgSendSellOrder {
 	return &MsgSendSellOrder{
 		Creator:          creator,
-		Port:             port,
-		ChannelID:        channelID,
 		TimeoutTimestamp: timeoutTimestamp,
 		AmountDenom:      amountDenom,
 		Amount:           amount,
@@ -57,12 +53,12 @@ func (msg *MsgSendSellOrder) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	if msg.Port == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet port")
-	}
-	if msg.ChannelID == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet channel")
-	}
+	// if msg.Port == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet port")
+	// }
+	// if msg.ChannelID == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet channel")
+	// }
 	if msg.TimeoutTimestamp == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet timeout")
 	}

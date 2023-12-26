@@ -6,40 +6,40 @@ import (
 	"nuah/x/exchange/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
+	// sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	// clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
+	// host "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 )
 
 // TransmitCreatePairPacket transmits the packet over IBC with the specified source port and source channel
-func (k Keeper) TransmitCreatePairPacket(
-	ctx sdk.Context,
-	packetData types.CreatePairPacketData,
-	sourcePort,
-	sourceChannel string,
-	timeoutHeight clienttypes.Height,
-	timeoutTimestamp uint64,
-) (uint64, error) {
-	channelCap, ok := k.scopedKeeper.GetCapability(ctx, host.ChannelCapabilityPath(sourcePort, sourceChannel))
-	if !ok {
-		return 0, sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
-	}
+// func (k Keeper) TransmitCreatePairPacket(
+// 	ctx sdk.Context,
+// 	packetData types.CreatePairPacketData,
+// 	sourcePort,
+// 	sourceChannel string,
+// 	timeoutHeight clienttypes.Height,
+// 	timeoutTimestamp uint64,
+// ) (uint64, error) {
+// 	channelCap, ok := k.scopedKeeper.GetCapability(ctx, host.ChannelCapabilityPath(sourcePort, sourceChannel))
+// 	if !ok {
+// 		return 0, sdkerrors.Wrap(channeltypes.ErrChannelCapabilityNotFound, "module does not own channel capability")
+// 	}
 
-	packetBytes, err := packetData.GetBytes()
-	if err != nil {
-		return 0, sdkerrors.Wrapf(sdkerrors.ErrJSONMarshal, "cannot marshal the packet: %w", err)
-	}
+// 	packetBytes, err := packetData.GetBytes()
+// 	if err != nil {
+// 		return 0, sdkerrors.Wrapf(sdkerrors.ErrJSONMarshal, "cannot marshal the packet: %w", err)
+// 	}
 
-	return k.channelKeeper.SendPacket(ctx, channelCap, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, packetBytes)
-}
+// 	return k.channelKeeper.SendPacket(ctx, channelCap, sourcePort, sourceChannel, timeoutHeight, timeoutTimestamp, packetBytes)
+// }
 
 // OnRecvCreatePairPacket processes packet reception
 func (k Keeper) OnRecvCreatePairPacket(ctx sdk.Context, packet channeltypes.Packet, data types.CreatePairPacketData) (packetAck types.CreatePairPacketAck, err error) {
 	// ...
 
 	// Get an order book index
-	pairIndex := types.OrderBookIndex(packet.SourcePort, packet.SourceChannel, data.SourceDenom, data.TargetDenom)
+	pairIndex := types.OrderBookIndex(data.SourceDenom, data.TargetDenom)
 
 	// If an order book is found, return an error
 	_, found := k.GetBuyOrderBook(ctx, pairIndex)
@@ -73,7 +73,7 @@ func (k Keeper) OnAcknowledgementCreatePairPacket(ctx sdk.Context, packet channe
 		}
 
 		// Set the sell order book
-		pairIndex := types.OrderBookIndex(packet.SourcePort, packet.SourceChannel, data.SourceDenom, data.TargetDenom)
+		pairIndex := types.OrderBookIndex(data.SourceDenom, data.TargetDenom)
 		book := types.NewSellOrderBook(data.SourceDenom, data.TargetDenom)
 		book.Index = pairIndex
 		k.SetSellOrderBook(ctx, book)

@@ -119,6 +119,11 @@ import (
 	oraclesmodule "nuah/x/oracles"
 	oraclesmodulekeeper "nuah/x/oracles/keeper"
 	oraclesmoduletypes "nuah/x/oracles/types"
+
+	loanmodule "nuah/x/loan"
+	loanmodulekeeper "nuah/x/loan/keeper"
+	loanmoduletypes "nuah/x/loan/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "nuah/app/params"
@@ -182,6 +187,7 @@ var (
 		nameservicemodule.AppModuleBasic{},
 		exchangemodule.AppModuleBasic{},
 		oraclesmodule.AppModuleBasic{},
+		loanmodule.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -264,6 +270,8 @@ type App struct {
 	ExchangeKeeper       exchangemodulekeeper.Keeper
 	ScopedOraclesKeeper  capabilitykeeper.ScopedKeeper
 	OraclesKeeper        oraclesmodulekeeper.Keeper
+
+	LoanKeeper loanmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
@@ -313,6 +321,7 @@ func New(
 		nameservicemoduletypes.StoreKey,
 		exchangemoduletypes.StoreKey,
 		oraclesmoduletypes.StoreKey,
+		loanmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -574,6 +583,16 @@ func New(
 	oraclesModule := oraclesmodule.NewAppModule(appCodec, app.OraclesKeeper, app.AccountKeeper, app.BankKeeper)
 
 	oraclesIBCModule := oraclesmodule.NewIBCModule(app.OraclesKeeper)
+
+	app.LoanKeeper = *loanmodulekeeper.NewKeeper(
+		appCodec,
+		keys[loanmoduletypes.StoreKey],
+		keys[loanmoduletypes.MemStoreKey],
+		app.GetSubspace(loanmoduletypes.ModuleName),
+		app.BankKeeper,
+	)
+	loanModule := loanmodule.NewAppModule(appCodec, app.LoanKeeper, app.AccountKeeper, app.BankKeeper)
+
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
@@ -640,6 +659,7 @@ func New(
 		nameserviceModule,
 		exchangeModule,
 		oraclesModule,
+		loanModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
@@ -675,6 +695,7 @@ func New(
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
 		oraclesmoduletypes.ModuleName,
+		loanmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -703,6 +724,7 @@ func New(
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
 		oraclesmoduletypes.ModuleName,
+		loanmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -736,6 +758,7 @@ func New(
 		nameservicemoduletypes.ModuleName,
 		exchangemoduletypes.ModuleName,
 		oraclesmoduletypes.ModuleName,
+		loanmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
@@ -963,6 +986,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(nameservicemoduletypes.ModuleName)
 	paramsKeeper.Subspace(exchangemoduletypes.ModuleName)
 	paramsKeeper.Subspace(oraclesmoduletypes.ModuleName)
+	paramsKeeper.Subspace(loanmoduletypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper

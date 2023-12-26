@@ -7,14 +7,16 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgCancelBuyOrder } from "./types/nuah/exchange/tx";
-import { MsgSendBuyOrder } from "./types/nuah/exchange/tx";
-import { MsgSendSellOrder } from "./types/nuah/exchange/tx";
 import { MsgCancelSellOrder } from "./types/nuah/exchange/tx";
 import { MsgSendCreatePair } from "./types/nuah/exchange/tx";
+import { MsgSendBuyOrder } from "./types/nuah/exchange/tx";
+import { MsgSendSellOrder } from "./types/nuah/exchange/tx";
+import { MsgCancelBuyOrder } from "./types/nuah/exchange/tx";
 
 import { BuyOrderBook as typeBuyOrderBook} from "./types"
 import { DenomTrace as typeDenomTrace} from "./types"
+import { OrderBook as typeOrderBook} from "./types"
+import { Order as typeOrder} from "./types"
 import { ExchangePacketData as typeExchangePacketData} from "./types"
 import { NoData as typeNoData} from "./types"
 import { CreatePairPacketData as typeCreatePairPacketData} from "./types"
@@ -25,11 +27,18 @@ import { BuyOrderPacketData as typeBuyOrderPacketData} from "./types"
 import { BuyOrderPacketAck as typeBuyOrderPacketAck} from "./types"
 import { Params as typeParams} from "./types"
 import { SellOrderBook as typeSellOrderBook} from "./types"
+import { StableSupply as typeStableSupply} from "./types"
 
-export { MsgCancelBuyOrder, MsgSendBuyOrder, MsgSendSellOrder, MsgCancelSellOrder, MsgSendCreatePair };
+export { MsgCancelSellOrder, MsgSendCreatePair, MsgSendBuyOrder, MsgSendSellOrder, MsgCancelBuyOrder };
 
-type sendMsgCancelBuyOrderParams = {
-  value: MsgCancelBuyOrder,
+type sendMsgCancelSellOrderParams = {
+  value: MsgCancelSellOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSendCreatePairParams = {
+  value: MsgSendCreatePair,
   fee?: StdFee,
   memo?: string
 };
@@ -46,21 +55,19 @@ type sendMsgSendSellOrderParams = {
   memo?: string
 };
 
-type sendMsgCancelSellOrderParams = {
-  value: MsgCancelSellOrder,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgSendCreatePairParams = {
-  value: MsgSendCreatePair,
-  fee?: StdFee,
-  memo?: string
-};
-
-
-type msgCancelBuyOrderParams = {
+type sendMsgCancelBuyOrderParams = {
   value: MsgCancelBuyOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgCancelSellOrderParams = {
+  value: MsgCancelSellOrder,
+};
+
+type msgSendCreatePairParams = {
+  value: MsgSendCreatePair,
 };
 
 type msgSendBuyOrderParams = {
@@ -71,12 +78,8 @@ type msgSendSellOrderParams = {
   value: MsgSendSellOrder,
 };
 
-type msgCancelSellOrderParams = {
-  value: MsgCancelSellOrder,
-};
-
-type msgSendCreatePairParams = {
-  value: MsgSendCreatePair,
+type msgCancelBuyOrderParams = {
+  value: MsgCancelBuyOrder,
 };
 
 
@@ -109,17 +112,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgCancelBuyOrder({ value, fee, memo }: sendMsgCancelBuyOrderParams): Promise<DeliverTxResponse> {
+		async sendMsgCancelSellOrder({ value, fee, memo }: sendMsgCancelSellOrderParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgCancelBuyOrder: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgCancelSellOrder: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCancelBuyOrder({ value: MsgCancelBuyOrder.fromPartial(value) })
+				let msg = this.msgCancelSellOrder({ value: MsgCancelSellOrder.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCancelBuyOrder: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgCancelSellOrder: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSendCreatePair({ value, fee, memo }: sendMsgSendCreatePairParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSendCreatePair: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSendCreatePair({ value: MsgSendCreatePair.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSendCreatePair: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -151,40 +168,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgCancelSellOrder({ value, fee, memo }: sendMsgCancelSellOrderParams): Promise<DeliverTxResponse> {
+		async sendMsgCancelBuyOrder({ value, fee, memo }: sendMsgCancelBuyOrderParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgCancelSellOrder: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgCancelBuyOrder: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCancelSellOrder({ value: MsgCancelSellOrder.fromPartial(value) })
+				let msg = this.msgCancelBuyOrder({ value: MsgCancelBuyOrder.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCancelSellOrder: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgSendCreatePair({ value, fee, memo }: sendMsgSendCreatePairParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgSendCreatePair: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgSendCreatePair({ value: MsgSendCreatePair.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgSendCreatePair: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgCancelBuyOrder: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
 		
-		msgCancelBuyOrder({ value }: msgCancelBuyOrderParams): EncodeObject {
+		msgCancelSellOrder({ value }: msgCancelSellOrderParams): EncodeObject {
 			try {
-				return { typeUrl: "/nuah.exchange.MsgCancelBuyOrder", value: MsgCancelBuyOrder.fromPartial( value ) }  
+				return { typeUrl: "/nuah.exchange.MsgCancelSellOrder", value: MsgCancelSellOrder.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCancelBuyOrder: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgCancelSellOrder: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSendCreatePair({ value }: msgSendCreatePairParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.exchange.MsgSendCreatePair", value: MsgSendCreatePair.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSendCreatePair: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -204,19 +215,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgCancelSellOrder({ value }: msgCancelSellOrderParams): EncodeObject {
+		msgCancelBuyOrder({ value }: msgCancelBuyOrderParams): EncodeObject {
 			try {
-				return { typeUrl: "/nuah.exchange.MsgCancelSellOrder", value: MsgCancelSellOrder.fromPartial( value ) }  
+				return { typeUrl: "/nuah.exchange.MsgCancelBuyOrder", value: MsgCancelBuyOrder.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCancelSellOrder: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgSendCreatePair({ value }: msgSendCreatePairParams): EncodeObject {
-			try {
-				return { typeUrl: "/nuah.exchange.MsgSendCreatePair", value: MsgSendCreatePair.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgSendCreatePair: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgCancelBuyOrder: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -244,6 +247,8 @@ class SDKModule {
 		this.structure =  {
 						BuyOrderBook: getStructure(typeBuyOrderBook.fromPartial({})),
 						DenomTrace: getStructure(typeDenomTrace.fromPartial({})),
+						OrderBook: getStructure(typeOrderBook.fromPartial({})),
+						Order: getStructure(typeOrder.fromPartial({})),
 						ExchangePacketData: getStructure(typeExchangePacketData.fromPartial({})),
 						NoData: getStructure(typeNoData.fromPartial({})),
 						CreatePairPacketData: getStructure(typeCreatePairPacketData.fromPartial({})),
@@ -254,6 +259,7 @@ class SDKModule {
 						BuyOrderPacketAck: getStructure(typeBuyOrderPacketAck.fromPartial({})),
 						Params: getStructure(typeParams.fromPartial({})),
 						SellOrderBook: getStructure(typeSellOrderBook.fromPartial({})),
+						StableSupply: getStructure(typeStableSupply.fromPartial({})),
 						
 		};
 		client.on('signer-changed',(signer) => {			

@@ -6,18 +6,19 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
+
+	// ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 
 	"nuah/x/exchange/types"
 )
 
-func (k Keeper) LockTokens(ctx sdk.Context, sourcePort string, sourceChannel string, sender sdk.AccAddress, tokens sdk.Coin) error {
+func (k Keeper) LockTokens(ctx sdk.Context, sender sdk.AccAddress, tokens sdk.Coin) error {
 	// create the escrow address for the tokens
-	escrowAddress := ibctransfertypes.GetEscrowAddress(sourcePort, sourceChannel)
+	// escrowAddress := ibctransfertypes.GetEscrowAddress(sourcePort, sourceChannel)
 
 	// escrow source tokens. It fails if balance insufficient
-	if err := k.bankKeeper.SendCoins(
-		ctx, sender, escrowAddress, sdk.NewCoins(tokens),
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(
+		ctx, sender, types.ModuleName, sdk.NewCoins(tokens),
 	); err != nil {
 		return err
 	}
@@ -50,39 +51,25 @@ func isIBCToken(denom string) bool {
 	return strings.HasPrefix(denom, "ibc/")
 }
 
-func (k Keeper) SafeBurn(ctx sdk.Context, port string, channel string, sender sdk.AccAddress, denom string, amount int32) error {
-	if isIBCToken(denom) {
-		// Burn the tokens
-		if err := k.BurnTokens(ctx, sender, sdk.NewCoin(denom, sdkmath.NewInt(int64(amount)))); err != nil {
-			return err
-		}
-	} else {
-		// Lock the tokens
-		if err := k.LockTokens(ctx, port, channel, sender, sdk.NewCoin(denom, sdkmath.NewInt(int64(amount)))); err != nil {
-			return err
-		}
+func (k Keeper) SafeBurn(ctx sdk.Context, sender sdk.AccAddress, denom string, amount int32) error {
+
+	// Lock the tokens
+	if err := k.LockTokens(ctx, sender, sdk.NewCoin(denom, sdkmath.NewInt(int64(amount)))); err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (k Keeper) SafeMint(ctx sdk.Context, port string, channel string, receiver sdk.AccAddress, denom string, amount int32) error {
-	if isIBCToken(denom) {
-		// Mint IBC tokens
-		if err := k.MintTokens(ctx, receiver, sdk.NewCoin(denom, sdkmath.NewInt(int64(amount)))); err != nil {
-			return err
-		}
-	} else {
-		// Unlock native tokens
-		if err := k.UnlockTokens(
-			ctx,
-			port,
-			channel,
-			receiver,
-			sdk.NewCoin(denom, sdkmath.NewInt(int64(amount))),
-		); err != nil {
-			return err
-		}
+func (k Keeper) SafeMint(ctx sdk.Context, receiver sdk.AccAddress, denom string, amount int32) error {
+
+	// Unlock native tokens
+	if err := k.UnlockTokens(
+		ctx,
+		receiver,
+		sdk.NewCoin(denom, sdkmath.NewInt(int64(amount))),
+	); err != nil {
+		return err
 	}
 
 	return nil
@@ -106,13 +93,13 @@ func (k Keeper) MintTokens(ctx sdk.Context, receiver sdk.AccAddress, tokens sdk.
 	return nil
 }
 
-func (k Keeper) UnlockTokens(ctx sdk.Context, sourcePort string, sourceChannel string, receiver sdk.AccAddress, tokens sdk.Coin) error {
+func (k Keeper) UnlockTokens(ctx sdk.Context, receiver sdk.AccAddress, tokens sdk.Coin) error {
 	// create the escrow address for the tokens
-	escrowAddress := ibctransfertypes.GetEscrowAddress(sourcePort, sourceChannel)
+	// escrowAddress := ibctransfertypes.GetEscrowAddress(sourcePort, sourceChannel)
 
 	// escrow source tokens. It fails if balance insufficient
-	if err := k.bankKeeper.SendCoins(
-		ctx, escrowAddress, receiver, sdk.NewCoins(tokens),
+	if err := k.bankKeeper.SendCoinsFromModuleToAccount(
+		ctx, types.ModuleName, receiver, sdk.NewCoins(tokens),
 	); err != nil {
 		return err
 	}

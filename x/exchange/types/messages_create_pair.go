@@ -11,16 +11,12 @@ var _ sdk.Msg = &MsgSendCreatePair{}
 
 func NewMsgSendCreatePair(
 	creator string,
-	port string,
-	channelID string,
 	timeoutTimestamp uint64,
 	sourceDenom string,
 	targetDenom string,
 ) *MsgSendCreatePair {
 	return &MsgSendCreatePair{
 		Creator:          creator,
-		Port:             port,
-		ChannelID:        channelID,
 		TimeoutTimestamp: timeoutTimestamp,
 		SourceDenom:      sourceDenom,
 		TargetDenom:      targetDenom,
@@ -53,12 +49,12 @@ func (msg *MsgSendCreatePair) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	if msg.Port == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet port")
-	}
-	if msg.ChannelID == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet channel")
-	}
+	// if msg.Port == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet port")
+	// }
+	// if msg.ChannelID == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet channel")
+	// }
 	if msg.TimeoutTimestamp == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid packet timeout")
 	}

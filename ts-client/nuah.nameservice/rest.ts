@@ -24,6 +24,21 @@ export type NameserviceMsgTransferNameResponse = object;
  */
 export type NameserviceParams = object;
 
+export interface NameserviceQueryAllWhoisByValueResponse {
+  whoisByValue?: NameserviceWhoisByValue[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface NameserviceQueryAllWhoisResponse {
   whois?: NameserviceWhois[];
 
@@ -37,6 +52,10 @@ export interface NameserviceQueryAllWhoisResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
+}
+
+export interface NameserviceQueryGetWhoisByValueResponse {
+  whoisByValue?: NameserviceWhoisByValue;
 }
 
 export interface NameserviceQueryGetWhoisResponse {
@@ -56,6 +75,11 @@ export interface NameserviceWhois {
   name?: string;
   value?: string;
   owner?: string;
+}
+
+export interface NameserviceWhoisByValue {
+  index?: string;
+  whoisIndex?: string;
 }
 
 export interface ProtobufAny {
@@ -318,6 +342,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryWhois = (index: string, params: RequestParams = {}) =>
     this.request<NameserviceQueryGetWhoisResponse, RpcStatus>({
       path: `/nuah/nameservice/whois/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryWhoisByValueAll
+   * @request GET:/nuah/nameservice/whois_by_value
+   */
+  queryWhoisByValueAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NameserviceQueryAllWhoisByValueResponse, RpcStatus>({
+      path: `/nuah/nameservice/whois_by_value`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryWhoisByValue
+   * @summary Queries a list of WhoisByValue items.
+   * @request GET:/nuah/nameservice/whois_by_value/{index}
+   */
+  queryWhoisByValue = (index: string, params: RequestParams = {}) =>
+    this.request<NameserviceQueryGetWhoisByValueResponse, RpcStatus>({
+      path: `/nuah/nameservice/whois_by_value/${index}`,
       method: "GET",
       format: "json",
       ...params,

@@ -30,6 +30,11 @@ var (
 func KeyPrefix(p string) []byte {
 	return []byte(p)
 }
-func OrderBookIndex(portID string, channelID string, sourceDenom string, targetDenom string) string {
-	return fmt.Sprintf("%s-%s-%s-%s", portID, channelID, sourceDenom, targetDenom)
+func OrderBookIndex(sourceDenom string, targetDenom string) string {
+	return fmt.Sprintf("%s-%s", sourceDenom, targetDenom)
 }
+
+const (
+	StableSupplyKey      = "StableSupply/value/"
+	StableSupplyCountKey = "StableSupply/count/"
+)

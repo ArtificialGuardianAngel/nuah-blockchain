@@ -7,30 +7,19 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgDeleteName } from "./types/nuah/nameservice/tx";
 import { MsgSetName } from "./types/nuah/nameservice/tx";
-import { MsgTransferName } from "./types/nuah/nameservice/tx";
 import { MsgCheckName } from "./types/nuah/nameservice/tx";
+import { MsgTransferName } from "./types/nuah/nameservice/tx";
+import { MsgDeleteName } from "./types/nuah/nameservice/tx";
 
 import { Params as typeParams} from "./types"
 import { Whois as typeWhois} from "./types"
+import { WhoisByValue as typeWhoisByValue} from "./types"
 
-export { MsgDeleteName, MsgSetName, MsgTransferName, MsgCheckName };
-
-type sendMsgDeleteNameParams = {
-  value: MsgDeleteName,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgSetName, MsgCheckName, MsgTransferName, MsgDeleteName };
 
 type sendMsgSetNameParams = {
   value: MsgSetName,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgTransferNameParams = {
-  value: MsgTransferName,
   fee?: StdFee,
   memo?: string
 };
@@ -41,21 +30,33 @@ type sendMsgCheckNameParams = {
   memo?: string
 };
 
-
-type msgDeleteNameParams = {
-  value: MsgDeleteName,
+type sendMsgTransferNameParams = {
+  value: MsgTransferName,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendMsgDeleteNameParams = {
+  value: MsgDeleteName,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgSetNameParams = {
   value: MsgSetName,
+};
+
+type msgCheckNameParams = {
+  value: MsgCheckName,
 };
 
 type msgTransferNameParams = {
   value: MsgTransferName,
 };
 
-type msgCheckNameParams = {
-  value: MsgCheckName,
+type msgDeleteNameParams = {
+  value: MsgDeleteName,
 };
 
 
@@ -88,20 +89,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgDeleteName({ value, fee, memo }: sendMsgDeleteNameParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeleteName: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDeleteName({ value: MsgDeleteName.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeleteName: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgSetName({ value, fee, memo }: sendMsgSetNameParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgSetName: Unable to sign Tx. Signer is not present.')
@@ -113,20 +100,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgSetName: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgTransferName({ value, fee, memo }: sendMsgTransferNameParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgTransferName: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgTransferName({ value: MsgTransferName.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgTransferName: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -144,20 +117,48 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgDeleteName({ value }: msgDeleteNameParams): EncodeObject {
-			try {
-				return { typeUrl: "/nuah.nameservice.MsgDeleteName", value: MsgDeleteName.fromPartial( value ) }  
+		async sendMsgTransferName({ value, fee, memo }: sendMsgTransferNameParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgTransferName: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgTransferName({ value: MsgTransferName.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgDeleteName: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgTransferName: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
+		async sendMsgDeleteName({ value, fee, memo }: sendMsgDeleteNameParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDeleteName: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgDeleteName({ value: MsgDeleteName.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgDeleteName: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgSetName({ value }: msgSetNameParams): EncodeObject {
 			try {
 				return { typeUrl: "/nuah.nameservice.MsgSetName", value: MsgSetName.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgSetName: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCheckName({ value }: msgCheckNameParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.nameservice.MsgCheckName", value: MsgCheckName.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCheckName: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -169,11 +170,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgCheckName({ value }: msgCheckNameParams): EncodeObject {
+		msgDeleteName({ value }: msgDeleteNameParams): EncodeObject {
 			try {
-				return { typeUrl: "/nuah.nameservice.MsgCheckName", value: MsgCheckName.fromPartial( value ) }  
+				return { typeUrl: "/nuah.nameservice.MsgDeleteName", value: MsgDeleteName.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCheckName: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgDeleteName: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -201,6 +202,7 @@ class SDKModule {
 		this.structure =  {
 						Params: getStructure(typeParams.fromPartial({})),
 						Whois: getStructure(typeWhois.fromPartial({})),
+						WhoisByValue: getStructure(typeWhoisByValue.fromPartial({})),
 						
 		};
 		client.on('signer-changed',(signer) => {			

@@ -7,6 +7,7 @@ import "nuah/exchange/params.proto";
 import "nuah/exchange/sell_order_book.proto";
 import "nuah/exchange/buy_order_book.proto";
 import "nuah/exchange/denom_trace.proto";
+import "nuah/exchange/stable_supply.proto";
 
 option go_package = "nuah/x/exchange/types";
 
@@ -17,5 +18,7 @@ message GenesisState {
   repeated SellOrderBook sellOrderBookList = 3 [(gogoproto.nullable) = false];
   repeated BuyOrderBook  buyOrderBookList  = 4 [(gogoproto.nullable) = false];
   repeated DenomTrace    denomTraceList    = 5 [(gogoproto.nullable) = false];
+  repeated StableSupply  stableSupplyList  = 6 [(gogoproto.nullable) = false];
+           uint64        stableSupplyCount = 7;
 }
 
