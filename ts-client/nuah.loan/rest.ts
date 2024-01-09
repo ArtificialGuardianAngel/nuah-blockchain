@@ -37,6 +37,8 @@ export interface LoanQueryAllRequestBookResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export type LoanQueryGetMadenRequestsResponse = object;
+
 export interface LoanQueryGetRequestBookResponse {
   requestBook?: LoanRequestBook;
 }
@@ -57,7 +59,9 @@ export interface LoanRequest {
   /** @format int32 */
   amount?: number;
   denom?: string;
-  accepted?: boolean;
+
+  /** @format int32 */
+  accepted?: number;
 }
 
 export interface LoanRequestBook {
@@ -279,6 +283,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetMadenRequests
+   * @summary Queries a list of GetMadenRequests items.
+   * @request GET:/nuah/loan/get_maden_requests/{from}
+   */
+  queryGetMadenRequests = (from: string, params: RequestParams = {}) =>
+    this.request<LoanQueryGetMadenRequestsResponse, RpcStatus>({
+      path: `/nuah/loan/get_maden_requests/${from}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

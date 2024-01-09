@@ -13,7 +13,7 @@ export interface Request {
   creator: string;
   amount: number;
   denom: string;
-  accepted: boolean;
+  accepted: number;
 }
 
 function createBaseRequestBookItem(): RequestBookItem {
@@ -79,7 +79,7 @@ export const RequestBookItem = {
 };
 
 function createBaseRequest(): Request {
-  return { id: 0, creator: "", amount: 0, denom: "", accepted: false };
+  return { id: 0, creator: "", amount: 0, denom: "", accepted: 0 };
 }
 
 export const Request = {
@@ -96,8 +96,8 @@ export const Request = {
     if (message.denom !== "") {
       writer.uint32(34).string(message.denom);
     }
-    if (message.accepted === true) {
-      writer.uint32(40).bool(message.accepted);
+    if (message.accepted !== 0) {
+      writer.uint32(40).int32(message.accepted);
     }
     return writer;
   },
@@ -122,7 +122,7 @@ export const Request = {
           message.denom = reader.string();
           break;
         case 5:
-          message.accepted = reader.bool();
+          message.accepted = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -138,7 +138,7 @@ export const Request = {
       creator: isSet(object.creator) ? String(object.creator) : "",
       amount: isSet(object.amount) ? Number(object.amount) : 0,
       denom: isSet(object.denom) ? String(object.denom) : "",
-      accepted: isSet(object.accepted) ? Boolean(object.accepted) : false,
+      accepted: isSet(object.accepted) ? Number(object.accepted) : 0,
     };
   },
 
@@ -148,7 +148,7 @@ export const Request = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.denom !== undefined && (obj.denom = message.denom);
-    message.accepted !== undefined && (obj.accepted = message.accepted);
+    message.accepted !== undefined && (obj.accepted = Math.round(message.accepted));
     return obj;
   },
 
@@ -158,7 +158,7 @@ export const Request = {
     message.creator = object.creator ?? "";
     message.amount = object.amount ?? 0;
     message.denom = object.denom ?? "";
-    message.accepted = object.accepted ?? false;
+    message.accepted = object.accepted ?? 0;
     return message;
   },
 };

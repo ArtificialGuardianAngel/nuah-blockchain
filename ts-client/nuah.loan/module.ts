@@ -7,9 +7,9 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgDeclineRequest } from "./types/nuah/loan/tx";
 import { MsgCreateRequestBook } from "./types/nuah/loan/tx";
 import { MsgCreateRequest } from "./types/nuah/loan/tx";
+import { MsgDeclineRequest } from "./types/nuah/loan/tx";
 import { MsgAcceptRequest } from "./types/nuah/loan/tx";
 
 import { Params as typeParams} from "./types"
@@ -17,13 +17,7 @@ import { RequestBookItem as typeRequestBookItem} from "./types"
 import { Request as typeRequest} from "./types"
 import { RequestBook as typeRequestBook} from "./types"
 
-export { MsgDeclineRequest, MsgCreateRequestBook, MsgCreateRequest, MsgAcceptRequest };
-
-type sendMsgDeclineRequestParams = {
-  value: MsgDeclineRequest,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgCreateRequestBook, MsgCreateRequest, MsgDeclineRequest, MsgAcceptRequest };
 
 type sendMsgCreateRequestBookParams = {
   value: MsgCreateRequestBook,
@@ -37,6 +31,12 @@ type sendMsgCreateRequestParams = {
   memo?: string
 };
 
+type sendMsgDeclineRequestParams = {
+  value: MsgDeclineRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
 type sendMsgAcceptRequestParams = {
   value: MsgAcceptRequest,
   fee?: StdFee,
@@ -44,16 +44,16 @@ type sendMsgAcceptRequestParams = {
 };
 
 
-type msgDeclineRequestParams = {
-  value: MsgDeclineRequest,
-};
-
 type msgCreateRequestBookParams = {
   value: MsgCreateRequestBook,
 };
 
 type msgCreateRequestParams = {
   value: MsgCreateRequest,
+};
+
+type msgDeclineRequestParams = {
+  value: MsgDeclineRequest,
 };
 
 type msgAcceptRequestParams = {
@@ -90,20 +90,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgDeclineRequest({ value, fee, memo }: sendMsgDeclineRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgDeclineRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgDeclineRequest({ value: MsgDeclineRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgDeclineRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgCreateRequestBook({ value, fee, memo }: sendMsgCreateRequestBookParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgCreateRequestBook: Unable to sign Tx. Signer is not present.')
@@ -132,6 +118,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgDeclineRequest({ value, fee, memo }: sendMsgDeclineRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgDeclineRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgDeclineRequest({ value: MsgDeclineRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgDeclineRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgAcceptRequest({ value, fee, memo }: sendMsgAcceptRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgAcceptRequest: Unable to sign Tx. Signer is not present.')
@@ -147,14 +147,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 		},
 		
 		
-		msgDeclineRequest({ value }: msgDeclineRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/nuah.loan.MsgDeclineRequest", value: MsgDeclineRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgDeclineRequest: Could not create message: ' + e.message)
-			}
-		},
-		
 		msgCreateRequestBook({ value }: msgCreateRequestBookParams): EncodeObject {
 			try {
 				return { typeUrl: "/nuah.loan.MsgCreateRequestBook", value: MsgCreateRequestBook.fromPartial( value ) }  
@@ -168,6 +160,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/nuah.loan.MsgCreateRequest", value: MsgCreateRequest.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgCreateRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgDeclineRequest({ value }: msgDeclineRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.loan.MsgDeclineRequest", value: MsgDeclineRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgDeclineRequest: Could not create message: ' + e.message)
 			}
 		},
 		

@@ -28,6 +28,12 @@ service Query {
     option (google.api.http).get = "/nuah/loan/request_book";
   
   }
+  
+  // Queries a list of GetMadenRequests items.
+  rpc GetMadenRequests (QueryGetMadenRequestsRequest) returns (QueryGetMadenRequestsResponse) {
+    option (google.api.http).get = "/nuah/loan/get_maden_requests/{from}";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -54,5 +60,13 @@ message QueryAllRequestBookRequest {
 message QueryAllRequestBookResponse {
   repeated RequestBook                            requestBook = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination  = 2;
+}
+
+message QueryGetMadenRequestsRequest {
+  string from = 1;
+}
+
+message QueryGetMadenRequestsResponse {
+  repeated RequestBook requests = 1 [(gogoproto.nullable) = false];
 }
 

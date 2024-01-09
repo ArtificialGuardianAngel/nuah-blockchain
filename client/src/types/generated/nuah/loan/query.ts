@@ -36,6 +36,14 @@ export interface QueryAllRequestBookResponse {
   pagination?: PageResponse;
 }
 
+export interface QueryGetMadenRequestsRequest {
+  from: string;
+}
+
+export interface QueryGetMadenRequestsResponse {
+  requests: RequestBook[];
+}
+
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -414,6 +422,129 @@ export const QueryAllRequestBookResponse = {
   },
 };
 
+function createBaseQueryGetMadenRequestsRequest(): QueryGetMadenRequestsRequest {
+  return { from: "" };
+}
+
+export const QueryGetMadenRequestsRequest = {
+  encode(
+    message: QueryGetMadenRequestsRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.from !== "") {
+      writer.uint32(10).string(message.from);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryGetMadenRequestsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMadenRequestsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.from = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetMadenRequestsRequest {
+    return {
+      from: isSet(object.from) ? String(object.from) : "",
+    };
+  },
+
+  toJSON(message: QueryGetMadenRequestsRequest): unknown {
+    const obj: any = {};
+    message.from !== undefined && (obj.from = message.from);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetMadenRequestsRequest>, I>>(
+    object: I
+  ): QueryGetMadenRequestsRequest {
+    const message = createBaseQueryGetMadenRequestsRequest();
+    message.from = object.from ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetMadenRequestsResponse(): QueryGetMadenRequestsResponse {
+  return { requests: [] };
+}
+
+export const QueryGetMadenRequestsResponse = {
+  encode(
+    message: QueryGetMadenRequestsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    for (const v of message.requests) {
+      RequestBook.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryGetMadenRequestsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetMadenRequestsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(RequestBook.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetMadenRequestsResponse {
+    return {
+      requests: Array.isArray(object?.requests)
+        ? object.requests.map((e: any) => RequestBook.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: QueryGetMadenRequestsResponse): unknown {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map((e) =>
+        e ? RequestBook.toJSON(e) : undefined
+      );
+    } else {
+      obj.requests = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetMadenRequestsResponse>, I>>(
+    object: I
+  ): QueryGetMadenRequestsResponse {
+    const message = createBaseQueryGetMadenRequestsResponse();
+    message.requests =
+      object.requests?.map((e) => RequestBook.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -425,6 +556,10 @@ export interface Query {
   RequestBookAll(
     request: QueryAllRequestBookRequest
   ): Promise<QueryAllRequestBookResponse>;
+  /** Queries a list of GetMadenRequests items. */
+  GetMadenRequests(
+    request: QueryGetMadenRequestsRequest
+  ): Promise<QueryGetMadenRequestsResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -434,6 +569,7 @@ export class QueryClientImpl implements Query {
     this.Params = this.Params.bind(this);
     this.RequestBook = this.RequestBook.bind(this);
     this.RequestBookAll = this.RequestBookAll.bind(this);
+    this.GetMadenRequests = this.GetMadenRequests.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -460,6 +596,20 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("nuah.loan.Query", "RequestBookAll", data);
     return promise.then((data) =>
       QueryAllRequestBookResponse.decode(new _m0.Reader(data))
+    );
+  }
+
+  GetMadenRequests(
+    request: QueryGetMadenRequestsRequest
+  ): Promise<QueryGetMadenRequestsResponse> {
+    const data = QueryGetMadenRequestsRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "nuah.loan.Query",
+      "GetMadenRequests",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetMadenRequestsResponse.decode(new _m0.Reader(data))
     );
   }
 }
