@@ -9,7 +9,7 @@ const TypeMsgSendBuyOrder = "send_buy_order"
 
 var _ sdk.Msg = &MsgSendBuyOrder{}
 
-func NewMsgSendBuyOrder(creator string, amountDenom string, amount string, priceDenom string, price string) *MsgSendBuyOrder {
+func NewMsgSendBuyOrder(creator string, amountDenom string, amount int32, priceDenom string, price int32) *MsgSendBuyOrder {
 	return &MsgSendBuyOrder{
 		Creator:     creator,
 		AmountDenom: amountDenom,

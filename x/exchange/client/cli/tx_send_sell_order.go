@@ -3,11 +3,13 @@ package cli
 import (
 	"strconv"
 
+	"nuah/x/exchange/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	"nuah/x/exchange/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -19,9 +21,15 @@ func CmdSendSellOrder() *cobra.Command {
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argAmountDenom := args[0]
-			argAmount := args[1]
+			argAmount, err := cast.ToInt32E(args[1])
+			if err != nil {
+				return err
+			}
 			argPriceDenom := args[2]
-			argPrice := args[3]
+			argPrice, err := cast.ToInt32E(args[3])
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
