@@ -13,11 +13,11 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_dex"
 
-    // Version defines the current version the IBC module supports
-Version = "dex-1"
+	// Version defines the current version the IBC module supports
+	Version = "dex-1"
 
-// PortID is the default port id that module binds to
-PortID = "dex"
+	// PortID is the default port id that module binds to
+	PortID = "dex"
 )
 
 var (
@@ -26,5 +26,5 @@ var (
 )
 
 func KeyPrefix(p string) []byte {
-    return []byte(p)
+	return []byte(p)
 }

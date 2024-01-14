@@ -6,9 +6,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-    "nuah/x/dex/types"
-    "nuah/x/dex/keeper"
-    keepertest "nuah/testutil/keeper"
+	keepertest "nuah/testutil/keeper"
+	"nuah/x/dex/keeper"
+	"nuah/x/dex/types"
 )
 
 func setupMsgServer(t testing.TB) (types.MsgServer, context.Context) {

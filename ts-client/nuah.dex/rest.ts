@@ -9,72 +9,17 @@
  * ---------------------------------------------------------------
  */
 
-export type LoanMsgAcceptRequestResponse = object;
-
-export type LoanMsgCreateRequestBookResponse = object;
-
-export type LoanMsgCreateRequestResponse = object;
-
-export type LoanMsgDeclineRequestResponse = object;
-
 /**
  * Params defines the parameters for the module.
  */
-export type LoanParams = object;
-
-export interface LoanQueryAllRequestBookResponse {
-  requestBook?: LoanRequestBook[];
-
-  /**
-   * PageResponse is to be embedded in gRPC response messages where the
-   * corresponding request message has used PageRequest.
-   *
-   *  message SomeResponse {
-   *          repeated Bar results = 1;
-   *          PageResponse page = 2;
-   *  }
-   */
-  pagination?: V1Beta1PageResponse;
-}
-
-export interface LoanQueryGetMadenRequestsResponse {
-  requests?: LoanRequestBook[];
-}
-
-export interface LoanQueryGetRequestBookResponse {
-  requestBook?: LoanRequestBook;
-}
+export type DexParams = object;
 
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
-export interface LoanQueryParamsResponse {
+export interface DexQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: LoanParams;
-}
-
-export interface LoanRequest {
-  /** @format int32 */
-  id?: number;
-  creator?: string;
-
-  /** @format int32 */
-  amount?: number;
-  denom?: string;
-
-  /** @format int32 */
-  accepted?: number;
-}
-
-export interface LoanRequestBook {
-  index?: string;
-  book?: LoanRequestBookItem;
-}
-
-export interface LoanRequestBookItem {
-  /** @format int32 */
-  idCount?: number;
-  requests?: LoanRequest[];
+  params?: DexParams;
 }
 
 export interface ProtobufAny {
@@ -86,78 +31,6 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
-}
-
-/**
-* message SomeRequest {
-         Foo some_parameter = 1;
-         PageRequest pagination = 2;
- }
-*/
-export interface V1Beta1PageRequest {
-  /**
-   * key is a value returned in PageResponse.next_key to begin
-   * querying the next page most efficiently. Only one of offset or key
-   * should be set.
-   * @format byte
-   */
-  key?: string;
-
-  /**
-   * offset is a numeric offset that can be used when key is unavailable.
-   * It is less efficient than using key. Only one of offset or key should
-   * be set.
-   * @format uint64
-   */
-  offset?: string;
-
-  /**
-   * limit is the total number of results to be returned in the result page.
-   * If left empty it will default to a value to be set by each app.
-   * @format uint64
-   */
-  limit?: string;
-
-  /**
-   * count_total is set to true  to indicate that the result set should include
-   * a count of the total number of items available for pagination in UIs.
-   * count_total is only respected when offset is used. It is ignored when key
-   * is set.
-   */
-  count_total?: boolean;
-
-  /**
-   * reverse is set to true if results are to be returned in the descending order.
-   *
-   * Since: cosmos-sdk 0.43
-   */
-  reverse?: boolean;
-}
-
-/**
-* PageResponse is to be embedded in gRPC response messages where the
-corresponding request message has used PageRequest.
-
- message SomeResponse {
-         repeated Bar results = 1;
-         PageResponse page = 2;
- }
-*/
-export interface V1Beta1PageResponse {
-  /**
-   * next_key is the key to be passed to PageRequest.key to
-   * query the next page most efficiently. It will be empty if
-   * there are no more results.
-   * @format byte
-   */
-  next_key?: string;
-
-  /**
-   * total is total number of results available if PageRequest.count_total
-   * was set, its value is undefined otherwise
-   * @format uint64
-   */
-  total?: string;
 }
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
@@ -281,7 +154,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title nuah/loan/genesis.proto
+ * @title nuah/dex/genesis.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -289,70 +162,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryGetMadenRequests
-   * @summary Queries a list of GetMadenRequests items.
-   * @request GET:/nuah/loan/get_maden_requests/{from}
-   */
-  queryGetMadenRequests = (from: string, params: RequestParams = {}) =>
-    this.request<LoanQueryGetMadenRequestsResponse, RpcStatus>({
-      path: `/nuah/loan/get_maden_requests/${from}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
-   * @request GET:/nuah/loan/params
+   * @request GET:/nuah/dex/params
    */
   queryParams = (params: RequestParams = {}) =>
-    this.request<LoanQueryParamsResponse, RpcStatus>({
-      path: `/nuah/loan/params`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryRequestBookAll
-   * @request GET:/nuah/loan/request_book
-   */
-  queryRequestBookAll = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.count_total"?: boolean;
-      "pagination.reverse"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<LoanQueryAllRequestBookResponse, RpcStatus>({
-      path: `/nuah/loan/request_book`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryRequestBook
-   * @summary Queries a list of RequestBook items.
-   * @request GET:/nuah/loan/request_book/{index}
-   */
-  queryRequestBook = (index: string, params: RequestParams = {}) =>
-    this.request<LoanQueryGetRequestBookResponse, RpcStatus>({
-      path: `/nuah/loan/request_book/${index}`,
+    this.request<DexQueryParamsResponse, RpcStatus>({
+      path: `/nuah/dex/params`,
       method: "GET",
       format: "json",
       ...params,

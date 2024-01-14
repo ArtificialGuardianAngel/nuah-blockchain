@@ -38,6 +38,7 @@ export interface QueryGetMadenRequestsRequest {
 }
 
 export interface QueryGetMadenRequestsResponse {
+  requests: RequestBook[];
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -390,11 +391,14 @@ export const QueryGetMadenRequestsRequest = {
 };
 
 function createBaseQueryGetMadenRequestsResponse(): QueryGetMadenRequestsResponse {
-  return {};
+  return { requests: [] };
 }
 
 export const QueryGetMadenRequestsResponse = {
-  encode(_: QueryGetMadenRequestsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: QueryGetMadenRequestsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.requests) {
+      RequestBook.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -405,6 +409,9 @@ export const QueryGetMadenRequestsResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.requests.push(RequestBook.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -413,17 +420,27 @@ export const QueryGetMadenRequestsResponse = {
     return message;
   },
 
-  fromJSON(_: any): QueryGetMadenRequestsResponse {
-    return {};
+  fromJSON(object: any): QueryGetMadenRequestsResponse {
+    return {
+      requests: Array.isArray(object?.requests) ? object.requests.map((e: any) => RequestBook.fromJSON(e)) : [],
+    };
   },
 
-  toJSON(_: QueryGetMadenRequestsResponse): unknown {
+  toJSON(message: QueryGetMadenRequestsResponse): unknown {
     const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map((e) => e ? RequestBook.toJSON(e) : undefined);
+    } else {
+      obj.requests = [];
+    }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryGetMadenRequestsResponse>, I>>(_: I): QueryGetMadenRequestsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGetMadenRequestsResponse>, I>>(
+    object: I,
+  ): QueryGetMadenRequestsResponse {
     const message = createBaseQueryGetMadenRequestsResponse();
+    message.requests = object.requests?.map((e) => RequestBook.fromPartial(e)) || [];
     return message;
   },
 };

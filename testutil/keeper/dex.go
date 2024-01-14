@@ -6,6 +6,9 @@ import (
 	"nuah/x/dex/keeper"
 	"nuah/x/dex/types"
 
+	tmdb "github.com/cometbft/cometbft-db"
+	"github.com/cometbft/cometbft/libs/log"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -14,12 +17,9 @@ import (
 	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
-	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	"github.com/stretchr/testify/require"
-	"github.com/cometbft/cometbft/libs/log"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	tmdb "github.com/cometbft/cometbft-db"
 )
 
 // dexChannelKeeper is a stub of cosmosibckeeper.ChannelKeeper.
@@ -34,15 +34,15 @@ func (dexChannelKeeper) GetNextSequenceSend(ctx sdk.Context, portID, channelID s
 }
 
 func (dexChannelKeeper) SendPacket(
-    ctx sdk.Context,
-    channelCap *capabilitytypes.Capability,
-    sourcePort string,
-    sourceChannel string,
-    timeoutHeight clienttypes.Height,
-    timeoutTimestamp uint64,
-    data []byte,
+	ctx sdk.Context,
+	channelCap *capabilitytypes.Capability,
+	sourcePort string,
+	sourceChannel string,
+	timeoutHeight clienttypes.Height,
+	timeoutTimestamp uint64,
+	data []byte,
 ) (uint64, error) {
-    return 0, nil
+	return 0, nil
 }
 
 func (dexChannelKeeper) ChanCloseInit(ctx sdk.Context, portID, channelID string, chanCap *capabilitytypes.Capability) error {
@@ -55,8 +55,6 @@ type dexPortKeeper struct{}
 func (dexPortKeeper) BindPort(ctx sdk.Context, portID string) *capabilitytypes.Capability {
 	return &capabilitytypes.Capability{}
 }
-
-
 
 func DexKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 	logger := log.NewNopLogger()
@@ -81,15 +79,15 @@ func DexKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		"DexParams",
 	)
 	k := keeper.NewKeeper(
-        appCodec,
-        storeKey,
-        memStoreKey,
-        paramsSubspace,
-        dexChannelKeeper{},
-        dexPortKeeper{},
-        capabilityKeeper.ScopeToModule("DexScopedKeeper"),
-        nil,
-    )
+		appCodec,
+		storeKey,
+		memStoreKey,
+		paramsSubspace,
+		dexChannelKeeper{},
+		dexPortKeeper{},
+		capabilityKeeper.ScopeToModule("DexScopedKeeper"),
+		nil,
+	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, logger)
 

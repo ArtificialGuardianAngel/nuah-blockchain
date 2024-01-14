@@ -122,9 +122,9 @@ import (
 	loanmoduletypes "nuah/x/loan/types"
 
 	dexmodule "nuah/x/dex"
-		dexmodulekeeper "nuah/x/dex/keeper"
-		dexmoduletypes "nuah/x/dex/types"
-// this line is used by starport scaffolding # stargate/app/moduleImport
+	dexmodulekeeper "nuah/x/dex/keeper"
+	dexmoduletypes "nuah/x/dex/types"
+	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "nuah/app/params"
 	"nuah/docs"
@@ -188,7 +188,7 @@ var (
 		oraclesmodule.AppModuleBasic{},
 		loanmodule.AppModuleBasic{},
 		dexmodule.AppModuleBasic{},
-// this line is used by starport scaffolding # stargate/app/moduleBasic
+		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
 	// module account permissions
@@ -202,8 +202,8 @@ var (
 		govtypes.ModuleName:               {authtypes.Burner},
 		ibctransfertypes.ModuleName:       {authtypes.Minter, authtypes.Burner},
 		nameservicemoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-		dexmoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-// this line is used by starport scaffolding # stargate/app/maccPerms
+		dexmoduletypes.ModuleName:         {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
 
@@ -270,10 +270,11 @@ type App struct {
 	ScopedOraclesKeeper  capabilitykeeper.ScopedKeeper
 	OraclesKeeper        oraclesmodulekeeper.Keeper
 
-	LoanKeeper loanmodulekeeper.Keeper
+	LoanKeeper      loanmodulekeeper.Keeper
 	ScopedDexKeeper capabilitykeeper.ScopedKeeper
-		DexKeeper dexmodulekeeper.Keeper
-// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+	ScopedDexKeeper capabilitykeeper.ScopedKeeper
+	DexKeeper       dexmodulekeeper.Keeper
+	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// mm is the module manager
 	mm *module.Manager
@@ -323,7 +324,7 @@ func New(
 		oraclesmoduletypes.StoreKey,
 		loanmoduletypes.StoreKey,
 		dexmoduletypes.StoreKey,
-// this line is used by starport scaffolding # stargate/app/storeKey
+		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -580,21 +581,21 @@ func New(
 	loanModule := loanmodule.NewAppModule(appCodec, app.LoanKeeper, app.AccountKeeper, app.BankKeeper)
 
 	scopedDexKeeper := app.CapabilityKeeper.ScopeToModule(dexmoduletypes.ModuleName)
-app.ScopedDexKeeper = scopedDexKeeper
-		app.DexKeeper = *dexmodulekeeper.NewKeeper(
-			appCodec,
-			keys[dexmoduletypes.StoreKey],
-			keys[dexmoduletypes.MemStoreKey],
-			app.GetSubspace(dexmoduletypes.ModuleName),
-			app.IBCKeeper.ChannelKeeper,
-&app.IBCKeeper.PortKeeper,
-scopedDexKeeper,
-			app.BankKeeper,
-)
-		dexModule := dexmodule.NewAppModule(appCodec, app.DexKeeper, app.AccountKeeper, app.BankKeeper)
+	app.ScopedDexKeeper = scopedDexKeeper
+	app.DexKeeper = *dexmodulekeeper.NewKeeper(
+		appCodec,
+		keys[dexmoduletypes.StoreKey],
+		keys[dexmoduletypes.MemStoreKey],
+		app.GetSubspace(dexmoduletypes.ModuleName),
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		scopedDexKeeper,
+		app.BankKeeper,
+	)
+	dexModule := dexmodule.NewAppModule(appCodec, app.DexKeeper, app.AccountKeeper, app.BankKeeper)
 
-		dexIBCModule := dexmodule.NewIBCModule(app.DexKeeper)
-// this line is used by starport scaffolding # stargate/app/keeperDefinition
+	dexIBCModule := dexmodule.NewIBCModule(app.DexKeeper)
+	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	/**** IBC Routing ****/
 
@@ -607,7 +608,7 @@ scopedDexKeeper,
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
 	ibcRouter.AddRoute(oraclesmoduletypes.ModuleName, oraclesIBCModule)
 	ibcRouter.AddRoute(dexmoduletypes.ModuleName, dexIBCModule)
-// this line is used by starport scaffolding # ibc/app/router
+	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	/**** Module Hooks ****/
@@ -661,7 +662,7 @@ scopedDexKeeper,
 		oraclesModule,
 		loanModule,
 		dexModule,
-// this line is used by starport scaffolding # stargate/app/appModule
+		// this line is used by starport scaffolding # stargate/app/appModule
 
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
 	)
@@ -697,7 +698,7 @@ scopedDexKeeper,
 		oraclesmoduletypes.ModuleName,
 		loanmoduletypes.ModuleName,
 		dexmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/beginBlockers
+		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -726,7 +727,7 @@ scopedDexKeeper,
 		oraclesmoduletypes.ModuleName,
 		loanmoduletypes.ModuleName,
 		dexmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/endBlockers
+		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -760,7 +761,7 @@ scopedDexKeeper,
 		oraclesmoduletypes.ModuleName,
 		loanmoduletypes.ModuleName,
 		dexmoduletypes.ModuleName,
-// this line is used by starport scaffolding # stargate/app/initGenesis
+		// this line is used by starport scaffolding # stargate/app/initGenesis
 	}
 	app.mm.SetOrderInitGenesis(genesisModuleOrder...)
 	app.mm.SetOrderExportGenesis(genesisModuleOrder...)
@@ -988,7 +989,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(oraclesmoduletypes.ModuleName)
 	paramsKeeper.Subspace(loanmoduletypes.ModuleName)
 	paramsKeeper.Subspace(dexmoduletypes.ModuleName)
-// this line is used by starport scaffolding # stargate/app/paramSubspace
+	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
 }

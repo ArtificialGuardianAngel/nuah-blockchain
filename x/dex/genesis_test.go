@@ -3,16 +3,16 @@ package dex_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	keepertest "nuah/testutil/keeper"
 	"nuah/testutil/nullify"
 	"nuah/x/dex"
 	"nuah/x/dex/types"
-	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {
 	genesisState := types.GenesisState{
-		Params:	types.DefaultParams(),
+		Params: types.DefaultParams(),
 		PortId: types.PortID,
 		// this line is used by starport scaffolding # genesis/test/state
 	}
