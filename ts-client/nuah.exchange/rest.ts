@@ -9,6 +9,12 @@
  * ---------------------------------------------------------------
  */
 
+export interface ExchangeBuyOrderBook {
+  index?: string;
+  amountDenom?: string;
+  priceDenom?: string;
+}
+
 export type ExchangeMsgCreatePairResponse = object;
 
 export type ExchangeMsgSendBuyOrderResponse = object;
@@ -20,12 +26,56 @@ export type ExchangeMsgSendSellOrderResponse = object;
  */
 export type ExchangeParams = object;
 
+export interface ExchangeQueryAllBuyOrderBookResponse {
+  buyOrderBook?: ExchangeBuyOrderBook[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface ExchangeQueryAllSellOrderBookResponse {
+  sellOrderBook?: ExchangeSellOrderBook[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface ExchangeQueryGetBuyOrderBookResponse {
+  buyOrderBook?: ExchangeBuyOrderBook;
+}
+
+export interface ExchangeQueryGetSellOrderBookResponse {
+  sellOrderBook?: ExchangeSellOrderBook;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface ExchangeQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: ExchangeParams;
+}
+
+export interface ExchangeSellOrderBook {
+  index?: string;
+  amountDenom?: string;
+  priceDenom?: string;
 }
 
 export interface ProtobufAny {
@@ -37,6 +87,78 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
+}
+
+/**
+* message SomeRequest {
+         Foo some_parameter = 1;
+         PageRequest pagination = 2;
+ }
+*/
+export interface V1Beta1PageRequest {
+  /**
+   * key is a value returned in PageResponse.next_key to begin
+   * querying the next page most efficiently. Only one of offset or key
+   * should be set.
+   * @format byte
+   */
+  key?: string;
+
+  /**
+   * offset is a numeric offset that can be used when key is unavailable.
+   * It is less efficient than using key. Only one of offset or key should
+   * be set.
+   * @format uint64
+   */
+  offset?: string;
+
+  /**
+   * limit is the total number of results to be returned in the result page.
+   * If left empty it will default to a value to be set by each app.
+   * @format uint64
+   */
+  limit?: string;
+
+  /**
+   * count_total is set to true  to indicate that the result set should include
+   * a count of the total number of items available for pagination in UIs.
+   * count_total is only respected when offset is used. It is ignored when key
+   * is set.
+   */
+  count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
+}
+
+/**
+* PageResponse is to be embedded in gRPC response messages where the
+corresponding request message has used PageRequest.
+
+ message SomeResponse {
+         repeated Bar results = 1;
+         PageResponse page = 2;
+ }
+*/
+export interface V1Beta1PageResponse {
+  /**
+   * next_key is the key to be passed to PageRequest.key to
+   * query the next page most efficiently. It will be empty if
+   * there are no more results.
+   * @format byte
+   */
+  next_key?: string;
+
+  /**
+   * total is total number of results available if PageRequest.count_total
+   * was set, its value is undefined otherwise
+   * @format uint64
+   */
+  total?: string;
 }
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";
@@ -160,10 +282,51 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title nuah/exchange/genesis.proto
+ * @title nuah/exchange/buy_order_book.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBuyOrderBookAll
+   * @request GET:/nuah/exchange/buy_order_book
+   */
+  queryBuyOrderBookAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<ExchangeQueryAllBuyOrderBookResponse, RpcStatus>({
+      path: `/nuah/exchange/buy_order_book`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBuyOrderBook
+   * @summary Queries a list of BuyOrderBook items.
+   * @request GET:/nuah/exchange/buy_order_book/{index}
+   */
+  queryBuyOrderBook = (index: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetBuyOrderBookResponse, RpcStatus>({
+      path: `/nuah/exchange/buy_order_book/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *
@@ -175,6 +338,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<ExchangeQueryParamsResponse, RpcStatus>({
       path: `/nuah/exchange/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySellOrderBookAll
+   * @request GET:/nuah/exchange/sell_order_book
+   */
+  querySellOrderBookAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<ExchangeQueryAllSellOrderBookResponse, RpcStatus>({
+      path: `/nuah/exchange/sell_order_book`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySellOrderBook
+   * @summary Queries a list of SellOrderBook items.
+   * @request GET:/nuah/exchange/sell_order_book/{index}
+   */
+  querySellOrderBook = (index: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetSellOrderBookResponse, RpcStatus>({
+      path: `/nuah/exchange/sell_order_book/${index}`,
       method: "GET",
       format: "json",
       ...params,

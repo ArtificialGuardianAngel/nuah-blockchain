@@ -1,22 +1,32 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
+import { BuyOrderBook } from "./buy_order_book";
 import { Params } from "./params";
+import { SellOrderBook } from "./sell_order_book";
 
 export const protobufPackage = "nuah.exchange";
 
 /** GenesisState defines the exchange module's genesis state. */
 export interface GenesisState {
   params: Params | undefined;
+  sellOrderBookList: SellOrderBook[];
+  buyOrderBookList: BuyOrderBook[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined };
+  return { params: undefined, sellOrderBookList: [], buyOrderBookList: [] };
 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.sellOrderBookList) {
+      SellOrderBook.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.buyOrderBookList) {
+      BuyOrderBook.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -31,6 +41,12 @@ export const GenesisState = {
         case 1:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.sellOrderBookList.push(SellOrderBook.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.buyOrderBookList.push(BuyOrderBook.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -40,12 +56,30 @@ export const GenesisState = {
   },
 
   fromJSON(object: any): GenesisState {
-    return { params: isSet(object.params) ? Params.fromJSON(object.params) : undefined };
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      sellOrderBookList: Array.isArray(object?.sellOrderBookList)
+        ? object.sellOrderBookList.map((e: any) => SellOrderBook.fromJSON(e))
+        : [],
+      buyOrderBookList: Array.isArray(object?.buyOrderBookList)
+        ? object.buyOrderBookList.map((e: any) => BuyOrderBook.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.sellOrderBookList) {
+      obj.sellOrderBookList = message.sellOrderBookList.map((e) => e ? SellOrderBook.toJSON(e) : undefined);
+    } else {
+      obj.sellOrderBookList = [];
+    }
+    if (message.buyOrderBookList) {
+      obj.buyOrderBookList = message.buyOrderBookList.map((e) => e ? BuyOrderBook.toJSON(e) : undefined);
+    } else {
+      obj.buyOrderBookList = [];
+    }
     return obj;
   },
 
@@ -54,6 +88,8 @@ export const GenesisState = {
     message.params = (object.params !== undefined && object.params !== null)
       ? Params.fromPartial(object.params)
       : undefined;
+    message.sellOrderBookList = object.sellOrderBookList?.map((e) => SellOrderBook.fromPartial(e)) || [];
+    message.buyOrderBookList = object.buyOrderBookList?.map((e) => BuyOrderBook.fromPartial(e)) || [];
     return message;
   },
 };

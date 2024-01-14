@@ -1,12 +1,18 @@
 syntax = "proto3";
+
 package nuah.exchange;
 
 import "gogoproto/gogo.proto";
 import "nuah/exchange/params.proto";
+import "nuah/exchange/sell_order_book.proto";
+import "nuah/exchange/buy_order_book.proto";
 
 option go_package = "nuah/x/exchange/types";
 
 // GenesisState defines the exchange module's genesis state.
 message GenesisState {
-  Params params = 1 [(gogoproto.nullable) = false];
+           Params        params            = 1 [(gogoproto.nullable) = false];
+  repeated SellOrderBook sellOrderBookList = 2 [(gogoproto.nullable) = false];
+  repeated BuyOrderBook  buyOrderBookList  = 3 [(gogoproto.nullable) = false];
 }
+

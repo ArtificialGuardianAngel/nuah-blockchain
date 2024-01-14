@@ -1,6 +1,5 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
-import { OrderBook } from "./order";
 
 export const protobufPackage = "nuah.exchange";
 
@@ -8,11 +7,10 @@ export interface BuyOrderBook {
   index: string;
   amountDenom: string;
   priceDenom: string;
-  book: OrderBook | undefined;
 }
 
 function createBaseBuyOrderBook(): BuyOrderBook {
-  return { index: "", amountDenom: "", priceDenom: "", book: undefined };
+  return { index: "", amountDenom: "", priceDenom: "" };
 }
 
 export const BuyOrderBook = {
@@ -25,9 +23,6 @@ export const BuyOrderBook = {
     }
     if (message.priceDenom !== "") {
       writer.uint32(26).string(message.priceDenom);
-    }
-    if (message.book !== undefined) {
-      OrderBook.encode(message.book, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -48,9 +43,6 @@ export const BuyOrderBook = {
         case 3:
           message.priceDenom = reader.string();
           break;
-        case 4:
-          message.book = OrderBook.decode(reader, reader.uint32());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -64,7 +56,6 @@ export const BuyOrderBook = {
       index: isSet(object.index) ? String(object.index) : "",
       amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
-      book: isSet(object.book) ? OrderBook.fromJSON(object.book) : undefined,
     };
   },
 
@@ -73,7 +64,6 @@ export const BuyOrderBook = {
     message.index !== undefined && (obj.index = message.index);
     message.amountDenom !== undefined && (obj.amountDenom = message.amountDenom);
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
-    message.book !== undefined && (obj.book = message.book ? OrderBook.toJSON(message.book) : undefined);
     return obj;
   },
 
@@ -82,7 +72,6 @@ export const BuyOrderBook = {
     message.index = object.index ?? "";
     message.amountDenom = object.amountDenom ?? "";
     message.priceDenom = object.priceDenom ?? "";
-    message.book = (object.book !== undefined && object.book !== null) ? OrderBook.fromPartial(object.book) : undefined;
     return message;
   },
 };

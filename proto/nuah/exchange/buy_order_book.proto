@@ -1,0 +1,14 @@
+syntax = "proto3";
+package nuah.exchange;
+import "nuah/exchange/order.proto";
+
+option go_package = "nuah/x/exchange/types";
+
+message BuyOrderBook {
+  string index = 1; 
+  string amountDenom = 2; 
+  string priceDenom = 3; 
+  OrderBook book = 4;
+  
+}
+
