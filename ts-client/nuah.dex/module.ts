@@ -7,13 +7,55 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgSendBuyOrder } from "./types/nuah/dex/tx";
+import { MsgSendCreatePair } from "./types/nuah/dex/tx";
+import { MsgSendSellOrder } from "./types/nuah/dex/tx";
 
+import { BuyOrderBook as typeBuyOrderBook} from "./types"
+import { DenomTrace as typeDenomTrace} from "./types"
 import { DexPacketData as typeDexPacketData} from "./types"
 import { NoData as typeNoData} from "./types"
+import { CreatePairPacketData as typeCreatePairPacketData} from "./types"
+import { CreatePairPacketAck as typeCreatePairPacketAck} from "./types"
+import { SellOrderPacketData as typeSellOrderPacketData} from "./types"
+import { SellOrderPacketAck as typeSellOrderPacketAck} from "./types"
+import { BuyOrderPacketData as typeBuyOrderPacketData} from "./types"
+import { BuyOrderPacketAck as typeBuyOrderPacketAck} from "./types"
 import { Params as typeParams} from "./types"
+import { SellOrderBook as typeSellOrderBook} from "./types"
 
-export {  };
+export { MsgSendBuyOrder, MsgSendCreatePair, MsgSendSellOrder };
 
+type sendMsgSendBuyOrderParams = {
+  value: MsgSendBuyOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSendCreatePairParams = {
+  value: MsgSendCreatePair,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgSendSellOrderParams = {
+  value: MsgSendSellOrder,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgSendBuyOrderParams = {
+  value: MsgSendBuyOrder,
+};
+
+type msgSendCreatePairParams = {
+  value: MsgSendCreatePair,
+};
+
+type msgSendSellOrderParams = {
+  value: MsgSendSellOrder,
+};
 
 
 export const registry = new Registry(msgTypes);
@@ -45,6 +87,72 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgSendBuyOrder({ value, fee, memo }: sendMsgSendBuyOrderParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSendBuyOrder: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSendBuyOrder({ value: MsgSendBuyOrder.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSendBuyOrder: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSendCreatePair({ value, fee, memo }: sendMsgSendCreatePairParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSendCreatePair: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSendCreatePair({ value: MsgSendCreatePair.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSendCreatePair: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgSendSellOrder({ value, fee, memo }: sendMsgSendSellOrderParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgSendSellOrder: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgSendSellOrder({ value: MsgSendSellOrder.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgSendSellOrder: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgSendBuyOrder({ value }: msgSendBuyOrderParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.dex.MsgSendBuyOrder", value: MsgSendBuyOrder.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSendBuyOrder: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSendCreatePair({ value }: msgSendCreatePairParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.dex.MsgSendCreatePair", value: MsgSendCreatePair.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSendCreatePair: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgSendSellOrder({ value }: msgSendSellOrderParams): EncodeObject {
+			try {
+				return { typeUrl: "/nuah.dex.MsgSendSellOrder", value: MsgSendSellOrder.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgSendSellOrder: Could not create message: ' + e.message)
+			}
+		},
 		
 	}
 };
@@ -68,9 +176,18 @@ class SDKModule {
 		this.query = queryClient({ addr: client.env.apiURL });		
 		this.updateTX(client);
 		this.structure =  {
+						BuyOrderBook: getStructure(typeBuyOrderBook.fromPartial({})),
+						DenomTrace: getStructure(typeDenomTrace.fromPartial({})),
 						DexPacketData: getStructure(typeDexPacketData.fromPartial({})),
 						NoData: getStructure(typeNoData.fromPartial({})),
+						CreatePairPacketData: getStructure(typeCreatePairPacketData.fromPartial({})),
+						CreatePairPacketAck: getStructure(typeCreatePairPacketAck.fromPartial({})),
+						SellOrderPacketData: getStructure(typeSellOrderPacketData.fromPartial({})),
+						SellOrderPacketAck: getStructure(typeSellOrderPacketAck.fromPartial({})),
+						BuyOrderPacketData: getStructure(typeBuyOrderPacketData.fromPartial({})),
+						BuyOrderPacketAck: getStructure(typeBuyOrderPacketAck.fromPartial({})),
 						Params: getStructure(typeParams.fromPartial({})),
+						SellOrderBook: getStructure(typeSellOrderBook.fromPartial({})),
 						
 		};
 		client.on('signer-changed',(signer) => {			

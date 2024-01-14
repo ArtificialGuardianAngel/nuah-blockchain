@@ -4,12 +4,18 @@ package nuah.dex;
 
 import "gogoproto/gogo.proto";
 import "nuah/dex/params.proto";
+import "nuah/dex/sell_order_book.proto";
+import "nuah/dex/buy_order_book.proto";
+import "nuah/dex/denom_trace.proto";
 
 option go_package = "nuah/x/dex/types";
 
 // GenesisState defines the dex module's genesis state.
 message GenesisState {
-  Params params  = 1 [(gogoproto.nullable) = false];
-  string port_id = 2;
+           Params        params            = 1 [(gogoproto.nullable) = false];
+           string        port_id           = 2;
+  repeated SellOrderBook sellOrderBookList = 3 [(gogoproto.nullable) = false];
+  repeated BuyOrderBook  buyOrderBookList  = 4 [(gogoproto.nullable) = false];
+  repeated DenomTrace    denomTraceList    = 5 [(gogoproto.nullable) = false];
 }
 
