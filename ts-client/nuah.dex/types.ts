@@ -1,5 +1,7 @@
 import { BuyOrderBook } from "./types/nuah/dex/buy_order_book"
 import { DenomTrace } from "./types/nuah/dex/denom_trace"
+import { OrderBook } from "./types/nuah/dex/order"
+import { Order } from "./types/nuah/dex/order"
 import { DexPacketData } from "./types/nuah/dex/packet"
 import { NoData } from "./types/nuah/dex/packet"
 import { CreatePairPacketData } from "./types/nuah/dex/packet"
@@ -15,6 +17,8 @@ import { SellOrderBook } from "./types/nuah/dex/sell_order_book"
 export {     
     BuyOrderBook,
     DenomTrace,
+    OrderBook,
+    Order,
     DexPacketData,
     NoData,
     CreatePairPacketData,

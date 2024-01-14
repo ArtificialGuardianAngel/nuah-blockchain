@@ -30,13 +30,14 @@ import { Module as IbcCoreChannelV1, msgTypes as IbcCoreChannelV1MsgTypes } from
 import { Module as IbcCoreClientV1, msgTypes as IbcCoreClientV1MsgTypes } from './ibc.core.client.v1'
 import { Module as IbcCoreConnectionV1, msgTypes as IbcCoreConnectionV1MsgTypes } from './ibc.core.connection.v1'
 import { Module as NuahDex, msgTypes as NuahDexMsgTypes } from './nuah.dex'
+import { Module as NuahExchange, msgTypes as NuahExchangeMsgTypes } from './nuah.exchange'
 import { Module as NuahLoan, msgTypes as NuahLoanMsgTypes } from './nuah.loan'
 import { Module as NuahNameservice, msgTypes as NuahNameserviceMsgTypes } from './nuah.nameservice'
 import { Module as NuahOracles, msgTypes as NuahOraclesMsgTypes } from './nuah.oracles'
 
 
 const Client = IgniteClient.plugin([
-    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseNodeV1Beta1, CosmosBaseTendermintV1Beta1, CosmosConsensusV1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, NuahDex, NuahLoan, NuahNameservice, NuahOracles
+    CosmosAuthV1Beta1, CosmosAuthzV1Beta1, CosmosBankV1Beta1, CosmosBaseNodeV1Beta1, CosmosBaseTendermintV1Beta1, CosmosConsensusV1, CosmosCrisisV1Beta1, CosmosDistributionV1Beta1, CosmosEvidenceV1Beta1, CosmosFeegrantV1Beta1, CosmosGovV1, CosmosGovV1Beta1, CosmosGroupV1, CosmosMintV1Beta1, CosmosNftV1Beta1, CosmosParamsV1Beta1, CosmosSlashingV1Beta1, CosmosStakingV1Beta1, CosmosTxV1Beta1, CosmosUpgradeV1Beta1, CosmosVestingV1Beta1, IbcApplicationsInterchainAccountsControllerV1, IbcApplicationsInterchainAccountsHostV1, IbcApplicationsTransferV1, IbcCoreChannelV1, IbcCoreClientV1, IbcCoreConnectionV1, NuahDex, NuahExchange, NuahLoan, NuahNameservice, NuahOracles
 ]);
 
 const registry = new Registry([
@@ -68,6 +69,7 @@ const registry = new Registry([
   ...IbcCoreClientV1MsgTypes,
   ...IbcCoreConnectionV1MsgTypes,
   ...NuahDexMsgTypes,
+  ...NuahExchangeMsgTypes,
   ...NuahLoanMsgTypes,
   ...NuahNameserviceMsgTypes,
   ...NuahOraclesMsgTypes,

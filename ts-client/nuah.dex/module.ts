@@ -13,6 +13,8 @@ import { MsgSendSellOrder } from "./types/nuah/dex/tx";
 
 import { BuyOrderBook as typeBuyOrderBook} from "./types"
 import { DenomTrace as typeDenomTrace} from "./types"
+import { OrderBook as typeOrderBook} from "./types"
+import { Order as typeOrder} from "./types"
 import { DexPacketData as typeDexPacketData} from "./types"
 import { NoData as typeNoData} from "./types"
 import { CreatePairPacketData as typeCreatePairPacketData} from "./types"
@@ -178,6 +180,8 @@ class SDKModule {
 		this.structure =  {
 						BuyOrderBook: getStructure(typeBuyOrderBook.fromPartial({})),
 						DenomTrace: getStructure(typeDenomTrace.fromPartial({})),
+						OrderBook: getStructure(typeOrderBook.fromPartial({})),
+						Order: getStructure(typeOrder.fromPartial({})),
 						DexPacketData: getStructure(typeDexPacketData.fromPartial({})),
 						NoData: getStructure(typeNoData.fromPartial({})),
 						CreatePairPacketData: getStructure(typeCreatePairPacketData.fromPartial({})),

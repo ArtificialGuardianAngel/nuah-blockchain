@@ -46457,6 +46457,28 @@ paths:
                       type: string
                     priceDenom:
                       type: string
+                    book:
+                      type: object
+                      properties:
+                        idCount:
+                          type: integer
+                          format: int32
+                        orders:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                format: int32
+                              creator:
+                                type: string
+                              amount:
+                                type: integer
+                                format: int32
+                              price:
+                                type: integer
+                                format: int32
               pagination:
                 type: object
                 properties:
@@ -46581,6 +46603,28 @@ paths:
                     type: string
                   priceDenom:
                     type: string
+                  book:
+                    type: object
+                    properties:
+                      idCount:
+                        type: integer
+                        format: int32
+                      orders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            creator:
+                              type: string
+                            amount:
+                              type: integer
+                              format: int32
+                            price:
+                              type: integer
+                              format: int32
         default:
           description: An unexpected error response.
           schema:
@@ -46835,6 +46879,28 @@ paths:
                       type: string
                     priceDenom:
                       type: string
+                    book:
+                      type: object
+                      properties:
+                        idCount:
+                          type: integer
+                          format: int32
+                        orders:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                format: int32
+                              creator:
+                                type: string
+                              amount:
+                                type: integer
+                                format: int32
+                              price:
+                                type: integer
+                                format: int32
               pagination:
                 type: object
                 properties:
@@ -46959,6 +47025,28 @@ paths:
                     type: string
                   priceDenom:
                     type: string
+                  book:
+                    type: object
+                    properties:
+                      idCount:
+                        type: integer
+                        format: int32
+                      orders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int32
+                            creator:
+                              type: string
+                            amount:
+                              type: integer
+                              format: int32
+                            price:
+                              type: integer
+                              format: int32
         default:
           description: An unexpected error response.
           schema:
@@ -46982,6 +47070,42 @@ paths:
           in: path
           required: true
           type: string
+      tags:
+        - Query
+  /nuah/exchange/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: NuahExchangeParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
       tags:
         - Query
   /nuah/loan/get_maden_requests/{from}:
@@ -76626,6 +76750,28 @@ definitions:
         type: string
       priceDenom:
         type: string
+      book:
+        type: object
+        properties:
+          idCount:
+            type: integer
+            format: int32
+          orders:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                creator:
+                  type: string
+                amount:
+                  type: integer
+                  format: int32
+                price:
+                  type: integer
+                  format: int32
   nuah.dex.DenomTrace:
     type: object
     properties:
@@ -76643,6 +76789,42 @@ definitions:
     type: object
   nuah.dex.MsgSendSellOrderResponse:
     type: object
+  nuah.dex.Order:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      creator:
+        type: string
+      amount:
+        type: integer
+        format: int32
+      price:
+        type: integer
+        format: int32
+  nuah.dex.OrderBook:
+    type: object
+    properties:
+      idCount:
+        type: integer
+        format: int32
+      orders:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+            creator:
+              type: string
+            amount:
+              type: integer
+              format: int32
+            price:
+              type: integer
+              format: int32
   nuah.dex.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -76660,6 +76842,28 @@ definitions:
               type: string
             priceDenom:
               type: string
+            book:
+              type: object
+              properties:
+                idCount:
+                  type: integer
+                  format: int32
+                orders:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      creator:
+                        type: string
+                      amount:
+                        type: integer
+                        format: int32
+                      price:
+                        type: integer
+                        format: int32
       pagination:
         type: object
         properties:
@@ -76742,6 +76946,28 @@ definitions:
               type: string
             priceDenom:
               type: string
+            book:
+              type: object
+              properties:
+                idCount:
+                  type: integer
+                  format: int32
+                orders:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      creator:
+                        type: string
+                      amount:
+                        type: integer
+                        format: int32
+                      price:
+                        type: integer
+                        format: int32
       pagination:
         type: object
         properties:
@@ -76780,6 +77006,28 @@ definitions:
             type: string
           priceDenom:
             type: string
+          book:
+            type: object
+            properties:
+              idCount:
+                type: integer
+                format: int32
+              orders:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int32
+                    creator:
+                      type: string
+                    amount:
+                      type: integer
+                      format: int32
+                    price:
+                      type: integer
+                      format: int32
   nuah.dex.QueryGetDenomTraceResponse:
     type: object
     properties:
@@ -76806,6 +77054,28 @@ definitions:
             type: string
           priceDenom:
             type: string
+          book:
+            type: object
+            properties:
+              idCount:
+                type: integer
+                format: int32
+              orders:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int32
+                    creator:
+                      type: string
+                    amount:
+                      type: integer
+                      format: int32
+                    price:
+                      type: integer
+                      format: int32
   nuah.dex.QueryParamsResponse:
     type: object
     properties:
@@ -76822,6 +77092,38 @@ definitions:
         type: string
       priceDenom:
         type: string
+      book:
+        type: object
+        properties:
+          idCount:
+            type: integer
+            format: int32
+          orders:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                creator:
+                  type: string
+                amount:
+                  type: integer
+                  format: int32
+                price:
+                  type: integer
+                  format: int32
+  nuah.exchange.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  nuah.exchange.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   nuah.loan.MsgAcceptRequestResponse:
     type: object
   nuah.loan.MsgCreateRequestBookResponse:
