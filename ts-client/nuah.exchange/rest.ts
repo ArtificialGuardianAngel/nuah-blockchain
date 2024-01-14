@@ -9,6 +9,12 @@
  * ---------------------------------------------------------------
  */
 
+export type ExchangeMsgCreatePairResponse = object;
+
+export type ExchangeMsgSendBuyOrderResponse = object;
+
+export type ExchangeMsgSendSellOrderResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

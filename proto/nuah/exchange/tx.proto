@@ -1,7 +1,40 @@
 syntax = "proto3";
+
 package nuah.exchange;
 
 option go_package = "nuah/x/exchange/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc CreatePair    (MsgCreatePair   ) returns (MsgCreatePairResponse   );
+  rpc SendBuyOrder  (MsgSendBuyOrder ) returns (MsgSendBuyOrderResponse );
+  rpc SendSellOrder (MsgSendSellOrder) returns (MsgSendSellOrderResponse);
+}
+message MsgCreatePair {
+  string creator     = 1;
+  string sourceDenom = 2;
+  string targetDenom = 3;
+}
+
+message MsgCreatePairResponse {}
+
+message MsgSendBuyOrder {
+  string creator     = 1;
+  string amountDenom = 2;
+  string amount      = 3;
+  string priceDenom  = 4;
+  string price       = 5;
+}
+
+message MsgSendBuyOrderResponse {}
+
+message MsgSendSellOrder {
+  string creator     = 1;
+  string amountDenom = 2;
+  string amount      = 3;
+  string priceDenom  = 4;
+  string price       = 5;
+}
+
+message MsgSendSellOrderResponse {}
+

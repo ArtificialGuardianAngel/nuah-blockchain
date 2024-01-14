@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package nuah.exchange;
+package nuah.dex;
 
-option go_package = "nuah/x/exchange/types";
+option go_package = "nuah/x/dex/types";
 
 message OrderBook {
   int32 idCount = 1;

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package nuah.dex;
 
-import "nuah/exchange/order.proto";
+import "nuah/dex/order.proto";
 
 option go_package = "nuah/x/dex/types";
 
