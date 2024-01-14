@@ -116,9 +116,9 @@ func (k Keeper) Data(goCtx context.Context, req *types.QueryGetDataRequest) (*ty
 			index = max(value, index)
 		}
 
-		value := data.AdjClose[strconv.Itoa(index)]
+		// value := data.AdjClose[strconv.Itoa(index)]
 
-		k.exchangeKeeper.SwarmSellOrders(ctx, strings.Replace(req.Index, "USD=X", "", 1), "USDn", int(value))
+		// k.exchangeKeeper.SwarmSellOrders(ctx, strings.Replace(req.Index, "USD=X", "", 1), "USDn", int(value))
 	}
 
 	return &types.QueryGetDataResponse{Data: val}, nil

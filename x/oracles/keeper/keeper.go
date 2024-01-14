@@ -3,7 +3,6 @@ package keeper
 import (
 	"fmt"
 
-	"nuah/x/exchange/keeper"
 	"nuah/x/oracles/types"
 
 	"github.com/cometbft/cometbft/libs/log"
@@ -28,8 +27,6 @@ type (
 		channelKeeper types.ChannelKeeper
 		portKeeper    types.PortKeeper
 		scopedKeeper  exported.ScopedKeeper
-
-		exchangeKeeper keeper.Keeper
 	}
 )
 
