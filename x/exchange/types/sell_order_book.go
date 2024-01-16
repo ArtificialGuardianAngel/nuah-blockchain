@@ -9,18 +9,18 @@ func NewSellOrderBook(AmountDenom string, PriceDenom string) SellOrderBook {
 	}
 }
 
-func (s *SellOrderBook) AppendOrder(creator string, amount int32, price int32) (int32, error) {
+func (s *SellOrderBook) AppendOrder(creator string, amount uint64, price uint64) (int32, error) {
 	return s.Book.appendOrder(creator, amount, price, Decreasing)
 }
 
 func (s *SellOrderBook) FillBuyOrder(order Order) (
 	remainingBuyOrder Order,
 	liquidated []Order,
-	purchase int32,
+	purchase uint64,
 	filled bool,
 ) {
 	var liquidatedList []Order
-	totalPurchase := int32(0)
+	totalPurchase := uint64(0)
 	remainingBuyOrder = order
 
 	// Liquidate as long as there is match
@@ -51,7 +51,7 @@ func (s *SellOrderBook) FillBuyOrder(order Order) (
 func (s *SellOrderBook) LiquidateFromBuyOrder(order Order) (
 	remainingBuyOrder Order,
 	liquidatedSellOrder Order,
-	purchase int32,
+	purchase uint64,
 	match bool,
 	filled bool,
 ) {

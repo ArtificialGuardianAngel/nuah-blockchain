@@ -38,6 +38,14 @@ func TestGenesisState_Validate(t *testing.T) {
 						Index: "1",
 					},
 				},
+				TokenInfoList: []types.TokenInfo{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -60,6 +68,20 @@ func TestGenesisState_Validate(t *testing.T) {
 			desc: "duplicated buyOrderBook",
 			genState: &types.GenesisState{
 				BuyOrderBookList: []types.BuyOrderBook{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "duplicated tokenInfo",
+			genState: &types.GenesisState{
+				TokenInfoList: []types.TokenInfo{
 					{
 						Index: "0",
 					},

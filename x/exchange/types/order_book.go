@@ -12,8 +12,8 @@ func NewOrderBook() OrderBook {
 }
 
 const (
-	MaxAmount = int32(100000)
-	MaxPrice  = int32(100000)
+	MaxAmount = uint64(100_000_000_000)
+	MaxPrice  = uint64(100_000_000_000)
 )
 
 type Ordering int
@@ -31,7 +31,7 @@ var (
 	ErrOrderNotFound = errors.New("order not found")
 )
 
-func (book *OrderBook) appendOrder(creator string, amount int32, price int32, ordering Ordering) (int32, error) {
+func (book *OrderBook) appendOrder(creator string, amount uint64, price uint64, ordering Ordering) (int32, error) {
 	if err := checkAmountAndPrice(amount, price); err != nil {
 		return 0, err
 	}
@@ -51,15 +51,15 @@ func (book *OrderBook) appendOrder(creator string, amount int32, price int32, or
 	return order.Id, nil
 }
 
-func checkAmountAndPrice(amount int32, price int32) error {
-	if amount == int32(0) {
+func checkAmountAndPrice(amount uint64, price uint64) error {
+	if amount == uint64(0) {
 		return ErrZeroAmount
 	}
 	if amount > MaxAmount {
 		return ErrMaxAmount
 	}
 
-	if price == int32(0) {
+	if price == uint64(0) {
 		return ErrZeroPrice
 	}
 	if price > MaxPrice {
@@ -80,6 +80,7 @@ func (book *OrderBook) insertOrder(order Order, ordering Ordering) {
 		var i int
 
 		// get the index of the new order depending on the provided ordering
+		// fmt.Printf("%+v\n", ordering == Increasing)
 		if ordering == Increasing {
 			i = sort.Search(len(book.Orders), func(i int) bool { return book.Orders[i].Price > order.Price })
 		} else {

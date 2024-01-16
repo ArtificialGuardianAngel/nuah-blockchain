@@ -12,6 +12,7 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		SellOrderBookList: []SellOrderBook{},
 		BuyOrderBookList:  []BuyOrderBook{},
+		TokenInfoList:     []TokenInfo{},
 		// this line is used by starport scaffolding # genesis/types/default
 		Params: DefaultParams(),
 	}
@@ -39,6 +40,16 @@ func (gs GenesisState) Validate() error {
 			return fmt.Errorf("duplicated index for buyOrderBook")
 		}
 		buyOrderBookIndexMap[index] = struct{}{}
+	}
+	// Check for duplicated index in tokenInfo
+	tokenInfoIndexMap := make(map[string]struct{})
+
+	for _, elem := range gs.TokenInfoList {
+		index := string(TokenInfoKey(elem.Index))
+		if _, ok := tokenInfoIndexMap[index]; ok {
+			return fmt.Errorf("duplicated index for tokenInfo")
+		}
+		tokenInfoIndexMap[index] = struct{}{}
 	}
 	// this line is used by starport scaffolding # genesis/types/validate
 

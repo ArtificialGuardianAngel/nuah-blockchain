@@ -12,6 +12,6 @@ message OrderBook {
 message Order {
   int32 id = 1;
   string creator = 2;
-  int32 amount = 3;
-  int32 price = 4;
+  uint64 amount = 3;
+  uint64 price = 4;
 }

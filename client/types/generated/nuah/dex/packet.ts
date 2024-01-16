@@ -2,9 +2,9 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "nuah.exchange";
+export const protobufPackage = "nuah.dex";
 
-export interface ExchangePacketData {
+export interface DexPacketData {
   noData?: NoData | undefined;
   createPairPacket?: CreatePairPacketData | undefined;
   sellOrderPacket?: SellOrderPacketData | undefined;
@@ -28,7 +28,6 @@ export interface SellOrderPacketData {
   amount: number;
   priceDenom: string;
   price: number;
-  seller: string;
 }
 
 /** SellOrderPacketAck defines a struct for the packet acknowledgment */
@@ -43,7 +42,6 @@ export interface BuyOrderPacketData {
   amount: number;
   priceDenom: string;
   price: number;
-  buyer: string;
 }
 
 /** BuyOrderPacketAck defines a struct for the packet acknowledgment */
@@ -52,7 +50,7 @@ export interface BuyOrderPacketAck {
   purchase: number;
 }
 
-function createBaseExchangePacketData(): ExchangePacketData {
+function createBaseDexPacketData(): DexPacketData {
   return {
     noData: undefined,
     createPairPacket: undefined,
@@ -61,9 +59,9 @@ function createBaseExchangePacketData(): ExchangePacketData {
   };
 }
 
-export const ExchangePacketData = {
+export const DexPacketData = {
   encode(
-    message: ExchangePacketData,
+    message: DexPacketData,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.noData !== undefined) {
@@ -90,10 +88,10 @@ export const ExchangePacketData = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ExchangePacketData {
+  decode(input: _m0.Reader | Uint8Array, length?: number): DexPacketData {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseExchangePacketData();
+    const message = createBaseDexPacketData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -126,7 +124,7 @@ export const ExchangePacketData = {
     return message;
   },
 
-  fromJSON(object: any): ExchangePacketData {
+  fromJSON(object: any): DexPacketData {
     return {
       noData: isSet(object.noData) ? NoData.fromJSON(object.noData) : undefined,
       createPairPacket: isSet(object.createPairPacket)
@@ -141,7 +139,7 @@ export const ExchangePacketData = {
     };
   },
 
-  toJSON(message: ExchangePacketData): unknown {
+  toJSON(message: DexPacketData): unknown {
     const obj: any = {};
     message.noData !== undefined &&
       (obj.noData = message.noData ? NoData.toJSON(message.noData) : undefined);
@@ -160,10 +158,10 @@ export const ExchangePacketData = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<ExchangePacketData>, I>>(
+  fromPartial<I extends Exact<DeepPartial<DexPacketData>, I>>(
     object: I
-  ): ExchangePacketData {
-    const message = createBaseExchangePacketData();
+  ): DexPacketData {
+    const message = createBaseDexPacketData();
     message.noData =
       object.noData !== undefined && object.noData !== null
         ? NoData.fromPartial(object.noData)
@@ -336,7 +334,7 @@ export const CreatePairPacketAck = {
 };
 
 function createBaseSellOrderPacketData(): SellOrderPacketData {
-  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, seller: "" };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0 };
 }
 
 export const SellOrderPacketData = {
@@ -355,9 +353,6 @@ export const SellOrderPacketData = {
     }
     if (message.price !== 0) {
       writer.uint32(32).int32(message.price);
-    }
-    if (message.seller !== "") {
-      writer.uint32(42).string(message.seller);
     }
     return writer;
   },
@@ -381,9 +376,6 @@ export const SellOrderPacketData = {
         case 4:
           message.price = reader.int32();
           break;
-        case 5:
-          message.seller = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -398,7 +390,6 @@ export const SellOrderPacketData = {
       amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
-      seller: isSet(object.seller) ? String(object.seller) : "",
     };
   },
 
@@ -409,7 +400,6 @@ export const SellOrderPacketData = {
     message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
-    message.seller !== undefined && (obj.seller = message.seller);
     return obj;
   },
 
@@ -421,7 +411,6 @@ export const SellOrderPacketData = {
     message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
-    message.seller = object.seller ?? "";
     return message;
   },
 };
@@ -493,7 +482,7 @@ export const SellOrderPacketAck = {
 };
 
 function createBaseBuyOrderPacketData(): BuyOrderPacketData {
-  return { amountDenom: "", amount: 0, priceDenom: "", price: 0, buyer: "" };
+  return { amountDenom: "", amount: 0, priceDenom: "", price: 0 };
 }
 
 export const BuyOrderPacketData = {
@@ -512,9 +501,6 @@ export const BuyOrderPacketData = {
     }
     if (message.price !== 0) {
       writer.uint32(32).int32(message.price);
-    }
-    if (message.buyer !== "") {
-      writer.uint32(42).string(message.buyer);
     }
     return writer;
   },
@@ -538,9 +524,6 @@ export const BuyOrderPacketData = {
         case 4:
           message.price = reader.int32();
           break;
-        case 5:
-          message.buyer = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -555,7 +538,6 @@ export const BuyOrderPacketData = {
       amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
-      buyer: isSet(object.buyer) ? String(object.buyer) : "",
     };
   },
 
@@ -566,7 +548,6 @@ export const BuyOrderPacketData = {
     message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
     message.price !== undefined && (obj.price = Math.round(message.price));
-    message.buyer !== undefined && (obj.buyer = message.buyer);
     return obj;
   },
 
@@ -578,7 +559,6 @@ export const BuyOrderPacketData = {
     message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
     message.price = object.price ?? 0;
-    message.buyer = object.buyer ?? "";
     return message;
   },
 };

@@ -16,6 +16,7 @@ import { OrderBook as typeOrderBook} from "./types"
 import { Order as typeOrder} from "./types"
 import { Params as typeParams} from "./types"
 import { SellOrderBook as typeSellOrderBook} from "./types"
+import { TokenInfo as typeTokenInfo} from "./types"
 
 export { MsgSendBuyOrder, MsgCreatePair, MsgSendSellOrder };
 
@@ -174,6 +175,7 @@ class SDKModule {
 						Order: getStructure(typeOrder.fromPartial({})),
 						Params: getStructure(typeParams.fromPartial({})),
 						SellOrderBook: getStructure(typeSellOrderBook.fromPartial({})),
+						TokenInfo: getStructure(typeTokenInfo.fromPartial({})),
 						
 		};
 		client.on('signer-changed',(signer) => {			

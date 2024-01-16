@@ -21,9 +21,9 @@ message MsgCreatePairResponse {}
 message MsgSendBuyOrder {
   string creator     = 1;
   string amountDenom = 2;
-  int32 amount      = 3;
+  uint64 amount      = 3;
   string priceDenom  = 4;
-  int32 price       = 5;
+  uint64 price       = 5;
 }
 
 message MsgSendBuyOrderResponse {}
@@ -31,9 +31,9 @@ message MsgSendBuyOrderResponse {}
 message MsgSendSellOrder {
   string creator     = 1;
   string amountDenom = 2;
-  int32 amount      = 3;
+  uint64 amount      = 3;
   string priceDenom  = 4;
-  int32 price       = 5;
+  uint64 price       = 5;
 }
 
 message MsgSendSellOrderResponse {}

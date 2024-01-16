@@ -3,8 +3,6 @@ import { Params } from "./params";
 import Long from "long";
 import { SellOrderBook } from "./sell_order_book";
 import { BuyOrderBook } from "./buy_order_book";
-import { DenomTrace } from "./denom_trace";
-import { StableSupply } from "./stable_supply";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "nuah.exchange";
@@ -12,24 +10,12 @@ export const protobufPackage = "nuah.exchange";
 /** GenesisState defines the exchange module's genesis state. */
 export interface GenesisState {
   params?: Params;
-  portId: string;
   sellOrderBookList: SellOrderBook[];
   buyOrderBookList: BuyOrderBook[];
-  denomTraceList: DenomTrace[];
-  stableSupplyList: StableSupply[];
-  stableSupplyCount: Long;
 }
 
 function createBaseGenesisState(): GenesisState {
-  return {
-    params: undefined,
-    portId: "",
-    sellOrderBookList: [],
-    buyOrderBookList: [],
-    denomTraceList: [],
-    stableSupplyList: [],
-    stableSupplyCount: Long.UZERO,
-  };
+  return { params: undefined, sellOrderBookList: [], buyOrderBookList: [] };
 }
 
 export const GenesisState = {
@@ -40,23 +26,11 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
-    if (message.portId !== "") {
-      writer.uint32(18).string(message.portId);
-    }
     for (const v of message.sellOrderBookList) {
-      SellOrderBook.encode(v!, writer.uint32(26).fork()).ldelim();
+      SellOrderBook.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.buyOrderBookList) {
-      BuyOrderBook.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    for (const v of message.denomTraceList) {
-      DenomTrace.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    for (const v of message.stableSupplyList) {
-      StableSupply.encode(v!, writer.uint32(50).fork()).ldelim();
-    }
-    if (!message.stableSupplyCount.isZero()) {
-      writer.uint32(56).uint64(message.stableSupplyCount);
+      BuyOrderBook.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -72,30 +46,14 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32());
           break;
         case 2:
-          message.portId = reader.string();
-          break;
-        case 3:
           message.sellOrderBookList.push(
             SellOrderBook.decode(reader, reader.uint32())
           );
           break;
-        case 4:
+        case 3:
           message.buyOrderBookList.push(
             BuyOrderBook.decode(reader, reader.uint32())
           );
-          break;
-        case 5:
-          message.denomTraceList.push(
-            DenomTrace.decode(reader, reader.uint32())
-          );
-          break;
-        case 6:
-          message.stableSupplyList.push(
-            StableSupply.decode(reader, reader.uint32())
-          );
-          break;
-        case 7:
-          message.stableSupplyCount = reader.uint64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -108,22 +66,12 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
-      portId: isSet(object.portId) ? String(object.portId) : "",
       sellOrderBookList: Array.isArray(object?.sellOrderBookList)
         ? object.sellOrderBookList.map((e: any) => SellOrderBook.fromJSON(e))
         : [],
       buyOrderBookList: Array.isArray(object?.buyOrderBookList)
         ? object.buyOrderBookList.map((e: any) => BuyOrderBook.fromJSON(e))
         : [],
-      denomTraceList: Array.isArray(object?.denomTraceList)
-        ? object.denomTraceList.map((e: any) => DenomTrace.fromJSON(e))
-        : [],
-      stableSupplyList: Array.isArray(object?.stableSupplyList)
-        ? object.stableSupplyList.map((e: any) => StableSupply.fromJSON(e))
-        : [],
-      stableSupplyCount: isSet(object.stableSupplyCount)
-        ? Long.fromValue(object.stableSupplyCount)
-        : Long.UZERO,
     };
   },
 
@@ -131,7 +79,6 @@ export const GenesisState = {
     const obj: any = {};
     message.params !== undefined &&
       (obj.params = message.params ? Params.toJSON(message.params) : undefined);
-    message.portId !== undefined && (obj.portId = message.portId);
     if (message.sellOrderBookList) {
       obj.sellOrderBookList = message.sellOrderBookList.map((e) =>
         e ? SellOrderBook.toJSON(e) : undefined
@@ -146,24 +93,6 @@ export const GenesisState = {
     } else {
       obj.buyOrderBookList = [];
     }
-    if (message.denomTraceList) {
-      obj.denomTraceList = message.denomTraceList.map((e) =>
-        e ? DenomTrace.toJSON(e) : undefined
-      );
-    } else {
-      obj.denomTraceList = [];
-    }
-    if (message.stableSupplyList) {
-      obj.stableSupplyList = message.stableSupplyList.map((e) =>
-        e ? StableSupply.toJSON(e) : undefined
-      );
-    } else {
-      obj.stableSupplyList = [];
-    }
-    message.stableSupplyCount !== undefined &&
-      (obj.stableSupplyCount = (
-        message.stableSupplyCount || Long.UZERO
-      ).toString());
     return obj;
   },
 
@@ -175,20 +104,10 @@ export const GenesisState = {
       object.params !== undefined && object.params !== null
         ? Params.fromPartial(object.params)
         : undefined;
-    message.portId = object.portId ?? "";
     message.sellOrderBookList =
       object.sellOrderBookList?.map((e) => SellOrderBook.fromPartial(e)) || [];
     message.buyOrderBookList =
       object.buyOrderBookList?.map((e) => BuyOrderBook.fromPartial(e)) || [];
-    message.denomTraceList =
-      object.denomTraceList?.map((e) => DenomTrace.fromPartial(e)) || [];
-    message.stableSupplyList =
-      object.stableSupplyList?.map((e) => StableSupply.fromPartial(e)) || [];
-    message.stableSupplyCount =
-      object.stableSupplyCount !== undefined &&
-      object.stableSupplyCount !== null
-        ? Long.fromValue(object.stableSupplyCount)
-        : Long.UZERO;
     return message;
   },
 };

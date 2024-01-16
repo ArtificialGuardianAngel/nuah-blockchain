@@ -3,6 +3,7 @@ import _m0 from "protobufjs/minimal";
 import { BuyOrderBook } from "./buy_order_book";
 import { Params } from "./params";
 import { SellOrderBook } from "./sell_order_book";
+import { TokenInfo } from "./token_info";
 
 export const protobufPackage = "nuah.exchange";
 
@@ -11,10 +12,11 @@ export interface GenesisState {
   params: Params | undefined;
   sellOrderBookList: SellOrderBook[];
   buyOrderBookList: BuyOrderBook[];
+  tokenInfoList: TokenInfo[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, sellOrderBookList: [], buyOrderBookList: [] };
+  return { params: undefined, sellOrderBookList: [], buyOrderBookList: [], tokenInfoList: [] };
 }
 
 export const GenesisState = {
@@ -27,6 +29,9 @@ export const GenesisState = {
     }
     for (const v of message.buyOrderBookList) {
       BuyOrderBook.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.tokenInfoList) {
+      TokenInfo.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -47,6 +52,9 @@ export const GenesisState = {
         case 3:
           message.buyOrderBookList.push(BuyOrderBook.decode(reader, reader.uint32()));
           break;
+        case 4:
+          message.tokenInfoList.push(TokenInfo.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -64,6 +72,9 @@ export const GenesisState = {
       buyOrderBookList: Array.isArray(object?.buyOrderBookList)
         ? object.buyOrderBookList.map((e: any) => BuyOrderBook.fromJSON(e))
         : [],
+      tokenInfoList: Array.isArray(object?.tokenInfoList)
+        ? object.tokenInfoList.map((e: any) => TokenInfo.fromJSON(e))
+        : [],
     };
   },
 
@@ -80,6 +91,11 @@ export const GenesisState = {
     } else {
       obj.buyOrderBookList = [];
     }
+    if (message.tokenInfoList) {
+      obj.tokenInfoList = message.tokenInfoList.map((e) => e ? TokenInfo.toJSON(e) : undefined);
+    } else {
+      obj.tokenInfoList = [];
+    }
     return obj;
   },
 
@@ -90,6 +106,7 @@ export const GenesisState = {
       : undefined;
     message.sellOrderBookList = object.sellOrderBookList?.map((e) => SellOrderBook.fromPartial(e)) || [];
     message.buyOrderBookList = object.buyOrderBookList?.map((e) => BuyOrderBook.fromPartial(e)) || [];
+    message.tokenInfoList = object.tokenInfoList?.map((e) => TokenInfo.fromPartial(e)) || [];
     return message;
   },
 };

@@ -6,6 +6,7 @@ import "gogoproto/gogo.proto";
 import "nuah/exchange/params.proto";
 import "nuah/exchange/sell_order_book.proto";
 import "nuah/exchange/buy_order_book.proto";
+import "nuah/exchange/token_info.proto";
 
 option go_package = "nuah/x/exchange/types";
 
@@ -14,5 +15,6 @@ message GenesisState {
            Params        params            = 1 [(gogoproto.nullable) = false];
   repeated SellOrderBook sellOrderBookList = 2 [(gogoproto.nullable) = false];
   repeated BuyOrderBook  buyOrderBookList  = 3 [(gogoproto.nullable) = false];
+  repeated TokenInfo     tokenInfoList     = 4 [(gogoproto.nullable) = false];
 }
 

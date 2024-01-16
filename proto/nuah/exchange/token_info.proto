@@ -1,0 +1,13 @@
+syntax = "proto3";
+package nuah.exchange;
+
+option go_package = "nuah/x/exchange/types";
+
+message TokenInfo {
+  string index = 1; 
+  string name = 2; 
+  int64 supply = 3; 
+  int64 decimals = 4; 
+  int64 used = 5;
+}
+

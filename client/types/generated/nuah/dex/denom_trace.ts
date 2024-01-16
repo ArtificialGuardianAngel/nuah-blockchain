@@ -2,19 +2,17 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "nuah.exchange";
+export const protobufPackage = "nuah.dex";
 
 export interface DenomTrace {
   index: string;
-  /**
-   * string port = 2;
-   * string channel = 3;
-   */
+  port: string;
+  channel: string;
   origin: string;
 }
 
 function createBaseDenomTrace(): DenomTrace {
-  return { index: "", origin: "" };
+  return { index: "", port: "", channel: "", origin: "" };
 }
 
 export const DenomTrace = {
@@ -25,8 +23,14 @@ export const DenomTrace = {
     if (message.index !== "") {
       writer.uint32(10).string(message.index);
     }
+    if (message.port !== "") {
+      writer.uint32(18).string(message.port);
+    }
+    if (message.channel !== "") {
+      writer.uint32(26).string(message.channel);
+    }
     if (message.origin !== "") {
-      writer.uint32(18).string(message.origin);
+      writer.uint32(34).string(message.origin);
     }
     return writer;
   },
@@ -42,6 +46,12 @@ export const DenomTrace = {
           message.index = reader.string();
           break;
         case 2:
+          message.port = reader.string();
+          break;
+        case 3:
+          message.channel = reader.string();
+          break;
+        case 4:
           message.origin = reader.string();
           break;
         default:
@@ -55,6 +65,8 @@ export const DenomTrace = {
   fromJSON(object: any): DenomTrace {
     return {
       index: isSet(object.index) ? String(object.index) : "",
+      port: isSet(object.port) ? String(object.port) : "",
+      channel: isSet(object.channel) ? String(object.channel) : "",
       origin: isSet(object.origin) ? String(object.origin) : "",
     };
   },
@@ -62,6 +74,8 @@ export const DenomTrace = {
   toJSON(message: DenomTrace): unknown {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
+    message.port !== undefined && (obj.port = message.port);
+    message.channel !== undefined && (obj.channel = message.channel);
     message.origin !== undefined && (obj.origin = message.origin);
     return obj;
   },
@@ -71,6 +85,8 @@ export const DenomTrace = {
   ): DenomTrace {
     const message = createBaseDenomTrace();
     message.index = object.index ?? "";
+    message.port = object.port ?? "";
+    message.channel = object.channel ?? "";
     message.origin = object.origin ?? "";
     return message;
   },

@@ -1,9 +1,10 @@
 package exchange
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"nuah/x/exchange/keeper"
 	"nuah/x/exchange/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.
@@ -16,6 +17,14 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.BuyOrderBookList {
 		k.SetBuyOrderBook(ctx, elem)
 	}
+	// Set all the tokenInfo
+
+	for _, elem := range genState.TokenInfoList {
+		k.SetTokenInfo(ctx, elem)
+	}
+	if len(genState.TokenInfoList) == 0 {
+		k.SetDefaultTokenInfo(ctx)
+	}
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }
@@ -27,6 +36,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.SellOrderBookList = k.GetAllSellOrderBook(ctx)
 	genesis.BuyOrderBookList = k.GetAllBuyOrderBook(ctx)
+	genesis.TokenInfoList = k.GetAllTokenInfo(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

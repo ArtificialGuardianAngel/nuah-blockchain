@@ -21,12 +21,12 @@ func CmdSendSellOrder() *cobra.Command {
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argAmountDenom := args[0]
-			argAmount, err := cast.ToInt32E(args[1])
+			argAmount, err := cast.ToUint64E(args[1])
 			if err != nil {
 				return err
 			}
 			argPriceDenom := args[2]
-			argPrice, err := cast.ToInt32E(args[3])
+			argPrice, err := cast.ToUint64E(args[3])
 			if err != nil {
 				return err
 			}

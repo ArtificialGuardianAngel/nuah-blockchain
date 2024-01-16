@@ -6,8 +6,6 @@ import {
   PageResponse,
 } from "../../cosmos/base/query/v1beta1/pagination";
 import { BuyOrderBook } from "./buy_order_book";
-import { DenomTrace } from "./denom_trace";
-import { StableSupply } from "./stable_supply";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -56,38 +54,24 @@ export interface QueryAllBuyOrderBookResponse {
   pagination?: PageResponse;
 }
 
-export interface QueryGetDenomTraceRequest {
-  index: string;
+export interface QueryGetAllSentOrdersRequest {
+  from: string;
 }
 
-export interface QueryGetDenomTraceResponse {
-  denomTrace?: DenomTrace;
+export interface QueryGetAllSentOrdersResponse {
+  buyOrderBook: BuyOrderBook[];
+  sellOrderBook: SellOrderBook[];
 }
 
-export interface QueryAllDenomTraceRequest {
-  pagination?: PageRequest;
+export interface QueryGetSentOrdersRequest {
+  from: string;
+  amountDenom: string;
+  priceDenom: string;
 }
 
-export interface QueryAllDenomTraceResponse {
-  denomTrace: DenomTrace[];
-  pagination?: PageResponse;
-}
-
-export interface QueryGetStableSupplyRequest {
-  id: Long;
-}
-
-export interface QueryGetStableSupplyResponse {
-  StableSupply?: StableSupply;
-}
-
-export interface QueryAllStableSupplyRequest {
-  pagination?: PageRequest;
-}
-
-export interface QueryAllStableSupplyResponse {
-  StableSupply: StableSupply[];
-  pagination?: PageResponse;
+export interface QueryGetSentOrdersResponse {
+  buyOrderBook?: BuyOrderBook;
+  sellOrderBook?: SellOrderBook;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -748,17 +732,17 @@ export const QueryAllBuyOrderBookResponse = {
   },
 };
 
-function createBaseQueryGetDenomTraceRequest(): QueryGetDenomTraceRequest {
-  return { index: "" };
+function createBaseQueryGetAllSentOrdersRequest(): QueryGetAllSentOrdersRequest {
+  return { from: "" };
 }
 
-export const QueryGetDenomTraceRequest = {
+export const QueryGetAllSentOrdersRequest = {
   encode(
-    message: QueryGetDenomTraceRequest,
+    message: QueryGetAllSentOrdersRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.index !== "") {
-      writer.uint32(10).string(message.index);
+    if (message.from !== "") {
+      writer.uint32(10).string(message.from);
     }
     return writer;
   },
@@ -766,15 +750,15 @@ export const QueryGetDenomTraceRequest = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryGetDenomTraceRequest {
+  ): QueryGetAllSentOrdersRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetDenomTraceRequest();
+    const message = createBaseQueryGetAllSentOrdersRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.index = reader.string();
+          message.from = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -784,38 +768,41 @@ export const QueryGetDenomTraceRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetDenomTraceRequest {
+  fromJSON(object: any): QueryGetAllSentOrdersRequest {
     return {
-      index: isSet(object.index) ? String(object.index) : "",
+      from: isSet(object.from) ? String(object.from) : "",
     };
   },
 
-  toJSON(message: QueryGetDenomTraceRequest): unknown {
+  toJSON(message: QueryGetAllSentOrdersRequest): unknown {
     const obj: any = {};
-    message.index !== undefined && (obj.index = message.index);
+    message.from !== undefined && (obj.from = message.from);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryGetDenomTraceRequest>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryGetAllSentOrdersRequest>, I>>(
     object: I
-  ): QueryGetDenomTraceRequest {
-    const message = createBaseQueryGetDenomTraceRequest();
-    message.index = object.index ?? "";
+  ): QueryGetAllSentOrdersRequest {
+    const message = createBaseQueryGetAllSentOrdersRequest();
+    message.from = object.from ?? "";
     return message;
   },
 };
 
-function createBaseQueryGetDenomTraceResponse(): QueryGetDenomTraceResponse {
-  return { denomTrace: undefined };
+function createBaseQueryGetAllSentOrdersResponse(): QueryGetAllSentOrdersResponse {
+  return { buyOrderBook: [], sellOrderBook: [] };
 }
 
-export const QueryGetDenomTraceResponse = {
+export const QueryGetAllSentOrdersResponse = {
   encode(
-    message: QueryGetDenomTraceResponse,
+    message: QueryGetAllSentOrdersResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.denomTrace !== undefined) {
-      DenomTrace.encode(message.denomTrace, writer.uint32(10).fork()).ldelim();
+    for (const v of message.buyOrderBook) {
+      BuyOrderBook.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.sellOrderBook) {
+      SellOrderBook.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -823,436 +810,22 @@ export const QueryGetDenomTraceResponse = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryGetDenomTraceResponse {
+  ): QueryGetAllSentOrdersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetDenomTraceResponse();
+    const message = createBaseQueryGetAllSentOrdersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.denomTrace = DenomTrace.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetDenomTraceResponse {
-    return {
-      denomTrace: isSet(object.denomTrace)
-        ? DenomTrace.fromJSON(object.denomTrace)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryGetDenomTraceResponse): unknown {
-    const obj: any = {};
-    message.denomTrace !== undefined &&
-      (obj.denomTrace = message.denomTrace
-        ? DenomTrace.toJSON(message.denomTrace)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryGetDenomTraceResponse>, I>>(
-    object: I
-  ): QueryGetDenomTraceResponse {
-    const message = createBaseQueryGetDenomTraceResponse();
-    message.denomTrace =
-      object.denomTrace !== undefined && object.denomTrace !== null
-        ? DenomTrace.fromPartial(object.denomTrace)
-        : undefined;
-    return message;
-  },
-};
-
-function createBaseQueryAllDenomTraceRequest(): QueryAllDenomTraceRequest {
-  return { pagination: undefined };
-}
-
-export const QueryAllDenomTraceRequest = {
-  encode(
-    message: QueryAllDenomTraceRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllDenomTraceRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllDenomTraceRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllDenomTraceRequest {
-    return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryAllDenomTraceRequest): unknown {
-    const obj: any = {};
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryAllDenomTraceRequest>, I>>(
-    object: I
-  ): QueryAllDenomTraceRequest {
-    const message = createBaseQueryAllDenomTraceRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
-    return message;
-  },
-};
-
-function createBaseQueryAllDenomTraceResponse(): QueryAllDenomTraceResponse {
-  return { denomTrace: [], pagination: undefined };
-}
-
-export const QueryAllDenomTraceResponse = {
-  encode(
-    message: QueryAllDenomTraceResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    for (const v of message.denomTrace) {
-      DenomTrace.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllDenomTraceResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllDenomTraceResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.denomTrace.push(DenomTrace.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllDenomTraceResponse {
-    return {
-      denomTrace: Array.isArray(object?.denomTrace)
-        ? object.denomTrace.map((e: any) => DenomTrace.fromJSON(e))
-        : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryAllDenomTraceResponse): unknown {
-    const obj: any = {};
-    if (message.denomTrace) {
-      obj.denomTrace = message.denomTrace.map((e) =>
-        e ? DenomTrace.toJSON(e) : undefined
-      );
-    } else {
-      obj.denomTrace = [];
-    }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryAllDenomTraceResponse>, I>>(
-    object: I
-  ): QueryAllDenomTraceResponse {
-    const message = createBaseQueryAllDenomTraceResponse();
-    message.denomTrace =
-      object.denomTrace?.map((e) => DenomTrace.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
-    return message;
-  },
-};
-
-function createBaseQueryGetStableSupplyRequest(): QueryGetStableSupplyRequest {
-  return { id: Long.UZERO };
-}
-
-export const QueryGetStableSupplyRequest = {
-  encode(
-    message: QueryGetStableSupplyRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (!message.id.isZero()) {
-      writer.uint32(8).uint64(message.id);
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetStableSupplyRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetStableSupplyRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetStableSupplyRequest {
-    return {
-      id: isSet(object.id) ? Long.fromValue(object.id) : Long.UZERO,
-    };
-  },
-
-  toJSON(message: QueryGetStableSupplyRequest): unknown {
-    const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = (message.id || Long.UZERO).toString());
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryGetStableSupplyRequest>, I>>(
-    object: I
-  ): QueryGetStableSupplyRequest {
-    const message = createBaseQueryGetStableSupplyRequest();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? Long.fromValue(object.id)
-        : Long.UZERO;
-    return message;
-  },
-};
-
-function createBaseQueryGetStableSupplyResponse(): QueryGetStableSupplyResponse {
-  return { StableSupply: undefined };
-}
-
-export const QueryGetStableSupplyResponse = {
-  encode(
-    message: QueryGetStableSupplyResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.StableSupply !== undefined) {
-      StableSupply.encode(
-        message.StableSupply,
-        writer.uint32(10).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetStableSupplyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryGetStableSupplyResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.StableSupply = StableSupply.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetStableSupplyResponse {
-    return {
-      StableSupply: isSet(object.StableSupply)
-        ? StableSupply.fromJSON(object.StableSupply)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryGetStableSupplyResponse): unknown {
-    const obj: any = {};
-    message.StableSupply !== undefined &&
-      (obj.StableSupply = message.StableSupply
-        ? StableSupply.toJSON(message.StableSupply)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryGetStableSupplyResponse>, I>>(
-    object: I
-  ): QueryGetStableSupplyResponse {
-    const message = createBaseQueryGetStableSupplyResponse();
-    message.StableSupply =
-      object.StableSupply !== undefined && object.StableSupply !== null
-        ? StableSupply.fromPartial(object.StableSupply)
-        : undefined;
-    return message;
-  },
-};
-
-function createBaseQueryAllStableSupplyRequest(): QueryAllStableSupplyRequest {
-  return { pagination: undefined };
-}
-
-export const QueryAllStableSupplyRequest = {
-  encode(
-    message: QueryAllStableSupplyRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllStableSupplyRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllStableSupplyRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllStableSupplyRequest {
-    return {
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
-    };
-  },
-
-  toJSON(message: QueryAllStableSupplyRequest): unknown {
-    const obj: any = {};
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial<I extends Exact<DeepPartial<QueryAllStableSupplyRequest>, I>>(
-    object: I
-  ): QueryAllStableSupplyRequest {
-    const message = createBaseQueryAllStableSupplyRequest();
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
-    return message;
-  },
-};
-
-function createBaseQueryAllStableSupplyResponse(): QueryAllStableSupplyResponse {
-  return { StableSupply: [], pagination: undefined };
-}
-
-export const QueryAllStableSupplyResponse = {
-  encode(
-    message: QueryAllStableSupplyResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    for (const v of message.StableSupply) {
-      StableSupply.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllStableSupplyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryAllStableSupplyResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.StableSupply.push(
-            StableSupply.decode(reader, reader.uint32())
+          message.buyOrderBook.push(
+            BuyOrderBook.decode(reader, reader.uint32())
           );
           break;
         case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
+          message.sellOrderBook.push(
+            SellOrderBook.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1262,42 +835,207 @@ export const QueryAllStableSupplyResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllStableSupplyResponse {
+  fromJSON(object: any): QueryGetAllSentOrdersResponse {
     return {
-      StableSupply: Array.isArray(object?.StableSupply)
-        ? object.StableSupply.map((e: any) => StableSupply.fromJSON(e))
+      buyOrderBook: Array.isArray(object?.buyOrderBook)
+        ? object.buyOrderBook.map((e: any) => BuyOrderBook.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
+      sellOrderBook: Array.isArray(object?.sellOrderBook)
+        ? object.sellOrderBook.map((e: any) => SellOrderBook.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: QueryGetAllSentOrdersResponse): unknown {
+    const obj: any = {};
+    if (message.buyOrderBook) {
+      obj.buyOrderBook = message.buyOrderBook.map((e) =>
+        e ? BuyOrderBook.toJSON(e) : undefined
+      );
+    } else {
+      obj.buyOrderBook = [];
+    }
+    if (message.sellOrderBook) {
+      obj.sellOrderBook = message.sellOrderBook.map((e) =>
+        e ? SellOrderBook.toJSON(e) : undefined
+      );
+    } else {
+      obj.sellOrderBook = [];
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetAllSentOrdersResponse>, I>>(
+    object: I
+  ): QueryGetAllSentOrdersResponse {
+    const message = createBaseQueryGetAllSentOrdersResponse();
+    message.buyOrderBook =
+      object.buyOrderBook?.map((e) => BuyOrderBook.fromPartial(e)) || [];
+    message.sellOrderBook =
+      object.sellOrderBook?.map((e) => SellOrderBook.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseQueryGetSentOrdersRequest(): QueryGetSentOrdersRequest {
+  return { from: "", amountDenom: "", priceDenom: "" };
+}
+
+export const QueryGetSentOrdersRequest = {
+  encode(
+    message: QueryGetSentOrdersRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.from !== "") {
+      writer.uint32(10).string(message.from);
+    }
+    if (message.amountDenom !== "") {
+      writer.uint32(18).string(message.amountDenom);
+    }
+    if (message.priceDenom !== "") {
+      writer.uint32(26).string(message.priceDenom);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryGetSentOrdersRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSentOrdersRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.from = reader.string();
+          break;
+        case 2:
+          message.amountDenom = reader.string();
+          break;
+        case 3:
+          message.priceDenom = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSentOrdersRequest {
+    return {
+      from: isSet(object.from) ? String(object.from) : "",
+      amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
+      priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
+    };
+  },
+
+  toJSON(message: QueryGetSentOrdersRequest): unknown {
+    const obj: any = {};
+    message.from !== undefined && (obj.from = message.from);
+    message.amountDenom !== undefined &&
+      (obj.amountDenom = message.amountDenom);
+    message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetSentOrdersRequest>, I>>(
+    object: I
+  ): QueryGetSentOrdersRequest {
+    const message = createBaseQueryGetSentOrdersRequest();
+    message.from = object.from ?? "";
+    message.amountDenom = object.amountDenom ?? "";
+    message.priceDenom = object.priceDenom ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetSentOrdersResponse(): QueryGetSentOrdersResponse {
+  return { buyOrderBook: undefined, sellOrderBook: undefined };
+}
+
+export const QueryGetSentOrdersResponse = {
+  encode(
+    message: QueryGetSentOrdersResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.buyOrderBook !== undefined) {
+      BuyOrderBook.encode(
+        message.buyOrderBook,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.sellOrderBook !== undefined) {
+      SellOrderBook.encode(
+        message.sellOrderBook,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryGetSentOrdersResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSentOrdersResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.buyOrderBook = BuyOrderBook.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.sellOrderBook = SellOrderBook.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSentOrdersResponse {
+    return {
+      buyOrderBook: isSet(object.buyOrderBook)
+        ? BuyOrderBook.fromJSON(object.buyOrderBook)
+        : undefined,
+      sellOrderBook: isSet(object.sellOrderBook)
+        ? SellOrderBook.fromJSON(object.sellOrderBook)
         : undefined,
     };
   },
 
-  toJSON(message: QueryAllStableSupplyResponse): unknown {
+  toJSON(message: QueryGetSentOrdersResponse): unknown {
     const obj: any = {};
-    if (message.StableSupply) {
-      obj.StableSupply = message.StableSupply.map((e) =>
-        e ? StableSupply.toJSON(e) : undefined
-      );
-    } else {
-      obj.StableSupply = [];
-    }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
+    message.buyOrderBook !== undefined &&
+      (obj.buyOrderBook = message.buyOrderBook
+        ? BuyOrderBook.toJSON(message.buyOrderBook)
+        : undefined);
+    message.sellOrderBook !== undefined &&
+      (obj.sellOrderBook = message.sellOrderBook
+        ? SellOrderBook.toJSON(message.sellOrderBook)
         : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAllStableSupplyResponse>, I>>(
+  fromPartial<I extends Exact<DeepPartial<QueryGetSentOrdersResponse>, I>>(
     object: I
-  ): QueryAllStableSupplyResponse {
-    const message = createBaseQueryAllStableSupplyResponse();
-    message.StableSupply =
-      object.StableSupply?.map((e) => StableSupply.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
+  ): QueryGetSentOrdersResponse {
+    const message = createBaseQueryGetSentOrdersResponse();
+    message.buyOrderBook =
+      object.buyOrderBook !== undefined && object.buyOrderBook !== null
+        ? BuyOrderBook.fromPartial(object.buyOrderBook)
+        : undefined;
+    message.sellOrderBook =
+      object.sellOrderBook !== undefined && object.sellOrderBook !== null
+        ? SellOrderBook.fromPartial(object.sellOrderBook)
         : undefined;
     return message;
   },
@@ -1321,20 +1059,14 @@ export interface Query {
   BuyOrderBookAll(
     request: QueryAllBuyOrderBookRequest
   ): Promise<QueryAllBuyOrderBookResponse>;
-  /** Queries a list of DenomTrace items. */
-  DenomTrace(
-    request: QueryGetDenomTraceRequest
-  ): Promise<QueryGetDenomTraceResponse>;
-  DenomTraceAll(
-    request: QueryAllDenomTraceRequest
-  ): Promise<QueryAllDenomTraceResponse>;
-  /** Queries a list of StableSupply items. */
-  StableSupply(
-    request: QueryGetStableSupplyRequest
-  ): Promise<QueryGetStableSupplyResponse>;
-  StableSupplyAll(
-    request: QueryAllStableSupplyRequest
-  ): Promise<QueryAllStableSupplyResponse>;
+  /** Queries a list of GetAllSentOrders items. */
+  GetAllSentOrders(
+    request: QueryGetAllSentOrdersRequest
+  ): Promise<QueryGetAllSentOrdersResponse>;
+  /** Queries a list of GetSentOrders items. */
+  GetSentOrders(
+    request: QueryGetSentOrdersRequest
+  ): Promise<QueryGetSentOrdersResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1346,10 +1078,8 @@ export class QueryClientImpl implements Query {
     this.SellOrderBookAll = this.SellOrderBookAll.bind(this);
     this.BuyOrderBook = this.BuyOrderBook.bind(this);
     this.BuyOrderBookAll = this.BuyOrderBookAll.bind(this);
-    this.DenomTrace = this.DenomTrace.bind(this);
-    this.DenomTraceAll = this.DenomTraceAll.bind(this);
-    this.StableSupply = this.StableSupply.bind(this);
-    this.StableSupplyAll = this.StableSupplyAll.bind(this);
+    this.GetAllSentOrders = this.GetAllSentOrders.bind(this);
+    this.GetSentOrders = this.GetSentOrders.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1415,55 +1145,31 @@ export class QueryClientImpl implements Query {
     );
   }
 
-  DenomTrace(
-    request: QueryGetDenomTraceRequest
-  ): Promise<QueryGetDenomTraceResponse> {
-    const data = QueryGetDenomTraceRequest.encode(request).finish();
-    const promise = this.rpc.request("nuah.exchange.Query", "DenomTrace", data);
-    return promise.then((data) =>
-      QueryGetDenomTraceResponse.decode(new _m0.Reader(data))
-    );
-  }
-
-  DenomTraceAll(
-    request: QueryAllDenomTraceRequest
-  ): Promise<QueryAllDenomTraceResponse> {
-    const data = QueryAllDenomTraceRequest.encode(request).finish();
+  GetAllSentOrders(
+    request: QueryGetAllSentOrdersRequest
+  ): Promise<QueryGetAllSentOrdersResponse> {
+    const data = QueryGetAllSentOrdersRequest.encode(request).finish();
     const promise = this.rpc.request(
       "nuah.exchange.Query",
-      "DenomTraceAll",
+      "GetAllSentOrders",
       data
     );
     return promise.then((data) =>
-      QueryAllDenomTraceResponse.decode(new _m0.Reader(data))
+      QueryGetAllSentOrdersResponse.decode(new _m0.Reader(data))
     );
   }
 
-  StableSupply(
-    request: QueryGetStableSupplyRequest
-  ): Promise<QueryGetStableSupplyResponse> {
-    const data = QueryGetStableSupplyRequest.encode(request).finish();
+  GetSentOrders(
+    request: QueryGetSentOrdersRequest
+  ): Promise<QueryGetSentOrdersResponse> {
+    const data = QueryGetSentOrdersRequest.encode(request).finish();
     const promise = this.rpc.request(
       "nuah.exchange.Query",
-      "StableSupply",
+      "GetSentOrders",
       data
     );
     return promise.then((data) =>
-      QueryGetStableSupplyResponse.decode(new _m0.Reader(data))
-    );
-  }
-
-  StableSupplyAll(
-    request: QueryAllStableSupplyRequest
-  ): Promise<QueryAllStableSupplyResponse> {
-    const data = QueryAllStableSupplyRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "nuah.exchange.Query",
-      "StableSupplyAll",
-      data
-    );
-    return promise.then((data) =>
-      QueryAllStableSupplyResponse.decode(new _m0.Reader(data))
+      QueryGetSentOrdersResponse.decode(new _m0.Reader(data))
     );
   }
 }

@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"nuah/x/exchange/types"
 
@@ -13,7 +14,7 @@ func (k msgServer) SendBuyOrder(goCtx context.Context, msg *types.MsgSendBuyOrde
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	pairIndex := types.OrderBookIndex(msg.AmountDenom, msg.PriceDenom)
-	_, found := k.GetBuyOrderBook(ctx, pairIndex)
+	buyBook, found := k.GetBuyOrderBook(ctx, pairIndex)
 	if !found {
 		return &types.MsgSendBuyOrderResponse{}, errors.New("the pair doesn't exist")
 	}
@@ -28,10 +29,12 @@ func (k msgServer) SendBuyOrder(goCtx context.Context, msg *types.MsgSendBuyOrde
 	if err := k.SafeBurn(ctx, sender, msg.PriceDenom, msg.Amount*msg.Price); err != nil {
 		return &types.MsgSendBuyOrderResponse{}, err
 	}
+	// append system order
 
 	// i.e on recv
-
 	sellBook, found := k.GetSellOrderBook(ctx, pairIndex)
+	k.Logger(ctx).Error(fmt.Sprintf("sellBook=%+v", sellBook))
+
 	if !found {
 		return &types.MsgSendBuyOrderResponse{}, errors.New("the pair doesn't exist")
 	}
@@ -41,6 +44,10 @@ func (k msgServer) SendBuyOrder(goCtx context.Context, msg *types.MsgSendBuyOrde
 		Amount: msg.Amount,
 		Price:  msg.Price,
 	})
+
+	k.Logger(ctx).Error(fmt.Sprintf("remain=%+v", remaining))
+	k.Logger(ctx).Error(fmt.Sprintf("liqidated=%+v", liquidated))
+	k.Logger(ctx).Error(fmt.Sprintf("purchase=%d", purchase))
 
 	for _, liquidation := range liquidated {
 		liquidation := liquidation
@@ -58,14 +65,10 @@ func (k msgServer) SendBuyOrder(goCtx context.Context, msg *types.MsgSendBuyOrde
 			return &types.MsgSendBuyOrderResponse{}, err
 		}
 	}
+	k.Logger(ctx).Error(fmt.Sprintf("sellBook=%+v", sellBook))
+	k.SetSellOrderBook(ctx, sellBook)
 
-	// i.e on ack
-	buyBook, found := k.GetBuyOrderBook(ctx, pairIndex)
-	if !found {
-		panic("buy order book must exist")
-	}
-
-	// Append the remaining amount of the order
+	// ie on ack
 	if remaining.Amount > 0 {
 		_, err := buyBook.AppendOrder(
 			msg.Creator,

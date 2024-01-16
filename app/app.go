@@ -127,6 +127,7 @@ import (
 	exchangemodule "nuah/x/exchange"
 	exchangemodulekeeper "nuah/x/exchange/keeper"
 	exchangemoduletypes "nuah/x/exchange/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "nuah/app/params"
@@ -135,7 +136,7 @@ import (
 
 const (
 	AccountAddressPrefix = "nuah"
-	Name                 = "NUAH"
+	Name                 = "nuah"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
@@ -276,7 +277,6 @@ type App struct {
 	OraclesKeeper        oraclesmodulekeeper.Keeper
 
 	LoanKeeper      loanmodulekeeper.Keeper
-	ScopedDexKeeper capabilitykeeper.ScopedKeeper
 	ScopedDexKeeper capabilitykeeper.ScopedKeeper
 	DexKeeper       dexmodulekeeper.Keeper
 

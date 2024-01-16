@@ -8,6 +8,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "nuah/exchange/params.proto";
 import "nuah/exchange/sell_order_book.proto";
 import "nuah/exchange/buy_order_book.proto";
+import "nuah/exchange/token_info.proto";
 
 option go_package = "nuah/x/exchange/types";
 
@@ -37,6 +38,28 @@ service Query {
   }
   rpc BuyOrderBookAll (QueryAllBuyOrderBookRequest) returns (QueryAllBuyOrderBookResponse) {
     option (google.api.http).get = "/nuah/exchange/buy_order_book";
+  
+  }
+  
+  // Queries a list of GetAllSentOrders items.
+  rpc GetAllSentOrders (QueryGetAllSentOrdersRequest) returns (QueryGetAllSentOrdersResponse) {
+    option (google.api.http).get = "/nuah/exchange/get_all_sent_orders/{from}";
+  
+  }
+  
+  // Queries a list of GetSentOrders items.
+  rpc GetSentOrders (QueryGetSentOrdersRequest) returns (QueryGetSentOrdersResponse) {
+    option (google.api.http).get = "/nuah/exchange/get_sent_orders/{from}/{amountDenom}/{priceDenom}";
+  
+  }
+  
+  // Queries a list of TokenInfo items.
+  rpc TokenInfo    (QueryGetTokenInfoRequest) returns (QueryGetTokenInfoResponse) {
+    option (google.api.http).get = "/nuah/exchange/token_info/{index}";
+  
+  }
+  rpc TokenInfoAll (QueryAllTokenInfoRequest) returns (QueryAllTokenInfoResponse) {
+    option (google.api.http).get = "/nuah/exchange/token_info";
   
   }
 }
@@ -82,5 +105,42 @@ message QueryAllBuyOrderBookRequest {
 message QueryAllBuyOrderBookResponse {
   repeated BuyOrderBook                           buyOrderBook = 1 [(gogoproto.nullable) = false];
            cosmos.base.query.v1beta1.PageResponse pagination   = 2;
+}
+
+message QueryGetAllSentOrdersRequest {
+  string from = 1;
+}
+
+message QueryGetAllSentOrdersResponse {
+  repeated BuyOrderBook  buyOrderBook  = 1 [(gogoproto.nullable) = false];
+  repeated SellOrderBook sellOrderBook = 2 [(gogoproto.nullable) = false];
+}
+
+message QueryGetSentOrdersRequest {
+  string from        = 1;
+  string amountDenom = 2;
+  string priceDenom  = 3;
+}
+
+message QueryGetSentOrdersResponse {
+  BuyOrderBook  buyOrderBook  = 1;
+  SellOrderBook sellOrderBook = 2;
+}
+
+message QueryGetTokenInfoRequest {
+  string index = 1;
+}
+
+message QueryGetTokenInfoResponse {
+  TokenInfo tokenInfo = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllTokenInfoRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllTokenInfoResponse {
+  repeated TokenInfo                              tokenInfo  = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

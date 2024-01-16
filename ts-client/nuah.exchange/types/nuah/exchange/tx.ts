@@ -15,9 +15,9 @@ export interface MsgCreatePairResponse {
 export interface MsgSendBuyOrder {
   creator: string;
   amountDenom: string;
-  amount: string;
+  amount: number;
   priceDenom: string;
-  price: string;
+  price: number;
 }
 
 export interface MsgSendBuyOrderResponse {
@@ -26,9 +26,9 @@ export interface MsgSendBuyOrderResponse {
 export interface MsgSendSellOrder {
   creator: string;
   amountDenom: string;
-  amount: string;
+  amount: number;
   priceDenom: string;
-  price: string;
+  price: number;
 }
 
 export interface MsgSendSellOrderResponse {
@@ -141,7 +141,7 @@ export const MsgCreatePairResponse = {
 };
 
 function createBaseMsgSendBuyOrder(): MsgSendBuyOrder {
-  return { creator: "", amountDenom: "", amount: "", priceDenom: "", price: "" };
+  return { creator: "", amountDenom: "", amount: 0, priceDenom: "", price: 0 };
 }
 
 export const MsgSendBuyOrder = {
@@ -152,14 +152,14 @@ export const MsgSendBuyOrder = {
     if (message.amountDenom !== "") {
       writer.uint32(18).string(message.amountDenom);
     }
-    if (message.amount !== "") {
-      writer.uint32(26).string(message.amount);
+    if (message.amount !== 0) {
+      writer.uint32(24).int32(message.amount);
     }
     if (message.priceDenom !== "") {
       writer.uint32(34).string(message.priceDenom);
     }
-    if (message.price !== "") {
-      writer.uint32(42).string(message.price);
+    if (message.price !== 0) {
+      writer.uint32(40).int32(message.price);
     }
     return writer;
   },
@@ -178,13 +178,13 @@ export const MsgSendBuyOrder = {
           message.amountDenom = reader.string();
           break;
         case 3:
-          message.amount = reader.string();
+          message.amount = reader.int32();
           break;
         case 4:
           message.priceDenom = reader.string();
           break;
         case 5:
-          message.price = reader.string();
+          message.price = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -198,9 +198,9 @@ export const MsgSendBuyOrder = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
-      amount: isSet(object.amount) ? String(object.amount) : "",
+      amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
-      price: isSet(object.price) ? String(object.price) : "",
+      price: isSet(object.price) ? Number(object.price) : 0,
     };
   },
 
@@ -208,9 +208,9 @@ export const MsgSendBuyOrder = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.amountDenom !== undefined && (obj.amountDenom = message.amountDenom);
-    message.amount !== undefined && (obj.amount = message.amount);
+    message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
-    message.price !== undefined && (obj.price = message.price);
+    message.price !== undefined && (obj.price = Math.round(message.price));
     return obj;
   },
 
@@ -218,9 +218,9 @@ export const MsgSendBuyOrder = {
     const message = createBaseMsgSendBuyOrder();
     message.creator = object.creator ?? "";
     message.amountDenom = object.amountDenom ?? "";
-    message.amount = object.amount ?? "";
+    message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
-    message.price = object.price ?? "";
+    message.price = object.price ?? 0;
     return message;
   },
 };
@@ -265,7 +265,7 @@ export const MsgSendBuyOrderResponse = {
 };
 
 function createBaseMsgSendSellOrder(): MsgSendSellOrder {
-  return { creator: "", amountDenom: "", amount: "", priceDenom: "", price: "" };
+  return { creator: "", amountDenom: "", amount: 0, priceDenom: "", price: 0 };
 }
 
 export const MsgSendSellOrder = {
@@ -276,14 +276,14 @@ export const MsgSendSellOrder = {
     if (message.amountDenom !== "") {
       writer.uint32(18).string(message.amountDenom);
     }
-    if (message.amount !== "") {
-      writer.uint32(26).string(message.amount);
+    if (message.amount !== 0) {
+      writer.uint32(24).int32(message.amount);
     }
     if (message.priceDenom !== "") {
       writer.uint32(34).string(message.priceDenom);
     }
-    if (message.price !== "") {
-      writer.uint32(42).string(message.price);
+    if (message.price !== 0) {
+      writer.uint32(40).int32(message.price);
     }
     return writer;
   },
@@ -302,13 +302,13 @@ export const MsgSendSellOrder = {
           message.amountDenom = reader.string();
           break;
         case 3:
-          message.amount = reader.string();
+          message.amount = reader.int32();
           break;
         case 4:
           message.priceDenom = reader.string();
           break;
         case 5:
-          message.price = reader.string();
+          message.price = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -322,9 +322,9 @@ export const MsgSendSellOrder = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       amountDenom: isSet(object.amountDenom) ? String(object.amountDenom) : "",
-      amount: isSet(object.amount) ? String(object.amount) : "",
+      amount: isSet(object.amount) ? Number(object.amount) : 0,
       priceDenom: isSet(object.priceDenom) ? String(object.priceDenom) : "",
-      price: isSet(object.price) ? String(object.price) : "",
+      price: isSet(object.price) ? Number(object.price) : 0,
     };
   },
 
@@ -332,9 +332,9 @@ export const MsgSendSellOrder = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.amountDenom !== undefined && (obj.amountDenom = message.amountDenom);
-    message.amount !== undefined && (obj.amount = message.amount);
+    message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.priceDenom !== undefined && (obj.priceDenom = message.priceDenom);
-    message.price !== undefined && (obj.price = message.price);
+    message.price !== undefined && (obj.price = Math.round(message.price));
     return obj;
   },
 
@@ -342,9 +342,9 @@ export const MsgSendSellOrder = {
     const message = createBaseMsgSendSellOrder();
     message.creator = object.creator ?? "";
     message.amountDenom = object.amountDenom ?? "";
-    message.amount = object.amount ?? "";
+    message.amount = object.amount ?? 0;
     message.priceDenom = object.priceDenom ?? "";
-    message.price = object.price ?? "";
+    message.price = object.price ?? 0;
     return message;
   },
 };

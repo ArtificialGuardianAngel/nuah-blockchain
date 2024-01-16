@@ -13,6 +13,7 @@ export interface ExchangeBuyOrderBook {
   index?: string;
   amountDenom?: string;
   priceDenom?: string;
+  book?: ExchangeOrderBook;
 }
 
 export type ExchangeMsgCreatePairResponse = object;
@@ -20,6 +21,24 @@ export type ExchangeMsgCreatePairResponse = object;
 export type ExchangeMsgSendBuyOrderResponse = object;
 
 export type ExchangeMsgSendSellOrderResponse = object;
+
+export interface ExchangeOrder {
+  /** @format int32 */
+  id?: number;
+  creator?: string;
+
+  /** @format int32 */
+  amount?: number;
+
+  /** @format int32 */
+  price?: number;
+}
+
+export interface ExchangeOrderBook {
+  /** @format int32 */
+  idCount?: number;
+  orders?: ExchangeOrder[];
+}
 
 /**
  * Params defines the parameters for the module.
@@ -56,12 +75,41 @@ export interface ExchangeQueryAllSellOrderBookResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface ExchangeQueryAllTokenInfoResponse {
+  tokenInfo?: ExchangeTokenInfo[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface ExchangeQueryGetAllSentOrdersResponse {
+  buyOrderBook?: ExchangeBuyOrderBook[];
+  sellOrderBook?: ExchangeSellOrderBook[];
+}
+
 export interface ExchangeQueryGetBuyOrderBookResponse {
   buyOrderBook?: ExchangeBuyOrderBook;
 }
 
 export interface ExchangeQueryGetSellOrderBookResponse {
   sellOrderBook?: ExchangeSellOrderBook;
+}
+
+export interface ExchangeQueryGetSentOrdersResponse {
+  buyOrderBook?: ExchangeBuyOrderBook;
+  sellOrderBook?: ExchangeSellOrderBook;
+}
+
+export interface ExchangeQueryGetTokenInfoResponse {
+  tokenInfo?: ExchangeTokenInfo;
 }
 
 /**
@@ -76,6 +124,14 @@ export interface ExchangeSellOrderBook {
   index?: string;
   amountDenom?: string;
   priceDenom?: string;
+  book?: ExchangeOrderBook;
+}
+
+export interface ExchangeTokenInfo {
+  index?: string;
+  name?: string;
+  supply?: string;
+  decimals?: string;
 }
 
 export interface ProtobufAny {
@@ -331,6 +387,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryGetAllSentOrders
+   * @summary Queries a list of GetAllSentOrders items.
+   * @request GET:/nuah/exchange/get_all_sent_orders/{from}
+   */
+  queryGetAllSentOrders = (from: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetAllSentOrdersResponse, RpcStatus>({
+      path: `/nuah/exchange/get_all_sent_orders/${from}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetSentOrders
+   * @summary Queries a list of GetSentOrders items.
+   * @request GET:/nuah/exchange/get_sent_orders/{from}/{amountDenom}/{priceDenom}
+   */
+  queryGetSentOrders = (from: string, amountDenom: string, priceDenom: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetSentOrdersResponse, RpcStatus>({
+      path: `/nuah/exchange/get_sent_orders/${from}/${amountDenom}/${priceDenom}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
    * @request GET:/nuah/exchange/params
@@ -379,6 +467,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   querySellOrderBook = (index: string, params: RequestParams = {}) =>
     this.request<ExchangeQueryGetSellOrderBookResponse, RpcStatus>({
       path: `/nuah/exchange/sell_order_book/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTokenInfoAll
+   * @request GET:/nuah/exchange/token_info
+   */
+  queryTokenInfoAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<ExchangeQueryAllTokenInfoResponse, RpcStatus>({
+      path: `/nuah/exchange/token_info`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTokenInfo
+   * @summary Queries a list of TokenInfo items.
+   * @request GET:/nuah/exchange/token_info/{index}
+   */
+  queryTokenInfo = (index: string, params: RequestParams = {}) =>
+    this.request<ExchangeQueryGetTokenInfoResponse, RpcStatus>({
+      path: `/nuah/exchange/token_info/${index}`,
       method: "GET",
       format: "json",
       ...params,

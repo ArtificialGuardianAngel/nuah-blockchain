@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -9,7 +11,7 @@ import (
 
 // ...
 
-func (k Keeper) SafeBurn(ctx sdk.Context, sender sdk.AccAddress, denom string, amount int32) error {
+func (k Keeper) SafeBurn(ctx sdk.Context, sender sdk.AccAddress, denom string, amount uint64) error {
 	// Lock the tokens
 	if err := k.LockTokens(ctx, sender, sdk.NewCoin(denom, sdkmath.NewInt(int64(amount)))); err != nil {
 		return err
@@ -18,7 +20,7 @@ func (k Keeper) SafeBurn(ctx sdk.Context, sender sdk.AccAddress, denom string, a
 	return nil
 }
 
-func (k Keeper) SafeMint(ctx sdk.Context, receiver sdk.AccAddress, denom string, amount int32) error {
+func (k Keeper) SafeMint(ctx sdk.Context, receiver sdk.AccAddress, denom string, amount uint64) error {
 	if err := k.UnlockTokens(
 		ctx,
 		receiver,
@@ -38,6 +40,7 @@ func (k Keeper) LockTokens(ctx sdk.Context, sender sdk.AccAddress, tokens sdk.Co
 	); err != nil {
 		return err
 	}
+	ctx.Logger().Info(fmt.Sprintf("Successfuly locked tokens=%+v from %+v", tokens, sender))
 
 	return nil
 }
@@ -51,6 +54,7 @@ func (k Keeper) UnlockTokens(ctx sdk.Context, receiver sdk.AccAddress, tokens sd
 	); err != nil {
 		return err
 	}
+	ctx.Logger().Info(fmt.Sprintf("Successfuly unlocked tokens=%+v to %+v", tokens, receiver))
 
 	return nil
 }
