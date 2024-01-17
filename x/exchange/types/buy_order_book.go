@@ -75,7 +75,7 @@ func (b *BuyOrderBook) LiquidateFromSellOrder(order Order) (
 	if highestBid.Amount >= order.Amount {
 		remainingSellOrder.Amount = 0
 		liquidatedBuyOrder.Amount = order.Amount
-		gain = order.Amount * highestBid.Price
+		gain = order.Amount * highestBid.Price / 1e6
 
 		// Remove the highest bid if it has been entirely liquidated
 		highestBid.Amount -= order.Amount

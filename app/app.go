@@ -611,6 +611,7 @@ func New(
 		app.GetSubspace(exchangemoduletypes.ModuleName),
 
 		app.BankKeeper,
+		app.OraclesKeeper,
 	)
 	exchangeModule := exchangemodule.NewAppModule(appCodec, app.ExchangeKeeper, app.AccountKeeper, app.BankKeeper)
 

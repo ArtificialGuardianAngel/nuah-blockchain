@@ -14,8 +14,8 @@ accounts:
   - 200000000stake
 - name: bob
   coins:
-  - 1000000nuah
-  - 1000000aga
+  - 1000000000000nuah
+  - 1000000000000aga
   - 1000000000000nuahp
 faucet:
   name: bob

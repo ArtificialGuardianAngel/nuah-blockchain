@@ -25,6 +25,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	if len(genState.TokenInfoList) == 0 {
 		k.SetDefaultTokenInfo(ctx)
 	}
+
+	k.InitiateSystemSellOrders(ctx)
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
 }

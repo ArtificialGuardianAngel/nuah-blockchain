@@ -1,6 +1,8 @@
 package types
 
 import (
+	oracleTypes "nuah/x/oracles/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -31,4 +33,12 @@ type BankKeeper interface {
 	DelegateCoins(ctx sdk.Context, delegatorAddr, moduleAccAddr sdk.AccAddress, amt sdk.Coins) error
 	UndelegateCoins(ctx sdk.Context, moduleAccAddr, delegatorAddr sdk.AccAddress, amt sdk.Coins) error
 	// Methods imported from bank should be defined here
+}
+
+type OracleKeeper interface {
+	GetAllData(ctx sdk.Context) (list []oracleTypes.Data)
+	GetData(
+		ctx sdk.Context,
+		index string,
+	) (val oracleTypes.Data, found bool)
 }

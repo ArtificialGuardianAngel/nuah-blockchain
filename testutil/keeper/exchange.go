@@ -3,6 +3,9 @@ package keeper
 import (
 	"testing"
 
+	"nuah/x/exchange/keeper"
+	"nuah/x/exchange/types"
+
 	tmdb "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/libs/log"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -13,8 +16,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/stretchr/testify/require"
-	"nuah/x/exchange/keeper"
-	"nuah/x/exchange/types"
 )
 
 func ExchangeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
@@ -41,6 +42,7 @@ func ExchangeKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 		storeKey,
 		memStoreKey,
 		paramsSubspace,
+		nil,
 		nil,
 	)
 

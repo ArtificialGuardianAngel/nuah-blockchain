@@ -53,7 +53,7 @@ func (k Keeper) GetAllSentOrders(goCtx context.Context, req *types.QueryGetAllSe
 	}
 
 	return &types.QueryGetAllSentOrdersResponse{
-		BuyOrderBook:  buyBooks,
-		SellOrderBook: sellBooks,
+		BuyOrderBook:  senderBuyBooks,
+		SellOrderBook: senderSellBooks,
 	}, nil
 }

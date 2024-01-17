@@ -1,9 +1,10 @@
 package keeper
 
 import (
+	"nuah/x/oracles/types"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"nuah/x/oracles/types"
 )
 
 // SetData set a specific data in the store from its index
@@ -19,7 +20,6 @@ func (k Keeper) SetData(ctx sdk.Context, data types.Data) {
 func (k Keeper) GetData(
 	ctx sdk.Context,
 	index string,
-
 ) (val types.Data, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.DataKeyPrefix))
 
